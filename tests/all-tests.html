@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+           "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>Stretchr SDK - Tests</title>
+  </head>
+  <body>
+    <script type="text/javascript" src="http://cdn.busterjs.org/releases/latest/buster-test.js"></script>
+    <script type="text/javascript" src="../src/stretchr.js"></script>
+    <script>
+
+      if (typeof require == "function" && typeof module == "object") {
+          buster = require("buster");
+          require("./strftime");
+      }
+
+      var assert = buster.assert;
+
+    </script>
+    <script type="text/javascript" src="stretchr.js"></script>
+    <script type="text/javascript" src="tools.js"></script>
+    <script type="text/javascript" src="session.js"></script>
+    <script type="text/javascript" src="request.js"></script>
+    <script type="text/javascript" src="security.js"></script>
+    <script type="text/javascript" src="making_requests.js"></script>
+  </body>
+</html>
