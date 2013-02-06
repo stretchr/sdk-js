@@ -2,7 +2,7 @@ buster.testCase("Request", {
 
 	"NewRequest": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r._session, s, "session")
@@ -20,7 +20,7 @@ buster.testCase("Request", {
 
 	"with": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.with("~limit", 2), r, "with should chain")
@@ -34,7 +34,7 @@ buster.testCase("Request", {
 
 	"where": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.where("name", "Mat"), r, "where should chain")
@@ -48,7 +48,7 @@ buster.testCase("Request", {
 
 	"method": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.method("POST"), r, "method should chain")
@@ -58,7 +58,7 @@ buster.testCase("Request", {
 
 	"body": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.hasBody(), false)
@@ -83,7 +83,7 @@ buster.testCase("Request", {
 
 	"bodyhash": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.bodyhash(), "", "No body")
@@ -96,7 +96,7 @@ buster.testCase("Request", {
 
 	"allParamsString": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		// reset params for test purposes
@@ -116,7 +116,7 @@ buster.testCase("Request", {
 
 	"url": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		r.where("name", "Mat").with("~limit", 1)
@@ -132,7 +132,7 @@ buster.testCase("Request", {
 
 	"safeUrl": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		r.where("name", "Mat").with("~limit", 1)
@@ -147,7 +147,7 @@ buster.testCase("Request", {
 
 	"stringToSign": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?%7Ealways200=1&%7Ecallback=Stretchr.callback&%7Ekey=pub&%7Emethod=GET&%7Eprivate=priv")
@@ -165,7 +165,7 @@ buster.testCase("Request", {
 
 	"signature": function(){
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		assert.equals(r.signature(), "f9b0d709d2f5d1d32481241419e9a6de916f74e9")
@@ -174,7 +174,7 @@ buster.testCase("Request", {
 
 	"signedUrl": function() {
 
-		var s = Stretchr.WithSession("project", "pub", "priv")
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
 		r.method("POST").with("~limit", 1).where("name", "Mat")

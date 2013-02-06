@@ -1,5 +1,7 @@
 /*
 
+	Stretchr JavaScript SDK
+
 	Copyright (c) 2012 Mat Ryer and Tyler Bunnell
 
 	Please consider promoting this project if you find it useful.
@@ -112,10 +114,10 @@ Stretchr.callback = function(object, context) {
 */
 
 /*
-	WithSession creates a new Stretchr session with the specified
+	NewSession creates a new Stretchr session with the specified
 	project and keys.
 */
-Stretchr.WithSession = function(project, publicKey, privateKey){
+Stretchr.NewSession = function(project, publicKey, privateKey){
 	var newSession = new(Stretchr.Session)
 	newSession._project = project
 	newSession._publicKey = publicKey
@@ -128,7 +130,7 @@ Stretchr.WithSession = function(project, publicKey, privateKey){
 
 	Create a new session by doing:
 
-	  s = Stretchr.WithSession(project, publicKey, privateKey)
+	  s = Stretchr.NewSession(project, publicKey, privateKey)
 */
 Stretchr.Session = function(){}
 
