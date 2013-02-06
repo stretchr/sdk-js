@@ -1,5 +1,43 @@
 # Stretchr JavaScript SDK
 
+The Stretchr JavaScript SDK allows you to interact with the Stretchr services from any web enabled device.  This SDK makes use of Stretchr's [JSONP](http://json-p.org) capabilities behind the scenes, providing an easy to use interface to developers.
+
+## Getting started
+
+Once you have created your Stretchr project and have your public and private keys, you can start using the Stretchr JavaScript SDK.
+
+### Importing Stretchr JavaScript SDK
+
+You can either use the [latest code](https://raw.github.com/stretchrcom/sdk-js/master/src/stretchr.js) directly from GitHub, or else [download](https://github.com/stretchrcom/sdk-js/tags) a copy to host yourself.  We recommend that you pick a specific version and stick to it, in case things change on the server and it breaks your code.
+
+### Simple HTML page
+
+    <!DOCTYPE html>
+    <html>
+      <head>
+        Stretchr SDK Example
+      </head>
+      <body>
+      
+        <!-- import the latest Stretchr SDK -->
+        <script src="https://raw.github.com/stretchrcom/sdk-js/master/src/stretchr.js"></script>
+        
+        <script>
+        
+          // setup my session
+          stretchr = Stretchr.NewSession("project", "public-key", "private-key");
+          
+          // load all messages
+          stretchr.at("messages").read(function(response){
+            for (message in response["~d"]["~i"]) {
+              console.log("Loaded message: " + message.text)
+            }
+          })
+        
+        </script>
+      </body>
+    </html>
+
 ## Usage
 
 ### Creating a session
@@ -150,3 +188,9 @@ Or to find all people over 30 years old:
       }
       
     })
+    
+## Known issues
+
+### Security
+
+  * Currently, using the Stretchr JavaScript SDK means you will be revealing your public and private keys.  It is not recommended that you share your keys with untrusted people.
