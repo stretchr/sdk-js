@@ -2,7 +2,7 @@ buster.testCase("Session", {
 
 	"New session": function(){
 
-		var s = stretchr.WithSession("project-name", "public-key", "private-key")
+		var s = Stretchr.WithSession("project-name", "public-key", "private-key")
 		refute.isNull(s, "WithSession should return something")
 
 		assert.equals(s._project, "project-name")
@@ -13,7 +13,7 @@ buster.testCase("Session", {
 
 	"at": function(){
 
-		var s = stretchr.WithSession("project-name", "public-key", "private-key")
+		var s = Stretchr.WithSession("project-name", "public-key", "private-key")
 		var request = s.at("path")
 
 		assert.defined(request, "at should return new request")

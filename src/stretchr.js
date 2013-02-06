@@ -28,9 +28,9 @@
 */
 
 /*
-	stretchr is the root namespace for all Stretchr activities.
+	Stretchr is the root namespace for all Stretchr activities.
 */
-var stretchr = {
+var Stretchr = {
 	/*
 		apiversion is the default API version.
 	*/
@@ -57,16 +57,16 @@ var stretchr = {
 	Weird eh?  No - it's a nice default for callbacks without having to define
 	loads of empty functions.
 */
-stretchr.doNothing = function(){};
+Stretchr.doNothing = function(){};
 
-stretchr.context = function() {
-	return ++stretchr._context;
+Stretchr.context = function() {
+	return ++Stretchr._context;
 }
 
 /*
 	encodeMap encodes the specified map into a sorted URL string.
 */
-stretchr.encodeMap = function(map) {
+Stretchr.encodeMap = function(map) {
 
 	// get the sorted keys
 	var keys = [];
@@ -97,10 +97,10 @@ stretchr.encodeMap = function(map) {
 /*
 	callback gets called when a JSONP request has completed.
 */
-stretchr.callback = function(object, context) {
+Stretchr.callback = function(object, context) {
 
 	// find the request that made this call
-	request = stretchr._requests[context]
+	request = Stretchr._requests[context]
 
 	// trigger the callback
 	request.onCompleted(object)
@@ -115,8 +115,8 @@ stretchr.callback = function(object, context) {
 	WithSession creates a new Stretchr session with the specified
 	project and keys.
 */
-stretchr.WithSession = function(project, publicKey, privateKey){
-	var newSession = new(stretchr.Session)
+Stretchr.WithSession = function(project, publicKey, privateKey){
+	var newSession = new(Stretchr.Session)
 	newSession._project = project
 	newSession._publicKey = publicKey
 	newSession._privateKey = privateKey
@@ -128,22 +128,22 @@ stretchr.WithSession = function(project, publicKey, privateKey){
 
 	Create a new session by doing:
 
-	  s = stretchr.WithSession(project, publicKey, privateKey)
+	  s = Stretchr.WithSession(project, publicKey, privateKey)
 */
-stretchr.Session = function(){}
+Stretchr.Session = function(){}
 
 /*
 	go executes the request.
 */
-stretchr.Session.prototype.go = function(request){
+Stretchr.Session.prototype.go = function(request){
 
-	context = stretchr.context()
+	context = Stretchr.context()
 
 	// add this request to the _requests array keyed by the context
-	stretchr._requests[context] = request
+	Stretchr._requests[context] = request
 
 	// make the request
-	stretchr._makeRequest(request)
+	Stretchr._makeRequest(request)
 
 	return context
 }
@@ -151,7 +151,7 @@ stretchr.Session.prototype.go = function(request){
 /*
 	_makeRequest makes an actual HTTP JSONP request.
 */
-stretchr.Session.prototype._makeRequest = function(request) {
+Stretchr.Session.prototype._makeRequest = function(request) {
 
 	var script = document.createElement('script');
 	script.src = request.signedUrl()
@@ -162,10 +162,10 @@ stretchr.Session.prototype._makeRequest = function(request) {
 
 /*
 	at starts a conversation with Stretchr by specifying the relevant path
-	and returning a stretchr.Request object which will continue the conversation.
+	and returning a Stretchr.Request object which will continue the conversation.
 */
-stretchr.Session.prototype.at = function(path){
-	return stretchr.NewRequest(this, path)
+Stretchr.Session.prototype.at = function(path){
+	return Stretchr.NewRequest(this, path)
 }
 
 /*
@@ -173,35 +173,35 @@ stretchr.Session.prototype.at = function(path){
 */
 
 /*
-	NewRequest makes a new stretchr.Request object with the specified session
+	NewRequest makes a new Stretchr.Request object with the specified session
 	and path.
 */
-stretchr.NewRequest = function(session, path) {
-	var request = new(stretchr.Request);
+Stretchr.NewRequest = function(session, path) {
+	var request = new(Stretchr.Request);
 	request._path = path;
 	request._session = session;
 	request._params = {
 		"~method": ["GET"],
 		"~key": [session._publicKey],
 		"~always200": [1],
-		"~callback": ["stretchr.callback"]
+		"~callback": ["Stretchr.callback"]
 	};
 	request._filterparams = {};
 	request._body = null;
 	request._method = "GET"
-	request.onCompleted = stretchr.doNothing;
+	request.onCompleted = Stretchr.doNothing;
 	return request;
 }
 
 /*
 	Request represents a complete conversation with Stretchr.
 */
-stretchr.Request = function(){}
+Stretchr.Request = function(){}
 
 /*
 	method sets the HTTP Method to use when accessing this request.
 */
-stretchr.Request.prototype.method = function(httpMethod) {
+Stretchr.Request.prototype.method = function(httpMethod) {
 
 	this._params["~method"] = [httpMethod]
 	return this;
@@ -211,7 +211,7 @@ stretchr.Request.prototype.method = function(httpMethod) {
 /*
 	bod sets the body object for this request.
 */
-stretchr.Request.prototype.body = function(body) {
+Stretchr.Request.prototype.body = function(body) {
 
 	if (typeof body == "object") {
 		this._body = body;
@@ -234,31 +234,31 @@ stretchr.Request.prototype.body = function(body) {
 /*
 	hasBody gets whether the request has a body or not.
 */
-stretchr.Request.prototype.hasBody = function() {
+Stretchr.Request.prototype.hasBody = function() {
 	return this._body != null
 }
 
 /*
 	bodystring gets the JSON string that represents the body.
 */
-stretchr.Request.prototype.bodystring = function(){
+Stretchr.Request.prototype.bodystring = function(){
 	return JSON.stringify(this._body)
 }
 
 /*
 	bodyhash gets a hash of the bodystring.
 */
-stretchr.Request.prototype.bodyhash = function(){
+Stretchr.Request.prototype.bodyhash = function(){
 	if (!this.hasBody()) {
 		return ""
 	}
-	return stretchr.hash(this.bodystring())
+	return Stretchr.hash(this.bodystring())
 }
 
 /*
 	with sets a parameter to the Request.
 */
-stretchr.Request.prototype.with = function(key, value) {
+Stretchr.Request.prototype.with = function(key, value) {
 
 	this._params[key] = this._params[key] || []
 	this._params[key].push(value)
@@ -270,7 +270,7 @@ stretchr.Request.prototype.with = function(key, value) {
 /*
 	where sets a filter parameter in the Request.
 */
-stretchr.Request.prototype.where = function(key, value) {
+Stretchr.Request.prototype.where = function(key, value) {
 
 	// add the prefix
 	key = ":" + key
@@ -287,7 +287,7 @@ stretchr.Request.prototype.where = function(key, value) {
 	allParamsString gets an encoded URL string of all the parameters ordered
 	by key first, then value.
 */
-stretchr.Request.prototype.allParamsString = function(){
+Stretchr.Request.prototype.allParamsString = function(){
 
 	var allParams = {}
 
@@ -298,7 +298,7 @@ stretchr.Request.prototype.allParamsString = function(){
 		allParams[key] = this._filterparams[key]
 	}
 
-	var s = stretchr.encodeMap(allParams)
+	var s = Stretchr.encodeMap(allParams)
 
 	if (s.length > 0) {
 		s = "?" + s
@@ -312,7 +312,7 @@ stretchr.Request.prototype.allParamsString = function(){
 	safeUrl generates an absolute URL from the properties in this request which is safe,
 	i.e. contains no sensitive data (like private key).
 */
-stretchr.Request.prototype.safeUrl = function() {
+Stretchr.Request.prototype.safeUrl = function() {
 
 	// ensure we do not send sensitive information
 	delete this._params["~private"]
@@ -325,14 +325,14 @@ stretchr.Request.prototype.safeUrl = function() {
 /*
 	url generates an absolute URL from the properties in this request
 */
-stretchr.Request.prototype.url = function() {
-	return ["http://", this._session._project, ".stretchr.com/api/", stretchr.apiversion, "/", this._path, this.allParamsString()].join("")
+Stretchr.Request.prototype.url = function() {
+	return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, this.allParamsString()].join("")
 }
 
 /*
 	stringToSign gets the string that should be signed for security purposes.
 */
-stretchr.Request.prototype.stringToSign = function(){
+Stretchr.Request.prototype.stringToSign = function(){
 
 	// add the private key
 	this._params["~private"] = [this._session._privateKey]
@@ -344,14 +344,14 @@ stretchr.Request.prototype.stringToSign = function(){
 /*
 	signature gets the security hash that should be sent along with this request.
 */
-stretchr.Request.prototype.signature = function(){
-	return stretchr.hash(this.stringToSign())
+Stretchr.Request.prototype.signature = function(){
+	return Stretchr.hash(this.stringToSign())
 }
 
 /*
 	signedUrl gets the actual URL of the request to make, with the ~sign parameter added.
 */
-stretchr.Request.prototype.signedUrl = function(){
+Stretchr.Request.prototype.signedUrl = function(){
 	return [this.safeUrl(), "&~sign=", this.signature()].join("")
 }
 
@@ -359,23 +359,23 @@ stretchr.Request.prototype.signedUrl = function(){
 	Actions
 */
 
-stretchr.Request.prototype.read = function(){
+Stretchr.Request.prototype.read = function(){
 	this._session.go(this.method("GET"))
 }
 
-stretchr.Request.prototype.update = function(){
+Stretchr.Request.prototype.update = function(){
 	this._session.go(this.method("PUT"))
 }
 
-stretchr.Request.prototype.replace = function(){
+Stretchr.Request.prototype.replace = function(){
 	this._session.go(this.method("POST"))
 }
 
-stretchr.Request.prototype.create = function(){
+Stretchr.Request.prototype.create = function(){
 	this._session.go(this.method("POST"))
 }
 
-stretchr.Request.prototype.remove = function(){
+Stretchr.Request.prototype.remove = function(){
 	this._session.go(this.method("DELETE"))
 }
 
@@ -386,14 +386,14 @@ stretchr.Request.prototype.remove = function(){
 /*
 	hashSHA1 uses the SHA1 algorithm to hash the specified string.
 */
-stretchr.hashSHA1 = function(s) {
+Stretchr.hashSHA1 = function(s) {
 	return CryptoJS.SHA1(s);
 }
 
 /*
 	hash uses the current hashing function to hash the specified string.
 */
-stretchr.hash = stretchr.hashSHA1;
+Stretchr.hash = Stretchr.hashSHA1;
 
 /*
 CryptoJS v3.1.2

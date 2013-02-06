@@ -2,8 +2,8 @@ buster.testCase("Actions", {
 
 	"read": function() {
 
-		var s = stretchr.WithSession("project", "pub", "priv")
-		var r = stretchr.NewRequest(s, "people")
+		var s = Stretchr.WithSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people")
 
 		var goCalledWithReq = null;
 		s.go = function(req){
@@ -19,8 +19,8 @@ buster.testCase("Actions", {
 
 	"create": function() {
 
-		var s = stretchr.WithSession("project", "pub", "priv")
-		var r = stretchr.NewRequest(s, "people")
+		var s = Stretchr.WithSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people")
 
 		var goCalledWithReq = null;
 		s.go = function(req){
@@ -36,8 +36,8 @@ buster.testCase("Actions", {
 
 	"update": function() {
 
-		var s = stretchr.WithSession("project", "pub", "priv")
-		var r = stretchr.NewRequest(s, "people/123")
+		var s = Stretchr.WithSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people/123")
 
 		var goCalledWithReq = null;
 		s.go = function(req){
@@ -53,8 +53,8 @@ buster.testCase("Actions", {
 
 	"replace": function() {
 
-		var s = stretchr.WithSession("project", "pub", "priv")
-		var r = stretchr.NewRequest(s, "people/123")
+		var s = Stretchr.WithSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people/123")
 
 		var goCalledWithReq = null;
 		s.go = function(req){
@@ -70,8 +70,8 @@ buster.testCase("Actions", {
 
 	"delete": function() {
 
-		var s = stretchr.WithSession("project", "pub", "priv")
-		var r = stretchr.NewRequest(s, "people/123")
+		var s = Stretchr.WithSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people/123")
 
 		var goCalledWithReq = null;
 		s.go = function(req){
