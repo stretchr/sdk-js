@@ -95,22 +95,6 @@ stretchr.encodeMap = function(map) {
 */
 
 /*
-	go executes the request.
-*/
-stretchr.go = function(request){
-
-	context = stretchr.context()
-
-	// add this request to the _requests array keyed by the context
-	stretchr._requests[context] = request
-
-	// make the request
-	stretchr._makeRequest(request)
-
-	return context
-}
-
-/*
 	callback gets called when a JSONP request has completed.
 */
 stretchr.callback = function(object, context) {
@@ -120,18 +104,6 @@ stretchr.callback = function(object, context) {
 
 	// trigger the callback
 	request.onCompleted(object)
-
-}
-
-/*
-	_makeRequest makes an actual HTTP JSONP request.
-*/
-stretchr._makeRequest = function(request) {
-
-	var script = document.createElement('script');
-	script.src = request.signedUrl()
-
-	document.getElementsByTagName('head')[0].appendChild(script);
 
 }
 
@@ -161,6 +133,34 @@ stretchr.WithSession = function(project, publicKey, privateKey){
 stretchr.Session = function(){}
 
 /*
+	go executes the request.
+*/
+stretchr.Session.prototype.go = function(request){
+
+	context = stretchr.context()
+
+	// add this request to the _requests array keyed by the context
+	stretchr._requests[context] = request
+
+	// make the request
+	stretchr._makeRequest(request)
+
+	return context
+}
+
+/*
+	_makeRequest makes an actual HTTP JSONP request.
+*/
+stretchr.Session.prototype._makeRequest = function(request) {
+
+	var script = document.createElement('script');
+	script.src = request.signedUrl()
+
+	document.getElementsByTagName('head')[0].appendChild(script);
+
+}
+
+/*
 	at starts a conversation with Stretchr by specifying the relevant path
 	and returning a stretchr.Request object which will continue the conversation.
 */
@@ -178,16 +178,17 @@ stretchr.Session.prototype.at = function(path){
 */
 stretchr.NewRequest = function(session, path) {
 	var request = new(stretchr.Request);
-	request._method = "GET";
 	request._path = path;
 	request._session = session;
 	request._params = {
+		"~method": ["GET"],
 		"~key": [session._publicKey],
 		"~always200": [1],
 		"~callback": ["stretchr.callback"]
 	};
 	request._filterparams = {};
 	request._body = null;
+	request._method = "GET"
 	request.onCompleted = stretchr.doNothing;
 	return request;
 }
@@ -202,7 +203,7 @@ stretchr.Request = function(){}
 */
 stretchr.Request.prototype.method = function(httpMethod) {
 
-	this._method = httpMethod;
+	this._params["~method"] = [httpMethod]
 	return this;
 
 }
@@ -352,6 +353,30 @@ stretchr.Request.prototype.signature = function(){
 */
 stretchr.Request.prototype.signedUrl = function(){
 	return [this.safeUrl(), "&~sign=", this.signature()].join("")
+}
+
+/*
+	Actions
+*/
+
+stretchr.Request.prototype.read = function(){
+	this._session.go(this.method("GET"))
+}
+
+stretchr.Request.prototype.update = function(){
+	this._session.go(this.method("PUT"))
+}
+
+stretchr.Request.prototype.replace = function(){
+	this._session.go(this.method("POST"))
+}
+
+stretchr.Request.prototype.create = function(){
+	this._session.go(this.method("POST"))
+}
+
+stretchr.Request.prototype.remove = function(){
+	this._session.go(this.method("DELETE"))
 }
 
 /*

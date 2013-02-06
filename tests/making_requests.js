@@ -7,8 +7,8 @@ buster.testCase("Making requests", {
 		var s = stretchr.WithSession("test", "pub", "priv")
 		var r = stretchr.NewRequest(s, "path")
 
-		stretchr._makeRequest(r)
-		
+		s._makeRequest(r)
+
 		scriptsAfter = document.getElementsByTagName('head')[0].getElementsByTagName("script").length
 		assert.equals(scriptsAfter, scriptsBefore+1, "Should be one more script element")
 
@@ -26,7 +26,7 @@ buster.testCase("Making requests", {
 
 		stretchr._context = 0;
 
-		context = stretchr.go(r)
+		context = s.go(r)
 
 		assert.equals(context, 1, "return of go should be the context")
 
