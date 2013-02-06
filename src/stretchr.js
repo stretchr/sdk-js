@@ -359,23 +359,28 @@ Stretchr.Request.prototype.signedUrl = function(){
 	Actions
 */
 
-Stretchr.Request.prototype.read = function(){
+Stretchr.Request.prototype.read = function(completed){
+	this.onCompleted = completed || Stretchr.doNothing;
 	this._session.go(this.method("GET"))
 }
 
-Stretchr.Request.prototype.update = function(){
+Stretchr.Request.prototype.update = function(completed){
+	this.onCompleted = completed || Stretchr.doNothing;
 	this._session.go(this.method("PUT"))
 }
 
-Stretchr.Request.prototype.replace = function(){
+Stretchr.Request.prototype.replace = function(completed){
+	this.onCompleted = completed || Stretchr.doNothing;
 	this._session.go(this.method("POST"))
 }
 
-Stretchr.Request.prototype.create = function(){
+Stretchr.Request.prototype.create = function(completed){
+	this.onCompleted = completed || Stretchr.doNothing;
 	this._session.go(this.method("POST"))
 }
 
-Stretchr.Request.prototype.remove = function(){
+Stretchr.Request.prototype.remove = function(completed){
+	this.onCompleted = completed || Stretchr.doNothing;
 	this._session.go(this.method("DELETE"))
 }
 

@@ -1,3 +1,5 @@
+var testCallback = function(){}
+
 buster.testCase("Actions", {
 
 	"read": function() {
@@ -10,8 +12,9 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.read()
+		r.read(testCallback)
 
+		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._method, "GET")
 		assert.equals(goCalledWithReq, r, ".go should be called")
 
@@ -27,8 +30,9 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.create()
+		r.create(testCallback)
 
+		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "POST")
 		assert.equals(goCalledWithReq, r, ".go should be called")
 
@@ -44,8 +48,9 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.update()
+		r.update(testCallback)
 
+		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "PUT")
 		assert.equals(goCalledWithReq, r, ".go should be called")
 
@@ -61,8 +66,9 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.replace()
+		r.replace(testCallback)
 
+		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "POST")
 		assert.equals(goCalledWithReq, r, ".go should be called")
 
@@ -78,8 +84,9 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.remove()
+		r.remove(testCallback)
 
+		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "DELETE")
 		assert.equals(goCalledWithReq, r, ".go should be called")
 
