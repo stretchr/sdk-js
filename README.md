@@ -194,3 +194,36 @@ Or to find all people over 30 years old:
 ### Security
 
   * Currently, using the Stretchr JavaScript SDK means you will be revealing your public and private keys.  It is not recommended that you share your keys with untrusted people.
+  
+## Writing tests
+
+We believe in test driven development, and in that spirit have made it very easy for you to write tests for your code that uses Stretchr.
+
+### How it works
+
+  * As well as importing the main `stretchr.js` file, you also import `stretchr-testing.js` which you will find alongside that file.
+  * Instead of setting `stretchr` to the result of `Stretchr.NewSession`, for your test code, you assign it to the response of `Stretchr.NewTestSession`.
+  * You then optionally setup responses to the calls you expect your code to make by calling the `respond` method.
+  * After you have executed the code being unit tested, you can inspect the `stretchr.requests` array to see what happened.
+
+### Example test
+
+    // use the TestSession instead of a real session object
+    stretchr = Stretchr.NewTestSession()
+    
+    // setup some responses
+    stretchr
+    
+      // first request will be fine
+      .respond({"~s":200})
+      
+      // the second request will fail
+      .respond({"~s":500, "~e":[{"~m": "Something went wrong"}]})
+      
+    ;
+      
+    // call the code being tested
+    myFuncThatUsesStretchr()
+    
+    // make assertions about the requests made
+    
