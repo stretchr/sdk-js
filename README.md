@@ -225,5 +225,39 @@ We believe in test driven development, and in that spirit have made it very easy
     // call the code being tested
     myFuncThatUsesStretchr()
     
-    // make assertions about the requests made
+    // make assertions about the requests made by accessing the
+    // stretchr.requests array
     
+    assert.equals(stretchr.requests[0].action, "read")
+    assert.equals(stretchr.requests[0].path, "people")
+    assert.equals(stretchr.requests[0].where["age"][0], ">30")
+    assert.equals(stretchr.requests[0].with["~limit"][0], 3)
+    
+    assert.equals(stretchr.requests[1].action, "update")
+    assert.equals(stretchr.requests[1].path, "people/123")  
+ 
+### Testing fields
+ 
+The `Request` objects are the actual underlying objects that the Stretchr JavaScript SDK uses to interact with the servers, so you can make assertions against any of the `Request` methods.
+
+#### Testable properties
+
+| Field | Description | Example |
+| --- |
+| `action` | A string describing the action that was taken by the request. | `undefined|"create"|"read"|"update"|"replace"|"delete"` |
+| `path` | The path of the request | `people/123` |
+| `where` | An object containing filter parameters.  The key is the field name, and the value is an array of filter values. NOTE: This map contains the fields without the colon `:` prefix. | `{"name":["Mat"]}` |
+| `with` | An object containing the additional parameters. The key is the field name, and the value is an array of filter values. | `{"~limit":[3]}` |
+| `_body` | The body object that will be sent with the request. | `{"name":"Mat"}` |
+| `_method` | The real HTTP method used to make the request.  Since the Stretchr JavaScript SDK uses JSONP, this is always `GET` | `"GET"` |
+| `onCompleted` | The function that will be called when the request is completed. | `function(response){ /* … */ }` |
+| `_session` | The associated `session` object |  |
+| `bodyhash()` |  Gets the body hash used for security signing | `a9993e364706816aba3e25717850c26c9cd0d89d` |
+| `url()` | Gets the full absolute URL of this request.  This does NOT contain the signature. | `http://proj.stretchr.com/api/v1/people?:name=Mat&~limit=3` |
+| `stringToSign()` | Gets the complete string that will be signed. | `GET&http://proj.stretchr.com/api/v1/people ?:name=Mat&~limit=3&~private=ABC` |
+| `signature()` | Gets the SHA-1 signature that validates this request. | `a9993e364706816aba3e25717850c26c9cd0d89d` |
+| `signedUrl()` | Gets the absolute URL (signed) that will actually be used to make the request | `http://proj.stretchr.com/api/v1/people ?:name=Mat&~limit=3&~sign=ABC` |
+| `safeUrl()` | Gets the URL without any sensitive or unnecessary fields. Used in the signing process. | `http://proj.stretchr.com/api/v1/people ?:name=Mat&~limit=3` |
+| `allParamsString()` | Gets a string represented all the parameters (`with` and `where`) sorted and ordered properly | `:name=Mat&~limit=3` |
+| `hasBody()` | Gets whether the request has a body or not | `true|false` |
+| `bodystring()` | Gets a JSON string representing the body object. | `"{\"name\":\"Mat\"}"` | 
