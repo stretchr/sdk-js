@@ -12,7 +12,7 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.read(testCallback)
+		assert.equals(r.read(testCallback), r, "Method should chain")
 
 		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._method, "GET")
@@ -30,7 +30,7 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.create(testCallback)
+		assert.equals(r.create(testCallback), r, "Method should chain")
 
 		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "POST")
@@ -48,7 +48,7 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.update(testCallback)
+		assert.equals(r.update(testCallback), r, "Method should chain")
 
 		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "PUT")
@@ -66,7 +66,7 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.replace(testCallback)
+		assert.equals(r.replace(testCallback), r, "Method should chain")
 
 		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "POST")
@@ -84,7 +84,7 @@ buster.testCase("Actions", {
 			goCalledWithReq = req;
 		}
 
-		r.remove(testCallback)
+		assert.equals(r.remove(testCallback), r, "Method should chain")
 
 		assert.equals(r.onCompleted, testCallback, "callback should be set")
 		assert.equals(r._params["~method"][0], "DELETE")

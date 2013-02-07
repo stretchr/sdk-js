@@ -363,27 +363,32 @@ Stretchr.Request.prototype.signedUrl = function(){
 
 Stretchr.Request.prototype.read = function(completed){
 	this.onCompleted = completed || Stretchr.doNothing;
-	this._session.go(this.method("GET"))
+	this._session.go(this.method("GET"));
+	return this; // chain
 }
 
 Stretchr.Request.prototype.update = function(completed){
 	this.onCompleted = completed || Stretchr.doNothing;
-	this._session.go(this.method("PUT"))
+	this._session.go(this.method("PUT"));
+	return this; // chain
 }
 
 Stretchr.Request.prototype.replace = function(completed){
 	this.onCompleted = completed || Stretchr.doNothing;
-	this._session.go(this.method("POST"))
+	this._session.go(this.method("POST"));
+	return this; // chain
 }
 
 Stretchr.Request.prototype.create = function(completed){
 	this.onCompleted = completed || Stretchr.doNothing;
-	this._session.go(this.method("POST"))
+	this._session.go(this.method("POST"));
+	return this; // chain
 }
 
 Stretchr.Request.prototype.remove = function(completed){
 	this.onCompleted = completed || Stretchr.doNothing;
-	this._session.go(this.method("DELETE"))
+	this._session.go(this.method("DELETE"));
+	return this; // chain
 }
 
 /*
