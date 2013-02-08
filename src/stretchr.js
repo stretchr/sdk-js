@@ -85,7 +85,7 @@ Stretchr.encodeMap = function(map) {
 		var theKey = keys[key]
 		var theValues = map[theKey].sort()
 		for (value in theValues) {
-			encodedString += escape(theKey) + "=" + escape(theValues[value]) + "&"
+			encodedString += theKey + "=" + escape(theValues[value]) + "&"
 		}
 	}
 
@@ -145,7 +145,7 @@ Stretchr.Session.prototype.go = function(request){
 	Stretchr._requests[context] = request
 
 	// make the request
-	Stretchr._makeRequest(request)
+	this._makeRequest(request)
 
 	return context
 }
@@ -156,7 +156,7 @@ Stretchr.Session.prototype.go = function(request){
 Stretchr.Session.prototype._makeRequest = function(request) {
 
 	var script = document.createElement('script');
-	script.src = request.signedUrl()
+	script.src = request.signedUrl();
 
 	document.getElementsByTagName('head')[0].appendChild(script);
 
