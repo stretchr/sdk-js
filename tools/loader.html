@@ -56,9 +56,9 @@
   "index": <%=counter%>,
   "key": "<%=hash%>",
   "date": <%=now%>,
-  "time": <%=timestamp|year%>,
-  "recent": <%=timestamp|month%>,
-  "today": <%=timestamp|day%>,
+  "time": <%=timestamp_year%>,
+  "recent": <%=timestamp_month%>,
+  "today": <%=timestamp_day%>,
   "custom": <%=myFunc%>
 }</textarea>
 					<em>Enter a collective path (i.e. does not end with an ID)</em>
@@ -67,9 +67,9 @@
 							<li><code><%=counter%></code> - An incremental integer</li>
 							<li><code><%=hash%></code> - A random hash of alpha-numberic characters</li>
 							<li><code><%=now%></code> - A unix timestamp of now</li>
-							<li><code><%=timestamp|year%></code> - A random timestamp within the past year</li>
-							<li><code><%=timestamp|month%></code> - A random timestamp within the past month</li>
-							<li><code><%=timestamp|day%></code> - A random timestamp today</li>
+							<li><code><%=timestamp_year%></code> - A random timestamp within the past year</li>
+							<li><code><%=timestamp_month%></code> - A random timestamp within the past month</li>
+							<li><code><%=timestamp_day%></code> - A random timestamp today</li>
 							<li><code><%=myFunc%></code> - Uses the value from <code>myFunc</code> function (see Custom data functions)</li>
 						</ul>
 					</em>
@@ -82,7 +82,7 @@
 				</h2>
 				<label>
 					<span>JavaScript code</span>
-					<textarea name="custom-functions">function myFunc(index, resource){ 
+					<textarea name="custom-functions">window.myFunc = function(index, resource){ 
   return index+1;
 }</textarea>
 				<em>
@@ -136,7 +136,7 @@
 				<textarea class="big" name="dry-run-results"></textarea>
 				<label>
 					<span>Happy?</span>
-					<input type="button" value="Begin making requests..." />
+					<input type="button" value="Begin making requests..." data-action="BeginMakingRequests" />
 				</label>
 				<label>
 					<span>or</span>
@@ -153,12 +153,11 @@
 					Please wait...
 				</h2>
 				<label>
-					<span>Progress</span>
 					<div class="progress">
 						<div class="track"></div>
 					</div>
 				</label>
-				<textarea class="big"></textarea>
+				<textarea class="big" name="actual-work-output"></textarea>
 			</div>
 
 		</div>
@@ -171,6 +170,11 @@
 				loader
 				by Mat Ryer
 			*/
+
+			/*
+				requests holds the request that will be made
+			*/
+			var requests = [];
 
 			/*
 				on ready
@@ -204,7 +208,7 @@
 				})) {
 				
 					// failed :-(
-				switchToSection("setup");
+				  switchToSection("setup");
 
 				};
 			
@@ -224,7 +228,11 @@
 
 				// execute the custom functions
 				try {
-					eval($("textarea[name='custom-functions']").val());
+					//handler(false, "Evaluating custom code:\n\n---\n" + $("textarea[name='custom-functions']").val())
+
+					eval("(" + $("textarea[name='custom-functions']").val() + ")");
+
+					//handler(false, "---\n... custom code OK.\n\n")
 				} catch(e) {
 					alert("Error executing your Custom data functions:\n\n" + e)
 					return false;
@@ -243,23 +251,118 @@
 
 					thisTemplate = thisTemplate.replace("<%=counter%>", counter++);
 					thisTemplate = thisTemplate.replace("<%=hash%>", Stretchr.hash(Date() + counter));
-					thisTemplate = thisTemplate.replace("<%=now%>", (new Date()).getTime()/1000);
+					thisTemplate = thisTemplate.replace("<%=now%>", toUnixTime(new Date()));
+
+					// handle custom functions
+					newOutput = "("
+					if (thisTemplate.indexOf("<%=") > -1) {
+						segs1 = thisTemplate.split("<%=")
+						for (s in segs1) {
+							seg = segs1[s]
+							if (seg.indexOf("%>") > -1) {
+								segs2 = seg.split("%>");
+								functionName = segs2[0];
+
+								try {
+									if (eval("typeof window." + functionName) != "function") {
+										newOutput += "\"" + functionName + "() is not a function\""
+									} else {
+										value = eval(functionName + "(" + i + ", thisTemplate);")
+										newOutput += value; 
+									}
+								} catch(e) {
+									handler(false, "Failed to execute custom function: " + e + "\n" + thisTemplate + "\n");
+								}
+
+								newOutput += segs2[1];
+							} else {
+								newOutput += seg
+							}
+						}
+					}
+					newOutput += ")"
+
+					// trim all whitespace
+					while (newOutput.indexOf("\n") > -1) {
+						newOutput = newOutput.replace("\n", "");
+					}
+					while (newOutput.indexOf("\r") > -1) {
+						newOutput = newOutput.replace("\r", "");
+					}
+					while (newOutput.indexOf("\t") > -1) {
+						newOutput = newOutput.replace("\t", "");
+					}
+					while (newOutput.indexOf("  \"") > -1) {
+						newOutput = newOutput.replace("  \"", "\"");
+					}
+					while (newOutput.indexOf(": ") > -1) {
+						newOutput = newOutput.replace(": ", ":");
+					}
 
 					var resource;
 					try {
-						resource = eval(thisTemplate);
+						resource = eval(newOutput);
 					} catch(e) {
 						// report this error to the handler
-						handler(false, "Couldn't create resource object: " + e + "\n" + thisTemplate + "\n");
+						handler(false, "Couldn't create resource object: " + e + "\n" + newOutput + "\n");
 						continue;
 					}
 
-					alert(resource);
+					handler(true, i + ") POST " + "/sss" + "\n" + JSON.stringify(resource) + "\n", resource, i);
 
 				}
 
 				// success
 				return true;
+
+			}
+
+			function onBeginMakingRequests() {
+
+				switchToSection("really-working");
+				updateProgress(0, "green", false);
+				var actualWorkOutput = $("textarea[name='actual-work-output']")
+				var stretchr = Stretchr.NewSession("test", "rz9eZ6V9L19Yzclt0H4TvhkYnD09OHoA", "vh8iXLuVNvm5I7KQdn8OYaMJ534E7YK6");
+
+				if (!go(function(ok, data, resource, index){
+
+					actualWorkOutput.val(
+						actualWorkOutput.val() + "Making request " + index + "\n"
+					);
+
+					// create the resource
+					stretchr.at("/people").body(resource).create(onRequestCompleted);
+
+				})) {
+				
+					// failed :-(
+				  switchToSection("setup");
+
+				};
+
+			}
+
+			function onRequestCompleted(response) {
+				var actualWorkOutput = $("textarea[name='actual-work-output']");
+				actualWorkOutput.val(
+					actualWorkOutput.val() + "Response: " +  JSON.stringify(response) + "\n"
+				);
+			}
+
+			function updateProgress(percentage, color, animated) {
+
+				if (animated) {
+
+					$(".progress .track")
+						.animate({width: percentage + "%", backgroundColor: color});
+
+				} else {
+
+					$(".progress .track")
+						.width(percentage + "%")
+						.css({backgroundColor: color})
+
+				}
 
 			}
 
@@ -289,6 +392,24 @@
 					}
 				})
 
+			}
+
+			/*
+				Data helpers
+			*/
+
+			function toUnixTime(d) {
+				return Math.floor(d.getTime()/1000);
+			}
+
+		  function timestamp_day(index, template) {
+				return toUnixTime(new Date())
+			}
+		  function timestamp_month(index, template) {
+				return toUnixTime(new Date())
+			}
+		  function timestamp_year(index, template) {
+				return toUnixTime(new Date())
 			}
 
 		</script>

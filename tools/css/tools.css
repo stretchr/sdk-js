@@ -49,7 +49,7 @@ code {
 	float: left;
 }
 .form input[type="text"] {
-	width: 300px;
+	width: 400px;
 	padding: 5px;
 	font-family: Menlo, "Courier New";
 }
@@ -58,8 +58,8 @@ code {
 	padding: 10px;
 }
 .form textarea {
-	width: 300px;
-	height: 100px;
+	width: 400px;
+	height: 200px;
 	font-family: Menlo, "Courier New";
 }
 .form textarea.big {
@@ -86,4 +86,18 @@ code {
 h1 {
 	font-size: 20px;
 	font-weight: bold;
+}
+
+
+
+.progress {
+	display: block;
+	height: 20px;
+	background-color: #eee;
+	margin-right: 200px;
+}
+.track {
+	height: 20px;
+	width: 0%;
+	color: black;
 }
