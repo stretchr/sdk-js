@@ -113,6 +113,14 @@
 						The number of resources to create
 					</em>
 				</label>
+				<!--
+				<label>
+					<span>Additional parameters</span>
+					<input type="text" name="params" />
+					<em>URL string of additional parameters to send with each request</em>
+					<em class="eg">e.g. "~exclude=~stamps&amp;~include=~parent"</em>
+				</label>
+			-->
 			</div>
 
 			<div class="form">
@@ -158,12 +166,16 @@
 					</div>
 				</label>
 				<textarea class="big" name="actual-work-output"></textarea>
+				<label>
+					<span>What now?</span>
+					<input type="button" value="Let's do some more..." data-action="MakeChanges" />
+				</label>
 			</div>
 
 		</div>
 
 		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-		<script src="../src/stretchr.js"></script>
+		<script src="js/stretchr.js"></script>
 		<script>
 
 			/*
@@ -175,6 +187,19 @@
 				requests holds the request that will be made
 			*/
 			var requests = [];
+
+			/*
+				responsesCount holds the number of successful responses
+				that have come back
+			*/
+			var responsesCount = 0;
+
+			/*
+				progressColor holds the CSS color of the progress bar.
+			*/
+			var progressColor = "green";
+
+			var count, template;
 
 			/*
 				on ready
@@ -238,8 +263,8 @@
 					return false;
 				}
 
-				var count = $("select[name='count']").val();
-				var template = $("textarea[name='data-template']").val();
+				count = $("select[name='count']").val();
+				template = $("textarea[name='data-template']").val();
 
 				// template items
 				var counter = 1;
@@ -319,6 +344,8 @@
 
 			function onBeginMakingRequests() {
 
+				responsesCount = 0;
+
 				switchToSection("really-working");
 				updateProgress(0, "green", false);
 				var actualWorkOutput = $("textarea[name='actual-work-output']")
@@ -330,8 +357,24 @@
 						actualWorkOutput.val() + "Making request " + index + "\n"
 					);
 
+					var req = stretchr.at("people").body(resource);
+
+					var paramString = $("input[name='params']").val();
+					if (paramString.length > 0) {
+
+						segs = paramString.split("&");
+						for (s in segs) {
+							seg = segs[s];
+							keyval = seg.split("=")
+							req.with(keyval[0], keyval[1])
+
+console.info(keyval[0] + " = " + keyval[1]);
+
+						}
+
+					}
 					// create the resource
-					stretchr.at("/people").body(resource).create(onRequestCompleted);
+					req.create(onRequestCompleted);
 
 				})) {
 				
@@ -343,10 +386,30 @@
 			}
 
 			function onRequestCompleted(response) {
+
 				var actualWorkOutput = $("textarea[name='actual-work-output']");
 				actualWorkOutput.val(
-					actualWorkOutput.val() + "Response: " +  JSON.stringify(response) + "\n"
+					actualWorkOutput.val() + "Received response:\n" +  JSON.stringify(response) + "\n\n"
 				);
+
+				if (response["~s"] != 200) {
+					progressColor = "red";
+				}
+
+				// increase the progress
+				responsesCount++;
+
+				if (responsesCount == count) {
+
+					updateProgress(100, progressColor, true);
+
+				} else {
+		
+					// update the progress bar
+					updateProgress(100 / (count / responsesCount), progressColor, true);
+
+				}
+
 			}
 
 			function updateProgress(percentage, color, animated) {
