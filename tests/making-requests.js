@@ -15,13 +15,13 @@ buster.testCase("Making requests", {
 	},
 
 	"Stretchr.go": function(){
-	
+		
+		var s = Stretchr.NewSession("project", "pub", "priv")
 		var makeRequestCalls = 0;
-		Stretchr._makeRequest = function(request){
+		s._makeRequest = function(request){
 			makeRequestCalls++;
 		}
 
-		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
 		Stretchr._context = 0;
