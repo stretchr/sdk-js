@@ -61,8 +61,11 @@ var Stretchr = {
 */
 Stretchr.doNothing = function(){};
 
+/*
+	context() gets a unique context variable.
+*/
 Stretchr.context = function() {
-	return ++Stretchr._context;
+	return "" + (++Stretchr._context);
 }
 
 /*
@@ -104,8 +107,10 @@ Stretchr.callback = function(object, context) {
 	// find the request that made this call
 	request = Stretchr._requests[context]
 
-	// trigger the callback
-	request.onCompleted(object)
+	if (request && request.onCompleted) {
+		// trigger the callback
+		request.onCompleted(object)
+	}
 
 }
 
@@ -139,15 +144,20 @@ Stretchr.Session = function(){}
 */
 Stretchr.Session.prototype.go = function(request){
 
-	context = Stretchr.context()
+	// get a context for this request
+	context = Stretchr.context();
+
+	// set it in the request
+	request.with("~context", context);
 
 	// add this request to the _requests array keyed by the context
-	Stretchr._requests[context] = request
+	Stretchr._requests[context] = request;
 
 	// make the request
-	this._makeRequest(request)
+	this._makeRequest(request);
 
-	return context
+	// return the context value
+	return context;
 }
 
 /*
