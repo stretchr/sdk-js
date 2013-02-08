@@ -23,6 +23,7 @@
 				<label>
 					<span>Project name:</span>
 					<input type="text" name="project-name" />
+					<code>.stretchr.com</code>
 				</label>
 				<label>
 					<span>Public key:</span>
@@ -39,8 +40,9 @@
 					Path
 				</h2>
 				<label>
-					<span>Post to /</span>
-					<input type="text" name="project-name" />
+					<span>Post to <code>/api/v1/</code></span>
+					<input type="text" name="path" />
+					<code>/</code>
 					<em>Enter a collective path (i.e. does not end with an ID)</em>
 					<em class="eg">e.g. "people" or "people/1/books"</em>
 				</label>
@@ -139,7 +141,7 @@
 
 			<div class="form">
 				<h2>
-					Results
+					Example output
 				</h2>
 				<textarea class="big" name="dry-run-results"></textarea>
 				<label>
@@ -333,7 +335,30 @@
 						continue;
 					}
 
-					handler(true, i + ") POST " + "/sss" + "\n" + JSON.stringify(resource) + "\n", resource, i);
+					var projectName = $("input[name='project-name']").val();
+					var publicKey = $("input[name='public-key']").val();
+					var privateKey = $("input[name='private-key']").val();
+					var path = $("input[name='path']").val();
+					var stretchr = Stretchr.NewSession(projectName, publicKey, privateKey);
+
+					var req = stretchr.at(path).body(resource);
+
+					/*
+					var paramString = $("input[name='params']").val();
+					if (paramString.length > 0) {
+
+						segs = paramString.split("&");
+						for (s in segs) {
+							seg = segs[s];
+							keyval = seg.split("=")
+							req.with(keyval[0], keyval[1])
+
+						}
+
+					}
+					*/
+
+					handler(true, (i + 1) + ") GET " + req.signedUrl() + "\n\n" + JSON.stringify(resource, null, "  ") + "\n", resource, i, req);
 
 				}
 
@@ -348,33 +373,16 @@
 
 				switchToSection("really-working");
 				updateProgress(0, "green", false);
-				var actualWorkOutput = $("textarea[name='actual-work-output']")
-				var stretchr = Stretchr.NewSession("test", "rz9eZ6V9L19Yzclt0H4TvhkYnD09OHoA", "vh8iXLuVNvm5I7KQdn8OYaMJ534E7YK6");
+				var actualWorkOutput = $("textarea[name='actual-work-output']");
 
-				if (!go(function(ok, data, resource, index){
+				if (!go(function(ok, data, resource, index, request){
 
 					actualWorkOutput.val(
 						actualWorkOutput.val() + "Making request " + index + "\n"
 					);
 
-					var req = stretchr.at("people").body(resource);
-
-					var paramString = $("input[name='params']").val();
-					if (paramString.length > 0) {
-
-						segs = paramString.split("&");
-						for (s in segs) {
-							seg = segs[s];
-							keyval = seg.split("=")
-							req.with(keyval[0], keyval[1])
-
-console.info(keyval[0] + " = " + keyval[1]);
-
-						}
-
-					}
 					// create the resource
-					req.create(onRequestCompleted);
+					request.create(onRequestCompleted);
 
 				})) {
 				
