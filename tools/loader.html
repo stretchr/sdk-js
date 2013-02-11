@@ -69,9 +69,14 @@
 							<li><code><%=counter%></code> - An incremental integer</li>
 							<li><code><%=hash%></code> - A random hash of alpha-numberic characters</li>
 							<li><code><%=now%></code> - A unix timestamp of now</li>
-							<li><code><%=timestamp_year%></code> - A random timestamp within the past year</li>
-							<li><code><%=timestamp_month%></code> - A random timestamp within the past month</li>
-							<li><code><%=timestamp_day%></code> - A random timestamp today</li>
+							<li><code><%=timestamp_year%></code> - A random timestamp this year</li>
+							<li><code><%=timestamp_year_until_now%></code> - A random timestamp so far this year</li>
+							<li><code><%=timestamp_month%></code> - A random timestamp this month</li>
+							<li><code><%=timestamp_day%></code> - A random timestamp at some point today</li>
+							<li><code><%=random%></code> - A random number between 0 and 1</li>
+							<li><code><%=random_bool%></code> - Randomly <code>"true"</code> or <code>"false"</code></li>
+							<li><code><%=random_percentage%></code> - A random number between 0 and 100</li>
+							<li><code><%=random_location%></code> - A random location object</li>
 							<li><code><%=myFunc%></code> - Uses the value from <code>myFunc</code> function (see Custom data functions)</li>
 						</ul>
 					</em>
@@ -473,14 +478,111 @@
 				return Math.floor(d.getTime()/1000);
 			}
 
+			function random_location(index, template) {
+
+
+
+			}
+
 		  function timestamp_day(index, template) {
-				return toUnixTime(new Date())
+
+				var start = new Date()
+				var end = new Date()
+
+				start.setHours(0);
+				start.setMinutes(0);
+				start.setSeconds(0);
+
+				end.setHours(23);
+				end.setMinutes(59);
+				end.setSeconds(59);
+
+				return toUnixTime(randomDate(start, end));
 			}
+			
 		  function timestamp_month(index, template) {
-				return toUnixTime(new Date())
+
+				var start = new Date()
+				var end = new Date()
+
+				start.setHours(0);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				start.setDate(0);
+
+				end.setHours(23);
+				end.setMinutes(59);
+				end.setSeconds(59);
+				end.setDate(28);
+
+				return toUnixTime(randomDate(start, end));
+
 			}
+
 		  function timestamp_year(index, template) {
-				return toUnixTime(new Date())
+
+				var start = new Date()
+				var end = new Date()
+
+				start.setHours(0);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				start.setDate(0);
+				start.setMonth(1);
+
+				end.setHours(23);
+				end.setMinutes(59);
+				end.setSeconds(59);
+				end.setDate(28);
+				end.setMonth(12);
+
+				return toUnixTime(randomDate(start, end));
+
+			}
+
+			function timestamp_year_until_now(index, template) {
+
+				var start = new Date()
+				var end = new Date()
+
+				start.setHours(0);
+				start.setMinutes(0);
+				start.setSeconds(0);
+				start.setDate(0);
+				start.setMonth(1);
+
+				return toUnixTime(randomDate(start, end));
+
+			}
+
+			function random() {
+				return Math.random();
+			}
+
+			function random_percentage() {
+				return random() * 100;
+			}
+
+			function random_location() {
+
+				var lat = 40.01601711804619 + (-10 + (Math.random() * 20));
+				var lng = -105.2490574057836 + (-10 + (Math.random() * 20));
+				var alt = 1268.254028320312 + (-250 + (Math.random() * 500));
+
+				return "{\"lat\":" + lat + ",\"lng\":" + lng + ",\"alt\":" + alt + "}";
+			}
+
+			function random_bool() {
+				if (Math.random() > 0.5) {
+					return "false";
+				} else {
+					return "true";
+				}
+			}
+
+			// thanks http://stackoverflow.com/questions/9035627/elegant-method-to-generate-array-of-random-dates-within-two-dates
+			function randomDate(start, end) {
+			    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 			}
 
 		</script>

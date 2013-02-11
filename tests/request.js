@@ -65,32 +65,19 @@ buster.testCase("Request", {
 
 		assert.equals(r.body({name: "Mat", age: 30}), r, "body should chain")
 		assert.equals(r._body["age"], 30)
-		assert.equals(r._params["~bodyhash"][0], "1bc102b3056f56c1851c6d11029c1086ad82ad33")
+		//assert.equals(r._params["~bodyhash"][0], "1bc102b3056f56c1851c6d11029c1086ad82ad33")
 		assert.equals(r._params["~body"][0], r.bodystring())
 
 		assert.equals(r.hasBody(), true)
 
 		assert.equals(r.body("{'name':'Mat','age':29}"), r, "body as string should chain")
 		assert.equals(r._body["age"], 29)
-		assert.equals(r._params["~bodyhash"][0], "d8750963d5c0180dba3453e7c996c53df8bd557b")
+		//assert.equals(r._params["~bodyhash"][0], "d8750963d5c0180dba3453e7c996c53df8bd557b")
 
 		assert.equals(r.hasBody(), true)
 
 		assert.equals(r.bodystring(), "{\"name\":\"Mat\",\"age\":29}")
 		assert.equals(r._params["~body"][0], r.bodystring())
-
-	},
-
-	"bodyhash": function(){
-
-		var s = Stretchr.NewSession("project", "pub", "priv")
-		var r = Stretchr.NewRequest(s, "path")
-
-		assert.equals(r.bodyhash(), "", "No body")
-
-		r.body({name: "Mat"})
-
-		assert.equals(r.bodyhash(), "f5391eb500fc8296e052accf28430950fe24545c")
 
 	},
 
@@ -114,6 +101,24 @@ buster.testCase("Request", {
 
 	},
 
+	"allParamsString with body": function(){
+
+		var s = Stretchr.NewSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people")
+
+		// reset params for test purposes
+		r._params = {}
+
+		assert.equals(r.allParamsString(), "")
+
+		r.body({
+			"something": true
+		})
+
+		assert.equals(r.allParamsString(), "?~body={%22something%22:true}")
+
+	},
+
 	"url": function(){
 
 		var s = Stretchr.NewSession("project", "pub", "priv")
@@ -126,7 +131,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~bodyhash=f5391eb500fc8296e052accf28430950fe24545c&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 
 	},
 
@@ -139,9 +144,9 @@ buster.testCase("Request", {
 		r.body({name: "Mat"})
 
 		// ensure url isn't corrupted by the stringToSign method
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 		r.stringToSign()
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 
 	},
 
@@ -159,7 +164,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~bodyhash=f5391eb500fc8296e052accf28430950fe24545c&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
 
 	},
 
@@ -182,7 +187,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=462fb1e9fdf5492ffb452424bf498a04961c397e")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=408a184c7069d8b25b5a91385bbc0f64d230bc98")
 
 	}
 
