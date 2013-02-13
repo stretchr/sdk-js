@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Loader - v1 - Stretchr</title>
+    <link href="css/reset.css" rel="stylesheet" />
+    <link href="css/tools.css" rel="stylesheet" />
+  </head>
+  <body>
+
+    <div id="header">
+      <h1>Data killer</h1>
+      <em>
+        Delete bulk data from Stretchr.
+      </em>
+    </div>
+
+    <div class="section setup">
+
+      <div class="form">
+        <h2>
+          Account
+        </h2>
+        <label>
+          <span>Project name:</span>
+          <input type="text" name="project-name" />
+          <code>.stretchr.com</code>
+        </label>
+        <label>
+          <span>Public key:</span>
+          <input type="text" name="public-key" />
+        </label>
+        <label>
+          <span>Private key:</span>
+          <input type="text" name="private-key" />
+        </label>
+      </div>
+      
+      <div class="form">
+        <h2>
+          Path
+        </h2>
+        <label>
+          <span><code>/api/v1/</code></span>
+          <input type="text" name="path" />
+          <code>/</code>
+          <em>Enter a path of resources to delete</em>
+          <em class="eg">e.g. "people" or "people/1"</em>
+        </label>
+        <label>
+          <span>Filtering</span><code>?</code>
+          <input type="text" name="filter" />
+          <em>Enter filtering parameters as a query string</em>
+          <em class="eg">e.g. ":age=>18&amp;:old=true"</em>
+        </label>
+      </div>
+
+      <div class="form">
+        <h2>
+          Dry run
+        </h2>
+        <label>
+          <span>All set?</span>
+          <input type="button" value="Perform dry run" data-action="DryRun" />
+        </label>
+      </div>
+
+    </div>
+
+    <div class="section dry-run">
+
+      <div class="form">
+        <h2>
+          Example output
+        </h2>
+        <textarea class="big" name="dry-run-results"></textarea>
+        <label>
+          <span>Happy?</span>
+          <input type="button" value="Begin making requests..." data-action="BeginMakingRequests" />
+        </label>
+        <label>
+          <span>or</span>
+          <input type="button" value="Make some changes" data-action="MakeChanges" />
+        </label>
+      </div>
+
+    </div>
+
+    <div class="section really-working">
+
+      <div class="form">
+        <h2>
+          Please wait...
+        </h2>
+        <label>
+          <div class="progress">
+            <div class="track"></div>
+          </div>
+        </label>
+        <textarea class="big" name="actual-work-output"></textarea>
+        <label>
+          <span>What now?</span>
+          <input type="button" value="Let's do some more..." data-action="MakeChanges" />
+        </label>
+      </div>
+
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="js/stretchr.js"></script>
+    <script>
+
+      /*
+        on ready
+      */
+      $(function(){
+
+        switchToSection("setup", false);
+
+        $("input[type=\"button\"]").click(function(){
+          var $this = $(this);
+          window["on" + $this.attr("data-action")]($this);
+        });
+
+      });
+
+      /*
+        go generates the resources and calls handler for each
+        one.
+      */
+      function go(handler) {
+        
+          var projectName = $("input[name='project-name']").val();
+          var publicKey = $("input[name='public-key']").val();
+          var privateKey = $("input[name='private-key']").val();
+          var path = $("input[name='path']").val();
+          var filter = $("input[name='filter']").val();
+          var stretchr = Stretchr.NewSession(projectName, publicKey, privateKey);
+          var req = stretchr.at(path);
+
+          // set the filter parameters properly
+          var queryObj = parseQuery(filter);
+          for (var key in queryObj) {
+            req.with(key, queryObj[key]);
+          }
+
+          handler(false, "DELETE " + req.url(), 0, req);
+
+          return true;
+      }
+
+      function onDryRun() {
+
+        switchToSection("dry-run");
+        dryRunResults = $("textarea[name='dry-run-results']").val("");
+
+        if (!go(function(ok, data){
+
+          // add this to the dry run results
+          dryRunResults.val(
+            dryRunResults.val() + data + "\n"
+          );
+
+        })) {
+        
+          // failed :-(
+          switchToSection("setup");
+
+        };
+
+      }
+
+      function onBeginMakingRequests() {
+
+        responsesCount = 0;
+
+        switchToSection("really-working");
+        updateProgress(0, "green", false);
+        var actualWorkOutput = $("textarea[name='actual-work-output']");
+
+        if (!go(function(ok, data, index, request){
+
+          actualWorkOutput.val(
+            actualWorkOutput.val() + "Making request " + index + "\n"
+          );
+
+          // create the resource
+          request.remove(onRequestCompleted);
+
+        })) {
+        
+          // failed :-(
+          switchToSection("setup");
+
+        };
+
+      }
+
+      function onRequestCompleted(response) {
+
+        var actualWorkOutput = $("textarea[name='actual-work-output']");
+        actualWorkOutput.val(
+          actualWorkOutput.val() + "Received response:\n" +  JSON.stringify(response) + "\n\n"
+        );
+
+        if (response["~s"] != 200) {
+          progressColor = "red";
+        }
+
+        // increase the progress
+        responsesCount++;
+
+        if (responsesCount == count) {
+
+          updateProgress(100, progressColor, true);
+
+        } else {
+    
+          // update the progress bar
+          updateProgress(100 / (count / responsesCount), progressColor, true);
+
+        }
+
+      }
+
+      function onMakeChanges() {
+
+        switchToSection("setup");
+
+      }
+
+      /*
+        Opens the specified section and closes all others.
+      */
+      function switchToSection(section, animated) {
+
+        if (typeof animated == "undefined") {
+          animated = true;
+        }
+
+        $("div.section").each(function(){
+          var $this = $(this);
+          if (!$this.hasClass(section)) {
+            if (animated) {
+              $this.slideUp();
+            } else {
+              $this.hide();
+            }
+          } else {
+            if (animated) {
+              $this.slideDown();
+            } else {
+              $this.show();
+            }         
+          }
+        })
+
+      }
+
+      function parseQuery(queryString) {
+        var args = queryString.substring(1).split('&');
+
+        argsParsed = {};
+
+        for (i=0; i < args.length; i++)
+        {
+            arg = unescape(args[i]);
+
+            if (arg.indexOf('=') == -1)
+            {
+                argsParsed[arg.trim()] = true;
+            }
+            else
+            {
+                kvp = arg.split('=');
+                argsParsed[kvp[0].trim()] = kvp[1].trim();
+            }
+        }
+
+        return argsParsed;
+      }
+
+      function updateProgress(percentage, color, animated) {
+
+        if (animated) {
+
+          $(".progress .track")
+            .width(percentage + "%");
+        } else {
+
+          $(".progress .track")
+            .width(percentage + "%")
+            .css({backgroundColor: color})
+
+        }
+
+      }
+
+    </script>
+
+  </body>
+</html>
