@@ -92,6 +92,38 @@ Or to find all people over 30 years old:
 
     stretchr.at("people").where("age", ">30").read(…)
     
+### Reading everything
+
+Stretchr limits each response to 100 resources, but somtimes you want to read more than that.  In that case, you can use the `readAll` method that makes multiple requests until all the data has loaded.
+
+    stretchr.at("people").readAll({
+      "onCompleted": function(response){
+    
+        if (response["~s"] != 200) {
+          
+          // TODO: handle errors
+          
+        } else {
+             
+          var resources = response["~d"]["~i"]
+      
+        }
+        
+      }
+    )
+
+You can optionally pass in an `"onProgress'` callback function that will be called after each page is loaded.  `onProgress` gets the actual response object, as well as a percentage value of how far into the process we are.
+
+    function onProgressCallback(repsonse, percentage) {
+      
+      updateProgressBar(percentage);
+
+      if (response["~s"] != 200) {
+        // TODO: handle error
+      }
+
+    }
+
 ### Creating a resource
 
     stretchr.at("people").body({name: "Mat", age: 30}).create(function(response){
