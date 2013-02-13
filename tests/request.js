@@ -93,11 +93,11 @@ buster.testCase("Request", {
 
 		r.with("one", 1).with("two", 2).with("three", 3)
 
-		assert.equals(r.allParamsString(), "?one=1&three=3&two=2")
+		assert.equals(r.allParamsString(), "one=1&three=3&two=2")
 
 		r.where("one", 1).where("two", 2).where("three", 3)
 
-		assert.equals(r.allParamsString(), "?:one=1&:three=3&:two=2&one=1&three=3&two=2")
+		assert.equals(r.allParamsString(), ":one=1&:three=3&:two=2&one=1&three=3&two=2")
 
 	},
 
@@ -115,7 +115,7 @@ buster.testCase("Request", {
 			"something": true
 		})
 
-		assert.equals(r.allParamsString(), "?~body={%22something%22:true}")
+		assert.equals(r.allParamsString(), "~body={\"something\":true}")
 
 	},
 
@@ -131,7 +131,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 
 	},
 
@@ -144,9 +144,9 @@ buster.testCase("Request", {
 		r.body({name: "Mat"})
 
 		// ensure url isn't corrupted by the stringToSign method
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 		r.stringToSign()
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
 
 	},
 
@@ -164,7 +164,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
 
 	},
 
@@ -187,7 +187,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={%22name%22:%22Mat%22}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=408a184c7069d8b25b5a91385bbc0f64d230bc98")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={"name":"Mat"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
 
 	}
 
