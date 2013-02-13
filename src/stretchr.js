@@ -71,8 +71,6 @@ Stretchr.context = function() {
   return "" + (++Stretchr._context);
 }
 
-Stretchr.urlEncodeCharacters = "\"";
-
 /*
   encodeMap encodes the specified map into a sorted URL string.
 */
