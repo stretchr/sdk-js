@@ -402,7 +402,14 @@ Stretchr.Request.prototype.remove = function(completed){
 }
 
 Stretchr.Request.prototype.readAll = function(options) {
-  this._newMultiplePageReader().readAll(options);
+  
+  var reader = this._newMultiplePageReader();
+  for (var key in options) {
+    reader[key] = options[key];
+  }
+
+  // start reading
+  reader.readAll(options);
 }
 
 /*
