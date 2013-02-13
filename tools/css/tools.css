@@ -90,6 +90,14 @@ h1 {
 	font-weight: bold;
 }
 
+ul {
+	list-style-type: disc;
+	margin-left: 20px;
+	line-height: 1.3em;
+}
+ul li {
+	padding: 5px;
+}
 
 
 .progress {
