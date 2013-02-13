@@ -237,13 +237,6 @@ Stretchr.Request.prototype.body = function(body) {
   // set the body parameter
   this._params["~body"] = [this.bodystring()];
 
-  /*
-  // set the bodyhash
-  if (this.hasBody()) {
-    this._params["~bodyhash"] = [this.bodyhash()];
-  }
-  */
-
   return this;
 
 }
