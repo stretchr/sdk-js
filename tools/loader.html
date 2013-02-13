@@ -430,8 +430,7 @@
 				if (animated) {
 
 					$(".progress .track")
-						.animate({width: percentage + "%", backgroundColor: color});
-
+						.width(percentage + "%");
 				} else {
 
 					$(".progress .track")
@@ -476,12 +475,6 @@
 
 			function toUnixTime(d) {
 				return Math.floor(d.getTime()/1000);
-			}
-
-			function random_location(index, template) {
-
-
-
 			}
 
 		  function timestamp_day(index, template) {
