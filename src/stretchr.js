@@ -151,7 +151,7 @@ Stretchr.Session.prototype.go = function(request){
   context = Stretchr.context();
 
   // set it in the request
-  request.with("~context", context);
+  request.set("~context", context);
 
   // add this request to the _requests array keyed by the context
   Stretchr._requests[context] = request;
@@ -256,13 +256,17 @@ Stretchr.Request.prototype.bodystring = function(){
 }
 
 /*
-  bodyhash gets a hash of the bodystring.
+  set sets a parameter in the Request and removed any existing
+  parameters with the same key.
 */
-Stretchr.Request.prototype.bodyhash = function(){
-  if (!this.hasBody()) {
-    return ""
-  }
-  return Stretchr.hash(this.bodystring())
+Stretchr.Request.prototype.set = function(key, value) {
+
+  // set the value
+  this._params[key] = [value];
+
+  // chain
+  return this;
+
 }
 
 /*
@@ -270,11 +274,11 @@ Stretchr.Request.prototype.bodyhash = function(){
 */
 Stretchr.Request.prototype.with = function(key, value) {
 
-  this._params[key] = this._params[key] || []
-  this._params[key].push(value)
+  this._params[key] = this._params[key] || [];
+  this._params[key].push(value);
 
   // chain
-  return this
+  return this;
 }
 
 /*
@@ -283,13 +287,13 @@ Stretchr.Request.prototype.with = function(key, value) {
 Stretchr.Request.prototype.where = function(key, value) {
 
   // add the prefix
-  key = ":" + key
+  key = ":" + key;
 
-  this._filterparams[key] = this._filterparams[key] || []
-  this._filterparams[key].push(value)
+  this._filterparams[key] = this._filterparams[key] || [];
+  this._filterparams[key].push(value);
 
   // chain
-  return this
+  return this;
 
 }
 
@@ -396,6 +400,109 @@ Stretchr.Request.prototype.remove = function(completed){
   this._session.go(this.method("DELETE"));
   return this; // chain
 }
+
+Stretchr.Request.prototype.readAll = function(options) {
+  this._newMultiplePageReader().readAll(options);
+}
+
+/*
+  Reading multiple pages
+*/
+Stretchr.Request.prototype._newMultiplePageReader = function(){
+
+  var reader = new Stretchr.MultiplePageReader();
+  reader._request = this;
+  reader._currentPage = -1;
+  reader._pageSize = 10;
+  reader._totalCount = -1;
+  reader._responses = [];
+  reader._items = [];
+  reader._interval = 100;
+  reader._loadedItemsCount = 0;
+  return reader;
+
+};
+
+
+Stretchr.MultiplePageReader = function(){};
+
+/*
+  options:
+    onCompleted: function(){}
+    onProgress: function(repsonse, percentage){}
+*/
+Stretchr.MultiplePageReader.prototype.readAll = function(options) {
+
+  this.onCompleted = options["onCompleted"] || function(){};
+  this.onProgress = options["onProgress"] || function(){};
+
+  this.readNextPage();
+
+};
+
+Stretchr.MultiplePageReader.prototype.readNextPage = function(){
+  this._currentPage++;
+
+  // set the limit value
+  var request = this._request;
+  var $this = this;
+
+  request.set("~total", 1);
+
+  request
+    .set("~limit", this._pageSize)
+    .set("~skip", this._pageSize * this._currentPage)
+    .read(function(response){
+
+      if (response["~s"] == 200) {
+
+        // do we have a total count?
+        if (response["~d"]["~t"]) {
+          $this._totalCount = response["~d"]["~t"];
+        }
+
+        // add the items
+        $this._responses.push(response);
+        for (var i in response["~d"]["~i"]) {
+
+          var index = ($this._currentPage * $this._pageSize) + parseInt(i);
+          $this._items[index] = response["~d"]["~i"][i];
+          $this._loadedItemsCount++;
+
+        }
+
+        $this._progressPercentage = Math.floor(100 / ($this._totalCount / $this._loadedItemsCount));
+
+        // update the progress
+        $this.onProgress(response, $this._progressPercentage);
+
+        if ($this._loadedItemsCount == $this._totalCount) {
+
+          // finished
+          $this.onCompleted({
+            "~s": 200,
+            "~d": {
+              "~t": $this._totalCount,
+              "~c": $this._totalCount,
+              "~i": $this._items
+            }
+          });
+
+        } else {
+
+          // more pages
+          window.setTimeout(function(){ $this.readNextPage(); }, $this._interval);
+
+        }
+
+      } else {
+        // TODO: handle error
+      }
+
+    })
+  ;
+
+};
 
 /*
   Security

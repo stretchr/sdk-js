@@ -31,6 +31,23 @@ buster.testCase("Request", {
 		assert.equals(r._params["something"].length, 2, "multiple with's with same key should build array")
 
 	},
+	
+	"set": function(){
+
+		var s = Stretchr.NewSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "path")
+
+		assert.equals(r.with("~limit", 2), r, "with should chain")
+		assert.equals(r._params["~limit"][0], 2, "params")
+
+		r.with("something", "one").with("something", "two")
+
+		assert.equals(r._params["something"].length, 2, "multiple with's with same key should build array")
+
+		assert.equals(r.set("something", "three"), r);
+		assert.equals(r._params["something"].length, 1, "Set should always replace value")
+
+	},
 
 	"where": function(){
 
@@ -187,7 +204,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={"name":"Mat"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
 
 	}
 
