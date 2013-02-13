@@ -354,8 +354,6 @@ Stretchr.Request.prototype.stringToSign = function(){
 
   var stringToSign = [this._method, "&", this.url()].join("")
 
-  console.info("stringToSign=" + stringToSign);
-
   return stringToSign
 
 }
