@@ -106,8 +106,10 @@
     </div>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="js/stretchr.js"></script>
+    <script src="https://raw.github.com/stretchrcom/sdk-js/master/src/stretchr.js"></script>
     <script>
+
+      var progressColor;
 
       /*
         on ready
@@ -206,19 +208,7 @@
           progressColor = "red";
         }
 
-        // increase the progress
-        responsesCount++;
-
-        if (responsesCount == count) {
-
-          updateProgress(100, progressColor, true);
-
-        } else {
-    
-          // update the progress bar
-          updateProgress(100 / (count / responsesCount), progressColor, true);
-
-        }
+        updateProgress(100, progressColor, true);
 
       }
 
