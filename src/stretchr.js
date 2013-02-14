@@ -483,7 +483,7 @@ Stretchr.MultiplePageReader.prototype.readNextPage = function(){
         // update the progress
         $this.onProgress(response, $this._progressPercentage);
 
-        if ($this._loadedItemsCount == $this._totalCount) {
+        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount == 0) {
 
           // finished
           $this.onCompleted({
