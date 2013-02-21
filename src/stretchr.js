@@ -27,10 +27,19 @@
     Jeff Mott for CryptoJS
     - scroll down for more information
 
-    Google Inc for proper URI implementation
-    - scroll down for more information
-
 */
+
+/*
+	oo
+	v1.0
+	The worlds simplest JavaScript OO implementation.
+	For if you just need classes, and nothing else.
+
+	Copyright (c) 2013 Mat Ryer
+	Please consider promoting this project if you find it useful.
+	Be sure to check out the Licence: https://github.com/stretchrcom/oo#licence
+*/
+var ooreset=function(){var e={version:"1.0",classes:[],classesmap:{},Class:function(t){if(e.classesmap[t]){throw new e.DuplicateClassNameException(t);return null}var n=function(){this.$initialiseBases.apply(this);this.init.apply(this,arguments)};n.prototype.init=function(){};n.$bases={};n.prototype.$initialiseBases=function(){for(var e in this.$class.$bases){var t=this.$class.$bases[e];for(var n in t.prototype){if(typeof t.prototype[n]=="function"){if(n.substr(0,1)!="$"){t.prototype[n]=t.prototype[n].bind(this)}}}}};for(var r=1,i=arguments.length-1;r<i;r++){var s=arguments[r];if(s.$isClass){n.$bases[s.$className]=s;ooextend(s.prototype,n.prototype);n.prototype[s.$className]=s.prototype}else if(typeof s=="object"){ooextend(s,n.prototype)}}if(arguments.length>1){ooextend(arguments[arguments.length-1],n.prototype)}n.toString=function(){return"<{ oo.Class: "+this.$className+" }>"};n.$isClass=true;n.prototype.constructor=n.prototype.$class=n;e.classes[e.classes.length]=n.$className=t;return e.classesmap[t]=n}};e.Exception=e.Class("oo.Exception",{init:function(e){this.message=e},toString:function(){return'<{ oo.Exception: " + message + " }>'}});e.DuplicateClassNameException=e.Class("oo.DuplicateClassNameException",e.Exception,{init:function(e){"Cannot define a class because '"+e+"' already exists."}});return e};var ooextend=function(e,t){for(var n in e){t[n]=e[n]}};var oo=ooreset();var oobind=function(){var e=arguments[0]||null,t=arguments[1]||this,n=[],r=2,i=arguments.length,s;for(;r<i;r++){n.push(arguments[r])}s=function(){var r=[];var s=0;for(s=0,i=n.length;s<i;s++){r.push(n[s])}for(s=0,i=arguments.length;s<i;s++){r.push(arguments[s])}return e.apply(t,r)};s.func=e;s.context=t;s.args=n;return s};Function.prototype.bind=function(){var e=[],t=0,n=arguments.length;e.push(this);for(;t<n;t++){e.push(arguments[t])}return oobind.apply(window,e)};
 
 /*
   Stretchr is the root namespace for all Stretchr activities.
@@ -130,13 +139,12 @@ Stretchr.callback = function(object, context) {
 /*
   NewSession creates a new Stretchr session with the specified
   project and keys.
+
+  DEPRECATED in favour of new Stretchr.Session(project, publicKey, privateKey);
+  that we get thanks to oo.
 */
 Stretchr.NewSession = function(project, publicKey, privateKey){
-  var newSession = new(Stretchr.Session)
-  newSession._project = project
-  newSession._publicKey = publicKey
-  newSession._privateKey = privateKey
-  return newSession
+  return new Stretchr.Session(project, publicKey, privateKey);
 }
 
 /*
@@ -146,48 +154,57 @@ Stretchr.NewSession = function(project, publicKey, privateKey){
 
     s = Stretchr.NewSession(project, publicKey, privateKey)
 */
-Stretchr.Session = function(){}
+Stretchr.Session = oo.Class("Stretchr.Session", {
 
-/*
-  go executes the request.
-*/
-Stretchr.Session.prototype.go = function(request){
+	init: function(project, publicKey, privateKey) {
+	  this._project = project
+	  this._publicKey = publicKey
+	  this._privateKey = privateKey
+	},
 
-  // get a context for this request
-  context = Stretchr.context();
+	/*
+	  go executes the request.
+	*/
+	go: function(request){
 
-  // set it in the request
-  request.set("~context", context);
+	  // get a context for this request
+	  context = Stretchr.context();
 
-  // add this request to the _requests array keyed by the context
-  Stretchr._requests[context] = request;
+	  // set it in the request
+	  request.set("~context", context);
 
-  // make the request
-  this._makeRequest(request);
+	  // add this request to the _requests array keyed by the context
+	  Stretchr._requests[context] = request;
 
-  // return the context value
-  return context;
-}
+	  // make the request
+	  this._makeRequest(request);
 
-/*
-  _makeRequest makes an actual HTTP JSONP request.
-*/
-Stretchr.Session.prototype._makeRequest = function(request) {
+	  // return the context value
+	  return context;
+	},
 
-  var script = document.createElement('script');
-  script.src = request.signedUrl();
+	/*
+	  _makeRequest makes an actual HTTP JSONP request.
+	*/
+	_makeRequest: function(request) {
 
-  document.getElementsByTagName('head')[0].appendChild(script);
+	  var script = document.createElement('script');
+	  script.src = request.signedUrl();
 
-}
+	  document.getElementsByTagName('head')[0].appendChild(script);
 
-/*
-  at starts a conversation with Stretchr by specifying the relevant path
-  and returning a Stretchr.Request object which will continue the conversation.
-*/
-Stretchr.Session.prototype.at = function(path){
-  return Stretchr.NewRequest(this, path)
-}
+	},
+
+	/*
+	  at starts a conversation with Stretchr by specifying the relevant path
+	  and returning a Stretchr.Request object which will continue the conversation.
+	*/
+	at: function(path){
+	  return Stretchr.NewRequest(this, path)
+	}
+
+});
+
 
 /*
   Request
@@ -214,308 +231,320 @@ Stretchr.NewRequest = function(session, path) {
   return request;
 }
 
+
 /*
   Request represents a complete conversation with Stretchr.
 */
-Stretchr.Request = function(){}
+Stretchr.Request = oo.Class("Stretchr.Request", {
+
+
+	/*
+	  method sets the HTTP Method to use when accessing this request.
+	*/
+	method: function(httpMethod) {
+
+	  this._params["~method"] = [httpMethod]
+	  return this;
+
+	},
+
+	/*
+	  body sets the body object for this request.
+	*/
+	body: function(body) {
+
+	  if (typeof body == "object") {
+	    this._body = body;
+	  } else if (typeof body == "string") {
+	    this._body = eval("(" + body + ")");
+	  }
+
+	  // set the body parameter
+	  this._params["~body"] = [this.bodystring()];
+
+	  return this;
+
+	},
+
+	/*
+	  hasBody gets whether the request has a body or not.
+	*/
+	hasBody: function() {
+	  return this._body != null
+	},
+
+	/*
+	  bodystring gets the JSON string that represents the body.
+	*/
+	bodystring: function(){
+	  return JSON.stringify(this._body)
+	},
+
+	/*
+	  set sets a parameter in the Request and removed any existing
+	  parameters with the same key.
+	*/
+	set: function(key, value) {
+
+	  // set the value
+	  this._params[key] = [value];
+
+	  // chain
+	  return this;
+
+	},
+
+	/*
+	  with sets a parameter to the Request.
+	*/
+	with: function(key, value) {
+
+	  this._params[key] = this._params[key] || [];
+	  this._params[key].push(value);
+
+	  // chain
+	  return this;
+	},
+
+	/*
+	  where sets a filter parameter in the Request.
+	*/
+	where: function(key, value) {
+
+	  // add the prefix
+	  key = ":" + key;
+
+	  this._filterparams[key] = this._filterparams[key] || [];
+	  this._filterparams[key].push(value);
+
+	  // chain
+	  return this;
+
+	},
+
+	/*
+	  allParamsString gets an encoded URL string of all the parameters ordered
+	  by key first, then value.
+	*/
+	allParamsString: function(){
+
+	  var allParams = {}
+
+	  for (key in this._params) {
+	    allParams[key] = this._params[key]
+	  }
+	  for (key in this._filterparams) {
+	    allParams[key] = this._filterparams[key]
+	  }
+
+	  var s = Stretchr.encodeMap(allParams)
+
+	  return s
+
+	},
+
+	/*
+	  safeUrl generates an absolute URL from the properties in this request which is safe,
+	  i.e. contains no sensitive data (like private key).
+	*/
+	safeUrl: function() {
+
+	  // ensure we do not send sensitive information
+	  delete this._params["~private"]
+	  delete this._params["~bodyhash"]
+
+	  return this.url()
+
+	},
+
+	/*
+	  url generates an absolute URL from the properties in this request
+	*/
+	url: function() {
+	  return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString()].join("")
+	},
+
+	/*
+	  stringToSign gets the string that should be signed for security purposes.
+	*/
+	stringToSign: function(){
+
+	  // add the private key
+	  this._params["~private"] = [this._session._privateKey]
+
+	  var stringToSign = [this._method, "&", this.url()].join("")
+
+	  return stringToSign
+
+	},
+
+	/*
+	  signature gets the security hash that should be sent along with this request.
+	*/
+	signature: function(){
+	  return Stretchr.hash(this.stringToSign())
+	},
+
+	/*
+	  signedUrl gets the actual URL of the request to make, with the ~sign parameter added.
+	*/
+	signedUrl: function(){
+	  return [this.safeUrl(), "&~sign=", this.signature()].join("")
+	},
+
+	/*
+	  Actions
+	*/
+
+	read: function(completed){
+	  this.onCompleted = completed || Stretchr.doNothing;
+	  this._session.go(this.method("GET"));
+	  return this; // chain
+	},
+
+	update: function(completed){
+	  this.onCompleted = completed || Stretchr.doNothing;
+	  this._session.go(this.method("PUT"));
+	  return this; // chain
+	},
+
+	replace: function(completed){
+	  this.onCompleted = completed || Stretchr.doNothing;
+	  this._session.go(this.method("POST"));
+	  return this; // chain
+	},
+
+	create: function(completed){
+	  this.onCompleted = completed || Stretchr.doNothing;
+	  this._session.go(this.method("POST"));
+	  return this; // chain
+	},
+
+	remove: function(completed){
+	  this.onCompleted = completed || Stretchr.doNothing;
+	  this._session.go(this.method("DELETE"));
+	  return this; // chain
+	},
+
+	readAll: function(options) {
+	  
+	  var reader = this._newMultiplePageReader();
+	  for (var key in options) {
+	    reader[key] = options[key];
+	  }
+
+	  // start reading
+	  reader.readAll(options);
+	},
+
+	/*
+	  Reading multiple pages
+	*/
+	_newMultiplePageReader: function(){
+	  return new Stretchr.MultiplePageReader(this);
+	}
+
+});
 
 /*
-  method sets the HTTP Method to use when accessing this request.
+	Stretchr.MultiplePageReader makes multiple requests to load many pages
+	of data.
 */
-Stretchr.Request.prototype.method = function(httpMethod) {
+Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 
-  this._params["~method"] = [httpMethod]
-  return this;
+	init: function(request){
 
-}
+	  reader._request = request;
+	  reader._currentPage = -1;
+	  reader._pageSize = 100;
+	  reader._totalCount = -1;
+	  reader._responses = [];
+	  reader._items = [];
+	  reader._interval = 100;
+	  reader._loadedItemsCount = 0;
 
-/*
-  bod sets the body object for this request.
-*/
-Stretchr.Request.prototype.body = function(body) {
+	},
 
-  if (typeof body == "object") {
-    this._body = body;
-  } else if (typeof body == "string") {
-    this._body = eval("(" + body + ")");
-  }
+	/*
+	  options:
+	    onCompleted: function(){}
+	    onProgress: function(repsonse, percentage){}
+	*/
+	readAll: function(options) {
 
-  // set the body parameter
-  this._params["~body"] = [this.bodystring()];
+	  this.onCompleted = options["onCompleted"] || function(){};
+	  this.onProgress = options["onProgress"] || function(){};
 
-  return this;
+	  this.readNextPage();
 
-}
+	},
 
-/*
-  hasBody gets whether the request has a body or not.
-*/
-Stretchr.Request.prototype.hasBody = function() {
-  return this._body != null
-}
+	// readNextPage reads the next page.
+	readNextPage: function(){
+	  this._currentPage++;
 
-/*
-  bodystring gets the JSON string that represents the body.
-*/
-Stretchr.Request.prototype.bodystring = function(){
-  return JSON.stringify(this._body)
-}
+	  // set the limit value
+	  var request = this._request;
+	  var $this = this;
 
-/*
-  set sets a parameter in the Request and removed any existing
-  parameters with the same key.
-*/
-Stretchr.Request.prototype.set = function(key, value) {
+	  request.set("~total", 1);
 
-  // set the value
-  this._params[key] = [value];
+	  request
+	    .set("~limit", this._pageSize)
+	    .set("~skip", this._pageSize * this._currentPage)
+	    .read(function(response){
 
-  // chain
-  return this;
+	      if (response["~s"] == 200) {
 
-}
+	        // do we have a total count?
+	        if (response["~d"]["~t"]) {
+	          $this._totalCount = response["~d"]["~t"];
+	        }
 
-/*
-  with sets a parameter to the Request.
-*/
-Stretchr.Request.prototype.with = function(key, value) {
+	        // add the items
+	        $this._responses.push(response);
+	        for (var i in response["~d"]["~i"]) {
 
-  this._params[key] = this._params[key] || [];
-  this._params[key].push(value);
+	          var index = ($this._currentPage * $this._pageSize) + parseInt(i);
+	          $this._items[index] = response["~d"]["~i"][i];
+	          $this._loadedItemsCount++;
 
-  // chain
-  return this;
-}
+	        }
 
-/*
-  where sets a filter parameter in the Request.
-*/
-Stretchr.Request.prototype.where = function(key, value) {
+	        $this._progressPercentage = Math.floor(100 / ($this._totalCount / $this._loadedItemsCount));
 
-  // add the prefix
-  key = ":" + key;
+	        // update the progress
+	        $this.onProgress(response, $this._progressPercentage);
 
-  this._filterparams[key] = this._filterparams[key] || [];
-  this._filterparams[key].push(value);
+	        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount == 0) {
 
-  // chain
-  return this;
-
-}
+	          // finished
+	          $this.onCompleted({
+	            "~s": 200,
+	            "~d": {
+	              "~t": $this._totalCount,
+	              "~c": $this._totalCount,
+	              "~i": $this._items
+	            }
+	          });
 
-/*
-  allParamsString gets an encoded URL string of all the parameters ordered
-  by key first, then value.
-*/
-Stretchr.Request.prototype.allParamsString = function(){
-
-  var allParams = {}
-
-  for (key in this._params) {
-    allParams[key] = this._params[key]
-  }
-  for (key in this._filterparams) {
-    allParams[key] = this._filterparams[key]
-  }
-
-  var s = Stretchr.encodeMap(allParams)
-
-  return s
-
-}
-
-/*
-  safeUrl generates an absolute URL from the properties in this request which is safe,
-  i.e. contains no sensitive data (like private key).
-*/
-Stretchr.Request.prototype.safeUrl = function() {
-
-  // ensure we do not send sensitive information
-  delete this._params["~private"]
-  delete this._params["~bodyhash"]
-
-  return this.url()
-
-}
-
-/*
-  url generates an absolute URL from the properties in this request
-*/
-Stretchr.Request.prototype.url = function() {
-  return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString()].join("")
-}
-
-/*
-  stringToSign gets the string that should be signed for security purposes.
-*/
-Stretchr.Request.prototype.stringToSign = function(){
-
-  // add the private key
-  this._params["~private"] = [this._session._privateKey]
-
-  var stringToSign = [this._method, "&", this.url()].join("")
-
-  return stringToSign
-
-}
-
-/*
-  signature gets the security hash that should be sent along with this request.
-*/
-Stretchr.Request.prototype.signature = function(){
-  return Stretchr.hash(this.stringToSign())
-}
-
-/*
-  signedUrl gets the actual URL of the request to make, with the ~sign parameter added.
-*/
-Stretchr.Request.prototype.signedUrl = function(){
-  return [this.safeUrl(), "&~sign=", this.signature()].join("")
-}
-
-/*
-  Actions
-*/
-
-Stretchr.Request.prototype.read = function(completed){
-  this.onCompleted = completed || Stretchr.doNothing;
-  this._session.go(this.method("GET"));
-  return this; // chain
-}
-
-Stretchr.Request.prototype.update = function(completed){
-  this.onCompleted = completed || Stretchr.doNothing;
-  this._session.go(this.method("PUT"));
-  return this; // chain
-}
-
-Stretchr.Request.prototype.replace = function(completed){
-  this.onCompleted = completed || Stretchr.doNothing;
-  this._session.go(this.method("POST"));
-  return this; // chain
-}
-
-Stretchr.Request.prototype.create = function(completed){
-  this.onCompleted = completed || Stretchr.doNothing;
-  this._session.go(this.method("POST"));
-  return this; // chain
-}
-
-Stretchr.Request.prototype.remove = function(completed){
-  this.onCompleted = completed || Stretchr.doNothing;
-  this._session.go(this.method("DELETE"));
-  return this; // chain
-}
-
-Stretchr.Request.prototype.readAll = function(options) {
-  
-  var reader = this._newMultiplePageReader();
-  for (var key in options) {
-    reader[key] = options[key];
-  }
-
-  // start reading
-  reader.readAll(options);
-}
-
-/*
-  Reading multiple pages
-*/
-Stretchr.Request.prototype._newMultiplePageReader = function(){
-
-  var reader = new Stretchr.MultiplePageReader();
-  reader._request = this;
-  reader._currentPage = -1;
-  reader._pageSize = 100;
-  reader._totalCount = -1;
-  reader._responses = [];
-  reader._items = [];
-  reader._interval = 100;
-  reader._loadedItemsCount = 0;
-  return reader;
-
-};
-
-
-Stretchr.MultiplePageReader = function(){};
-
-/*
-  options:
-    onCompleted: function(){}
-    onProgress: function(repsonse, percentage){}
-*/
-Stretchr.MultiplePageReader.prototype.readAll = function(options) {
-
-  this.onCompleted = options["onCompleted"] || function(){};
-  this.onProgress = options["onProgress"] || function(){};
-
-  this.readNextPage();
-
-};
-
-Stretchr.MultiplePageReader.prototype.readNextPage = function(){
-  this._currentPage++;
-
-  // set the limit value
-  var request = this._request;
-  var $this = this;
-
-  request.set("~total", 1);
-
-  request
-    .set("~limit", this._pageSize)
-    .set("~skip", this._pageSize * this._currentPage)
-    .read(function(response){
-
-      if (response["~s"] == 200) {
-
-        // do we have a total count?
-        if (response["~d"]["~t"]) {
-          $this._totalCount = response["~d"]["~t"];
-        }
-
-        // add the items
-        $this._responses.push(response);
-        for (var i in response["~d"]["~i"]) {
-
-          var index = ($this._currentPage * $this._pageSize) + parseInt(i);
-          $this._items[index] = response["~d"]["~i"][i];
-          $this._loadedItemsCount++;
-
-        }
-
-        $this._progressPercentage = Math.floor(100 / ($this._totalCount / $this._loadedItemsCount));
-
-        // update the progress
-        $this.onProgress(response, $this._progressPercentage);
-
-        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount == 0) {
-
-          // finished
-          $this.onCompleted({
-            "~s": 200,
-            "~d": {
-              "~t": $this._totalCount,
-              "~c": $this._totalCount,
-              "~i": $this._items
-            }
-          });
-
-        } else {
-
-          // more pages
-          window.setTimeout(function(){ $this.readNextPage(); }, $this._interval);
-
-        }
-
-      } else {
-        // TODO: handle error
-      }
-
-    })
-  ;
-
-};
+	        } else {
+
+	          // more pages
+	          window.setTimeout(function(){ $this.readNextPage(); }, $this._interval);
+
+	        }
+
+	      } else {
+	        // TODO: handle error
+	      }
+
+	    })
+	  ;
+
+	}
+
+});
 
 /*
   Security
