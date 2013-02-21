@@ -36,22 +36,7 @@
   Stretchr is the root namespace for all Stretchr activities.
 */
 var Stretchr = {
-<<<<<<< HEAD
-  /*
-    apiversion is the default API version.
-  */
-  "apiversion": "v1",
 
-  /*
-    _context keeps track of request context values.
-  */
-  "_context": 0,
-
-  /*
-    _requests holds an array of outstanding requests.
-  */
-  "_requests": []
-=======
 	/*
 		apiversion is the default API version.
 	*/
@@ -71,7 +56,6 @@ var Stretchr = {
 		_requests holds an array of outstanding requests.
 	*/
 	"_requests": []
->>>>>>> added version number
 };
 
 /*
