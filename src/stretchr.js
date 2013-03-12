@@ -389,7 +389,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	  signedUrl gets the actual URL of the request to make, with the ~sign parameter added.
 	*/
 	signedUrl: function(){
-	  return [this.safeUrl(), "&~sign=", this.signature()].join("")
+	  signature = this.signature()
+	  this._params["~body"] = [encodeURIComponent(this.bodystring())];	  
+	  return [this.safeUrl(), "&~sign=", signature].join("")
 	},
 
 	/*
