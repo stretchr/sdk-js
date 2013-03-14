@@ -54,7 +54,7 @@ var Stretchr = {
 	/*
 		version is the JavaScript SDK version.
 	*/
-	"version": "v1.0",
+	"version": "v1.0.1",
 
 	/*
 		_context keeps track of request context values.
@@ -94,23 +94,23 @@ Stretchr.encodeMap = function(map) {
   // get the sorted keys
   var keys = [];
   for (key in map) {
-    keys.push(key)
+    keys.push(key);
   }
-  keys.sort()
+  keys.sort();
 
   // prepare the encoded string
-  var encodedString = ""
+  var encodedString = "";
 
   // for each key, add the sorted values
   for (key in keys) {
-    var theKey = keys[key]
-    var theValues = map[theKey].sort()
+    var theKey = keys[key];
+    var theValues = map[theKey].sort();
     for (value in theValues) {
-      encodedString += theKey + "=" + theValues[value] + "&"
+      encodedString += theKey + "=" + theValues[value] + "&";
     }
   }
 
-  return encodedString.slice(0, -1)
+  return encodedString.slice(0, -1);
 }
 
 /*
@@ -373,6 +373,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	  this._params["~private"] = [this._session._privateKey]
 
 	  var stringToSign = [this._method, "&", this.url()].join("")
+
+    console.info(stringToSign)
 
 	  return stringToSign
 
