@@ -204,7 +204,7 @@ buster.testCase("Request", {
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
 
 	}
 
