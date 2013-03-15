@@ -366,7 +366,10 @@
 					}
 					*/
 
-					handler(true, (i + 1) + ") GET " + req.signedUrl() + "\n\n" + JSON.stringify(resource, null, "  ") + "\n", resource, i, req);
+					// set the correct HTTP method for debugging purposes
+					req.method("POST");
+
+					handler(true, (i + 1) + ") GET " + req.url() + "\n\n" + JSON.stringify(resource, null, "  ") + "\n", resource, i, req);
 
 				}
 
