@@ -260,7 +260,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	  }
 
 	  // set the body parameter
-	  this._params["~body"] = [this.bodystring()];
+    if (this.bodystring()) {
+      this._params["~body"] = [this.bodystring()];
+    }
 
 	  return this;
 
