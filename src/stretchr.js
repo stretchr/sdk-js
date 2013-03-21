@@ -458,14 +458,14 @@ Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 
 	init: function(request){
 
-	  reader._request = request;
-	  reader._currentPage = -1;
-	  reader._pageSize = 100;
-	  reader._totalCount = -1;
-	  reader._responses = [];
-	  reader._items = [];
-	  reader._interval = 100;
-	  reader._loadedItemsCount = 0;
+	  this._request = request;
+	  this._currentPage = -1;
+	  this._pageSize = 100;
+	  this._totalCount = -1;
+	  this._responses = [];
+	  this._items = [];
+	  this._interval = 100;
+	  this._loadedItemsCount = 0;
 
 	},
 
