@@ -279,6 +279,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	  bodystring gets the JSON string that represents the body.
 	*/
 	bodystring: function(){
+    if (!this._body) { return null; }
 	  return JSON.stringify(this._body)
 	},
 
