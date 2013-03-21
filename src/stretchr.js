@@ -374,8 +374,6 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 
 	  var stringToSign = [this._method, "&", this.url()].join("")
 
-    console.info(stringToSign)
-
 	  return stringToSign
 
 	},
