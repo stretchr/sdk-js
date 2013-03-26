@@ -523,7 +523,7 @@ Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 	        // update the progress
 	        $this.onProgress(response, $this._progressPercentage);
 
-	        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount == 0) {
+	        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount <= 0) {
 
 	          // finished
 	          $this.onCompleted({
