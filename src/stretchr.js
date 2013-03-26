@@ -525,8 +525,6 @@ Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 
 	        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount <= 0) {
 
-console.info("finished")
-
 	          // finished
 	          $this.onCompleted({
 	            "~s": 200,
