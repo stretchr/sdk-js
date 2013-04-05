@@ -21,7 +21,7 @@
   FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
   OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
   DEALINGS IN THE SOFTWARE.
-  
+
   Special thanks to:
 
     Jeff Mott for CryptoJS
@@ -298,9 +298,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	},
 
 	/*
-	  with sets a parameter to the Request.
+	  param sets a parameter to the Request.
 	*/
-	with: function(key, value) {
+	param: function(key, value) {
 
 	  this._params[key] = this._params[key] || [];
 	  this._params[key].push(value);
@@ -394,7 +394,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	signedUrl: function(){
 	  signature = this.signature()
     if (this.bodystring()) {
-      this._params["~body"] = [encodeURIComponent(this.bodystring())];    
+      this._params["~body"] = [encodeURIComponent(this.bodystring())];
     }
 	  return [this.safeUrl(), "&~sign=", signature].join("")
 	},
@@ -434,7 +434,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
 	},
 
 	readAll: function(options) {
-	  
+
 	  var reader = this._newMultiplePageReader();
 	  for (var key in options) {
 	    reader[key] = options[key];

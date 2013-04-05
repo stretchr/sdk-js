@@ -42,7 +42,7 @@ buster.testCase("Test Session", {
 		s.at("people/123").create(function(r){
 			res2 = r;
 		});
-		s.at("people").with("~limit", 5).remove(function(r){
+		s.at("people").param("~limit", 5).remove(function(r){
 			res3 = r;
 		});
 		s.at("people").update(function(r){
@@ -65,7 +65,7 @@ buster.testCase("Test Session", {
 
 		assert.equals(s.requests[2].action, "remove")
 		assert.equals(s.requests[2].path, "people")
-		assert.equals(s.requests[2].with["~limit"][0], 5)
+		assert.equals(s.requests[2].params["~limit"][0], 5)
 		assert.equals(res3, responseObject3, "responseObject3")
 
 		assert.equals(s.requests[3].action, "update")

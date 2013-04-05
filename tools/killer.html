@@ -34,7 +34,7 @@
           <input type="text" name="private-key" />
         </label>
       </div>
-      
+
       <div class="form">
         <h2>
           Path
@@ -130,7 +130,7 @@
         one.
       */
       function go(handler) {
-        
+
           var projectName = $("input[name='project-name']").val();
           var publicKey = $("input[name='public-key']").val();
           var privateKey = $("input[name='private-key']").val();
@@ -142,7 +142,7 @@
           // set the filter parameters properly
           var queryObj = parseQuery(filter);
           for (var key in queryObj) {
-            req.with(key, queryObj[key]);
+            req.param(key, queryObj[key]);
           }
 
           handler(false, "DELETE " + req.url(), 0, req);
@@ -163,7 +163,7 @@
           );
 
         })) {
-        
+
           // failed :-(
           switchToSection("setup");
 
@@ -189,7 +189,7 @@
           request.remove(onRequestCompleted);
 
         })) {
-        
+
           // failed :-(
           switchToSection("setup");
 
@@ -240,7 +240,7 @@
               $this.slideDown();
             } else {
               $this.show();
-            }         
+            }
           }
         })
 

@@ -34,7 +34,7 @@
 					<input type="text" name="private-key" />
 				</label>
 			</div>
-			
+
 			<div class="form">
 				<h2>
 					Path
@@ -47,7 +47,7 @@
 					<em class="eg">e.g. "people" or "people/1/books"</em>
 				</label>
 			</div>
-			
+
 			<div class="form">
 				<h2>
 					Data
@@ -89,7 +89,7 @@
 				</h2>
 				<label>
 					<span>JavaScript code</span>
-					<textarea name="custom-functions">window.myFunc = function(index, resource){ 
+					<textarea name="custom-functions">window.myFunc = function(index, resource){
   return index+1;
 }</textarea>
 				<em>
@@ -238,12 +238,12 @@
 					);
 
 				})) {
-				
+
 					// failed :-(
 				  switchToSection("setup");
 
 				};
-			
+
 			}
 
 			function onMakeChanges() {
@@ -300,7 +300,7 @@
 										newOutput += "\"" + functionName + "() is not a function\""
 									} else {
 										value = eval(functionName + "(" + i + ", thisTemplate);")
-										newOutput += value; 
+										newOutput += value;
 									}
 								} catch(e) {
 									handler(false, "Failed to execute custom function: " + e + "\n" + thisTemplate + "\n");
@@ -359,7 +359,7 @@
 						for (s in segs) {
 							seg = segs[s];
 							keyval = seg.split("=")
-							req.with(keyval[0], keyval[1])
+							req.param(keyval[0], keyval[1])
 
 						}
 
@@ -396,7 +396,7 @@
 					request.create(onRequestCompleted);
 
 				})) {
-				
+
 					// failed :-(
 				  switchToSection("setup");
 
@@ -423,7 +423,7 @@
 					updateProgress(100, progressColor, true);
 
 				} else {
-		
+
 					// update the progress bar
 					updateProgress(100 / (count / responsesCount), progressColor, true);
 
@@ -469,7 +469,7 @@
 							$this.slideDown();
 						} else {
 							$this.show();
-						}					
+						}
 					}
 				})
 
@@ -498,7 +498,7 @@
 
 				return toUnixTime(randomDate(start, end));
 			}
-			
+
 		  function timestamp_month(index, template) {
 
 				var start = new Date()

@@ -24,7 +24,7 @@
 	FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 	OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 	DEALINGS IN THE SOFTWARE.
-	
+
 
 */
 
@@ -66,7 +66,7 @@ Stretchr.GetTestRequest = function(session, path){
 			this.where[param.slice(1, param.length)] = this._filterparams[param]
 		}
 
-		this.with = this._params;
+		this.params = this._params;
 
 		// add to the request array
 		this._session.requests.push(this);
