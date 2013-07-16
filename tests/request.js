@@ -194,6 +194,17 @@ buster.testCase("Request", {
 
 	},
 
+	"signature with + symbol": function(){
+
+		var s = Stretchr.NewSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people")
+
+		r.where(":symbol", "+")
+
+		assert.equals(r.signature(), "8114ac0f9ff46ca70272de3b9b46793b9fa24217")
+
+	},
+
 	"signedUrl": function() {
 
 		var s = Stretchr.NewSession("project", "pub", "priv")
