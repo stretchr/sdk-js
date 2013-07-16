@@ -91,7 +91,7 @@ Stretchr.context = function() {
 /*
   encodeMap encodes the specified map into a sorted URL string.
 */
-Stretchr.encodeMap = function(map) {
+Stretchr.encodeMap = function(map, encodeValues) {
 
   // get the sorted keys
   var keys = [];
@@ -108,11 +108,28 @@ Stretchr.encodeMap = function(map) {
     var theKey = keys[key];
     var theValues = map[theKey].sort();
     for (value in theValues) {
-      encodedString += theKey + "=" + theValues[value] + "&";
+
+      if (encodeValues) {
+        encodedString += theKey + "=" + Stretchr.encode(theValues[value]) + "&";  
+      } else {
+        encodedString += theKey + "=" + theValues[value] + "&";
+      }
+
     }
   }
 
   return encodedString.slice(0, -1);
+}
+
+/*
+  encode performs a encodeURIComponent plus some extras.
+*/
+Stretchr.encode = function(v) {
+
+  v = encodeURIComponent(v)
+
+  return v
+
 }
 
 /*
@@ -331,7 +348,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
     allParamsString gets an encoded URL string of all the parameters ordered
     by key first, then value.
   */
-  allParamsString: function(){
+  allParamsString: function(encodeValues) {
 
     var allParams = {}
 
@@ -342,9 +359,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
       allParams[key] = this._filterparams[key]
     }
 
-    var s = Stretchr.encodeMap(allParams)
-
-    return s
+    return Stretchr.encodeMap(allParams, encodeValues)
 
   },
 
@@ -352,21 +367,21 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
     safeUrl generates an absolute URL from the properties in this request which is safe,
     i.e. contains no sensitive data (like private key).
   */
-  safeUrl: function() {
+  safeUrl: function(encodeValues) {
 
     // ensure we do not send sensitive information
     delete this._params["private"]
     delete this._params["bodyhash"]
 
-    return this.url()
+    return this.url(encodeValues)
 
   },
 
   /*
     url generates an absolute URL from the properties in this request
   */
-  url: function() {
-    return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString()].join("")
+  url: function(encodeValues) {
+    return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString(encodeValues)].join("")
   },
 
   /*
@@ -393,11 +408,23 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
     signedUrl gets the actual URL of the request to make, with the sign parameter added.
   */
   signedUrl: function(){
+
     signature = this.signature()
+    
+    // set the body string
     if (this.bodystring()) {
-      this._params["body"] = [encodeURIComponent(this.bodystring())];
+      this._params["body"] = [this.bodystring()];
     }
-    return [this.safeUrl(), "&sign=", signature].join("")
+
+    /*
+    for (var key in this._params) {
+      for (var valI in this._params[key]) {
+        this._params[key][valI] = Stretchr.encode(this._params[key][valI]);
+      }
+    }
+    */
+
+    return [this.safeUrl(true), "&sign=", signature].join("")
   },
 
   /*

@@ -194,14 +194,16 @@ buster.testCase("Request", {
 
 	},
 
-	"signature with + symbol": function(){
+	"signedURL with + symbol": function(){
 
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		r.where(":symbol", "+")
+		r.where("symbol", "+")
 
-		assert.equals(r.signature(), "8114ac0f9ff46ca70272de3b9b46793b9fa24217")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1.1/people?:symbol=+&always200=1&callback=Stretchr.callback&key=pub&method=GET&private=priv")
+		assert.equals(r.signature(), "c69a3b59d3997e4446091dcb5ade017576f96070")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1.1/people?:symbol=%2B&always200=1&callback=Stretchr.callback&key=pub&method=GET&sign=c69a3b59d3997e4446091dcb5ade017576f96070")
 
 	},
 
