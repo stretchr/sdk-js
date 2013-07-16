@@ -1,8 +1,9 @@
 /*
 
   Stretchr JavaScript SDK
+  /api/v1.1
 
-  Copyright (c) 2012 Mat Ryer and Tyler Bunnell
+  Copyright (c) 2013 Mat Ryer and Tyler Bunnell
 
   Please consider promoting this project if you find it useful.
 
@@ -30,41 +31,42 @@
 */
 
 /*
-	oo
-	v1.0
-	The worlds simplest JavaScript OO implementation.
-	For if you just need classes, and nothing else.
+  oo
+  v1.0
+  
+  The worlds simplest JavaScript OO implementation.
+  For if you just need classes, and nothing else.
 
-	Copyright (c) 2013 Mat Ryer
-	Please consider promoting this project if you find it useful.
-	Be sure to check out the Licence: https://github.com/stretchrcom/oo#licence
+  Copyright (c) 2013 Mat Ryer
+  Please consider promoting this project if you find it useful.
+  Be sure to check out the Licence: https://github.com/stretchrcom/oo#licence
 */
-var ooreset=function(){var e={version:"1.0",classes:[],classesmap:{},Class:function(t){if(e.classesmap[t]){throw new e.DuplicateClassNameException(t);return null}var n=function(){this.$initialiseBases.apply(this);this.init.apply(this,arguments)};n.prototype.init=function(){};n.$bases={};n.prototype.$initialiseBases=function(){for(var e in this.$class.$bases){var t=this.$class.$bases[e];for(var n in t.prototype){if(typeof t.prototype[n]=="function"){if(n.substr(0,1)!="$"){t.prototype[n]=t.prototype[n].bind(this)}}}}};for(var r=1,i=arguments.length-1;r<i;r++){var s=arguments[r];if(s.$isClass){n.$bases[s.$className]=s;ooextend(s.prototype,n.prototype);n.prototype[s.$className]=s.prototype}else if(typeof s=="object"){ooextend(s,n.prototype)}}if(arguments.length>1){ooextend(arguments[arguments.length-1],n.prototype)}n.toString=function(){return"<{ oo.Class: "+this.$className+" }>"};n.$isClass=true;n.prototype.constructor=n.prototype.$class=n;e.classes[e.classes.length]=n.$className=t;return e.classesmap[t]=n}};e.Exception=e.Class("oo.Exception",{init:function(e){this.message=e},toString:function(){return'<{ oo.Exception: " + message + " }>'}});e.DuplicateClassNameException=e.Class("oo.DuplicateClassNameException",e.Exception,{init:function(e){"Cannot define a class because '"+e+"' already exists."}});return e};var ooextend=function(e,t){for(var n in e){t[n]=e[n]}};var oo=ooreset();var oobind=function(){var e=arguments[0]||null,t=arguments[1]||this,n=[],r=2,i=arguments.length,s;for(;r<i;r++){n.push(arguments[r])}s=function(){var r=[];var s=0;for(s=0,i=n.length;s<i;s++){r.push(n[s])}for(s=0,i=arguments.length;s<i;s++){r.push(arguments[s])}return e.apply(t,r)};s.func=e;s.context=t;s.args=n;return s};Function.prototype.bind=function(){var e=[],t=0,n=arguments.length;e.push(this);for(;t<n;t++){e.push(arguments[t])}return oobind.apply(window,e)};
+var ooreset=function(){var e={version:"1.0",classes:[],classesmap:{},Class:function(t){if(e.classesmap[t]){throw new e.DuplicateClassNameException(t);return null}var n=function(){this.$initialiseBases.apply(this);this.init.apply(this,arguments)};n.prototype.init=function(){};n.$bases={};n.prototype.$initialiseBases=function(){for(var e in this.$class.$bases){var t=this.$class.$bases[e];for(var n in t.prototype){if(typeof t.prototype[n]=="function"){if(n.substr(0,1)!="$"){t.prototype[n]=t.prototype[n].bind(this)}}}}};for(var r=1,i=arguments.length-1;r<i;r++){var s=arguments[r];if(s.$isClass){n.$bases[s.$className]=s;ooextend(s.prototype,n.prototype);n.prototype[s.$className]=s.prototype}else if(typeof s=="object"){ooextend(s,n.prototype)}}if(arguments.length>1){ooextend(arguments[arguments.length-1],n.prototype)}n.toString=function(){return"<{ oo.Class: "+this.$className+" }>"};n.$isClass=true;n.prototype.constructor=n.prototype.$class=n;e.classes[e.classes.length]=n.$className=t;return e.classesmap[t]=n}};e.Exception=e.Class("oo.Exception",{init:function(e){this.message=e},toString:function(){return'<{ oo.Exception: " + message + " }>'}});e.DuplicateClassNameException=e.Class("oo.DuplicateClassNameException",e.Exception,{init:function(e){"Cannot define a class because '"+e+"' already exists."}});return e};var ooextend=function(e,t){for(var n in e){t[n]=e[n]}};var oo=ooreset();var oobind=function(){var e=arguments[0]||null,t=arguments[1]||this,n=[],r=2,i=arguments.length,s;for(;r<i;r++){n.push(arguments[r])}s=function(){var r=[];var s=0;for(s=0,i=n.length;s<i;s++){r.push(n[s])}for(s=0,i=arguments.length;s<i;s++){r.push(arguments[s])}return e.apply(t,r)};s.func=e;s.context=t;s.args=n;return s};Function.prototype.bind=function(){var e=[],t=0,n=arguments.length;e.push(this);for(;t<n;t++){e.push(arguments[t])}return oobind.apply(window,e)}
 
 /*
   Stretchr is the root namespace for all Stretchr activities.
 */
 var Stretchr = {
 
-	/*
-		apiversion is the default API version.
-	*/
-	"apiversion": "v1",
+  /*
+    apiversion is the default API version.
+  */
+  "apiversion": "v1.1",
 
-	/*
-		version is the JavaScript SDK version.
-	*/
-	"version": "v1.0.1",
+  /*
+    version is the JavaScript SDK version.
+  */
+  "version": "v1.0.1",
 
-	/*
-		_context keeps track of request context values.
-	*/
-	"_context": 0,
+  /*
+    _context keeps track of request context values.
+  */
+  "_context": 0,
 
-	/*
-		_requests holds an array of outstanding requests.
-	*/
-	"_requests": []
+  /*
+    _requests holds an array of outstanding requests.
+  */
+  "_requests": []
 };
 
 /*
@@ -156,52 +158,52 @@ Stretchr.NewSession = function(project, publicKey, privateKey){
 */
 Stretchr.Session = oo.Class("Stretchr.Session", {
 
-	init: function(project, publicKey, privateKey) {
-	  this._project = project
-	  this._publicKey = publicKey
-	  this._privateKey = privateKey
-	},
+  init: function(project, publicKey, privateKey) {
+    this._project = project
+    this._publicKey = publicKey
+    this._privateKey = privateKey
+  },
 
-	/*
-	  go executes the request.
-	*/
-	go: function(request){
+  /*
+    go executes the request.
+  */
+  go: function(request){
 
-	  // get a context for this request
-	  context = Stretchr.context();
+    // get a context for this request
+    context = Stretchr.context();
 
-	  // set it in the request
-	  request.set("~context", context);
+    // set it in the request
+    request.set("context", context);
 
-	  // add this request to the _requests array keyed by the context
-	  Stretchr._requests[context] = request;
+    // add this request to the _requests array keyed by the context
+    Stretchr._requests[context] = request;
 
-	  // make the request
-	  this._makeRequest(request);
+    // make the request
+    this._makeRequest(request);
 
-	  // return the context value
-	  return context;
-	},
+    // return the context value
+    return context;
+  },
 
-	/*
-	  _makeRequest makes an actual HTTP JSONP request.
-	*/
-	_makeRequest: function(request) {
+  /*
+    _makeRequest makes an actual HTTP JSONP request.
+  */
+  _makeRequest: function(request) {
 
-	  var script = document.createElement('script');
-	  script.src = request.signedUrl();
+    var script = document.createElement('script');
+    script.src = request.signedUrl();
 
-	  document.getElementsByTagName('head')[0].appendChild(script);
+    document.getElementsByTagName('head')[0].appendChild(script);
 
-	},
+  },
 
-	/*
-	  at starts a conversation with Stretchr by specifying the relevant path
-	  and returning a Stretchr.Request object which will continue the conversation.
-	*/
-	at: function(path){
-	  return Stretchr.NewRequest(this, path)
-	}
+  /*
+    at starts a conversation with Stretchr by specifying the relevant path
+    and returning a Stretchr.Request object which will continue the conversation.
+  */
+  at: function(path){
+    return Stretchr.NewRequest(this, path)
+  }
 
 });
 
@@ -219,10 +221,10 @@ Stretchr.NewRequest = function(session, path) {
   request._path = path;
   request._session = session;
   request._params = {
-    "~method": ["GET"],
-    "~key": [session._publicKey],
-    "~always200": [1],
-    "~callback": ["Stretchr.callback"]
+    "method": ["GET"],
+    "key": [session._publicKey],
+    "always200": [1],
+    "callback": ["Stretchr.callback"]
   };
   request._filterparams = {};
   request._body = null;
@@ -238,318 +240,320 @@ Stretchr.NewRequest = function(session, path) {
 Stretchr.Request = oo.Class("Stretchr.Request", {
 
 
-	/*
-	  method sets the HTTP Method to use when accessing this request.
-	*/
-	method: function(httpMethod) {
+  /*
+    method sets the HTTP Method to use when accessing this request.
+  */
+  method: function(httpMethod) {
 
-	  this._params["~method"] = [httpMethod]
-	  return this;
+    this._params["method"] = [httpMethod]
+    return this;
 
-	},
+  },
 
-	/*
-	  body sets the body object for this request.
-	*/
-	body: function(body) {
+  /*
+    body sets the body object for this request.
+  */
+  body: function(body) {
 
-	  if (typeof body == "object") {
-	    this._body = body;
-	  } else if (typeof body == "string") {
-	    this._body = eval("(" + body + ")");
-	  }
-
-	  // set the body parameter
-    if (this.bodystring()) {
-      this._params["~body"] = [this.bodystring()];
+    if (typeof body == "object") {
+      this._body = body;
+    } else if (typeof body == "string") {
+      this._body = eval("(" + body + ")");
     }
 
-	  return this;
+    // set the body parameter
+    if (this.bodystring()) {
+      this._params["body"] = [this.bodystring()];
+    }
 
-	},
+    return this;
 
-	/*
-	  hasBody gets whether the request has a body or not.
-	*/
-	hasBody: function() {
-	  return this._body != null
-	},
+  },
 
-	/*
-	  bodystring gets the JSON string that represents the body.
-	*/
-	bodystring: function(){
+  /*
+    hasBody gets whether the request has a body or not.
+  */
+  hasBody: function() {
+    return this._body != null
+  },
+
+  /*
+    bodystring gets the JSON string that represents the body.
+  */
+  bodystring: function(){
     if (!this._body) { return null; }
-	  return JSON.stringify(this._body)
-	},
+    return JSON.stringify(this._body)
+  },
 
-	/*
-	  set sets a parameter in the Request and removed any existing
-	  parameters with the same key.
-	*/
-	set: function(key, value) {
+  /*
+    set sets a parameter in the Request and removed any existing
+    parameters with the same key.
+  */
+  set: function(key, value) {
 
-	  // set the value
-	  this._params[key] = [value];
+    // set the value
+    this._params[key] = [value];
 
-	  // chain
-	  return this;
+    // chain
+    return this;
 
-	},
+  },
 
-	/*
-	  param sets a parameter to the Request.
-	*/
-	param: function(key, value) {
+  /*
+    param sets a parameter to the Request.
+  */
+  param: function(key, value) {
 
-	  this._params[key] = this._params[key] || [];
-	  this._params[key].push(value);
+    this._params[key] = this._params[key] || [];
+    this._params[key].push(value);
 
-	  // chain
-	  return this;
-	},
+    // chain
+    return this;
+  },
 
-	/*
-	  where sets a filter parameter in the Request.
-	*/
-	where: function(key, value) {
+  /*
+    where sets a filter parameter in the Request.
+  */
+  where: function(key, value) {
 
-	  // add the prefix
-	  key = ":" + key;
+    // add the prefix
+    key = ":" + key;
 
-	  this._filterparams[key] = this._filterparams[key] || [];
-	  this._filterparams[key].push(value);
+    this._filterparams[key] = this._filterparams[key] || [];
+    this._filterparams[key].push(value);
 
-	  // chain
-	  return this;
+    // chain
+    return this;
 
-	},
+  },
 
-	/*
-	  allParamsString gets an encoded URL string of all the parameters ordered
-	  by key first, then value.
-	*/
-	allParamsString: function(){
+  /*
+    allParamsString gets an encoded URL string of all the parameters ordered
+    by key first, then value.
+  */
+  allParamsString: function(){
 
-	  var allParams = {}
+    var allParams = {}
 
-	  for (key in this._params) {
-	    allParams[key] = this._params[key]
-	  }
-	  for (key in this._filterparams) {
-	    allParams[key] = this._filterparams[key]
-	  }
-
-	  var s = Stretchr.encodeMap(allParams)
-
-	  return s
-
-	},
-
-	/*
-	  safeUrl generates an absolute URL from the properties in this request which is safe,
-	  i.e. contains no sensitive data (like private key).
-	*/
-	safeUrl: function() {
-
-	  // ensure we do not send sensitive information
-	  delete this._params["~private"]
-	  delete this._params["~bodyhash"]
-
-	  return this.url()
-
-	},
-
-	/*
-	  url generates an absolute URL from the properties in this request
-	*/
-	url: function() {
-	  return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString()].join("")
-	},
-
-	/*
-	  stringToSign gets the string that should be signed for security purposes.
-	*/
-	stringToSign: function(){
-
-	  // add the private key
-	  this._params["~private"] = [this._session._privateKey]
-
-	  var stringToSign = [this._method, "&", this.url()].join("")
-
-	  return stringToSign
-
-	},
-
-	/*
-	  signature gets the security hash that should be sent along with this request.
-	*/
-	signature: function(){
-	  return Stretchr.hash(this.stringToSign())
-	},
-
-	/*
-	  signedUrl gets the actual URL of the request to make, with the ~sign parameter added.
-	*/
-	signedUrl: function(){
-	  signature = this.signature()
-    if (this.bodystring()) {
-      this._params["~body"] = [encodeURIComponent(this.bodystring())];
+    for (key in this._params) {
+      allParams[key] = this._params[key]
     }
-	  return [this.safeUrl(), "&~sign=", signature].join("")
-	},
+    for (key in this._filterparams) {
+      allParams[key] = this._filterparams[key]
+    }
 
-	/*
-	  Actions
-	*/
+    var s = Stretchr.encodeMap(allParams)
 
-	read: function(completed){
-	  this.onCompleted = completed || Stretchr.doNothing;
-	  this._session.go(this.method("GET"));
-	  return this; // chain
-	},
+    return s
 
-	update: function(completed){
-	  this.onCompleted = completed || Stretchr.doNothing;
-	  this._session.go(this.method("PUT"));
-	  return this; // chain
-	},
+  },
 
-	replace: function(completed){
-	  this.onCompleted = completed || Stretchr.doNothing;
-	  this._session.go(this.method("POST"));
-	  return this; // chain
-	},
+  /*
+    safeUrl generates an absolute URL from the properties in this request which is safe,
+    i.e. contains no sensitive data (like private key).
+  */
+  safeUrl: function() {
 
-	create: function(completed){
-	  this.onCompleted = completed || Stretchr.doNothing;
-	  this._session.go(this.method("POST"));
-	  return this; // chain
-	},
+    // ensure we do not send sensitive information
+    delete this._params["private"]
+    delete this._params["bodyhash"]
 
-	remove: function(completed){
-	  this.onCompleted = completed || Stretchr.doNothing;
-	  this._session.go(this.method("DELETE"));
-	  return this; // chain
-	},
+    return this.url()
 
-	readAll: function(options) {
+  },
 
-	  var reader = this._newMultiplePageReader();
-	  for (var key in options) {
-	    reader[key] = options[key];
-	  }
+  /*
+    url generates an absolute URL from the properties in this request
+  */
+  url: function() {
+    return ["http://", this._session._project, ".stretchr.com/api/", Stretchr.apiversion, "/", this._path, "?", this.allParamsString()].join("")
+  },
 
-	  // start reading
-	  reader.readAll(options);
-	},
+  /*
+    stringToSign gets the string that should be signed for security purposes.
+  */
+  stringToSign: function(){
 
-	/*
-	  Reading multiple pages
-	*/
-	_newMultiplePageReader: function(){
-	  return new Stretchr.MultiplePageReader(this);
-	}
+    // add the private key
+    this._params["private"] = [this._session._privateKey]
+
+    var stringToSign = [this._method, "&", this.url()].join("")
+    return stringToSign
+
+  },
+
+  /*
+    signature gets the security hash that should be sent along with this request.
+  */
+  signature: function(){
+    return Stretchr.hash(this.stringToSign())
+  },
+
+  /*
+    signedUrl gets the actual URL of the request to make, with the sign parameter added.
+  */
+  signedUrl: function(){
+    signature = this.signature()
+    if (this.bodystring()) {
+      this._params["body"] = [encodeURIComponent(this.bodystring())];
+    }
+    return [this.safeUrl(), "&sign=", signature].join("")
+  },
+
+  /*
+    Actions
+  */
+
+  read: function(completed){
+    this.onCompleted = completed || Stretchr.doNothing;
+    this._session.go(this.method("GET"));
+    return this; // chain
+  },
+
+  update: function(completed){
+    this.onCompleted = completed || Stretchr.doNothing;
+    this._session.go(this.method("PUT"));
+    return this; // chain
+  },
+
+  replace: function(completed){
+    this.onCompleted = completed || Stretchr.doNothing;
+    this._session.go(this.method("POST"));
+    return this; // chain
+  },
+
+  create: function(completed){
+    this.onCompleted = completed || Stretchr.doNothing;
+    this._session.go(this.method("POST"));
+    return this; // chain
+  },
+
+  remove: function(completed){
+    this.onCompleted = completed || Stretchr.doNothing;
+    this._session.go(this.method("DELETE"));
+    return this; // chain
+  },
+
+  readAll: function(options) {
+
+    var reader = this._newMultiplePageReader();
+    for (var key in options) {
+      reader[key] = options[key];
+    }
+
+    // start reading
+    reader.readAll(options);
+  },
+
+  /*
+    Reading multiple pages
+  */
+  _newMultiplePageReader: function(){
+    return new Stretchr.MultiplePageReader(this);
+  }
 
 });
 
 /*
-	Stretchr.MultiplePageReader makes multiple requests to load many pages
-	of data.
+  Stretchr.MultiplePageReader makes multiple requests to load many pages
+  of data.
 */
 Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 
-	init: function(request){
+  init: function(request){
 
-	  this._request = request;
-	  this._currentPage = -1;
-	  this._pageSize = 100;
-	  this._totalCount = -1;
-	  this._responses = [];
-	  this._items = [];
-	  this._interval = 100;
-	  this._loadedItemsCount = 0;
+    this._request = request;
+    this._currentPage = -1;
+    this._pageSize = 100;
+    this._totalCount = -1;
+    this._responses = [];
+    this._items = [];
+    this._interval = 100;
+    this._loadedItemsCount = 0;
 
-	},
+  },
 
-	/*
-	  options:
-	    onCompleted: function(){}
-	    onProgress: function(repsonse, percentage){}
-	*/
-	readAll: function(options) {
+  /*
+    options:
+      onCompleted: function(){}
+      onProgress: function(repsonse, percentage){}
+  */
+  readAll: function(options) {
 
-	  this.onCompleted = options["onCompleted"] || function(){};
-	  this.onProgress = options["onProgress"] || function(){};
+    this.onCompleted = options["onCompleted"] || Stretchr.doNothing;
+    this.onProgress = options["onProgress"] || Stretchr.doNothing;
 
-	  this.readNextPage();
+    this.readNextPage();
 
-	},
+  },
 
-	// readNextPage reads the next page.
-	readNextPage: function(){
-	  this._currentPage++;
+  // readNextPage reads the next page.
+  readNextPage: function(){
+    this._currentPage++;
 
-	  // set the limit value
-	  var request = this._request;
-	  var $this = this;
+    // set the limit value
+    var request = this._request;
+    var $this = this;
 
-	  request.set("~total", 1);
+    request.set("total", 1);
 
-	  request
-	    .set("~limit", this._pageSize)
-	    .set("~skip", this._pageSize * this._currentPage)
-	    .read(function(response){
+    request
+      .set("limit", this._pageSize)
+      .set("skip", this._pageSize * this._currentPage)
+      .read(function(response){
 
-	      if (response["~s"] == 200) {
+        if (response["~status"] == 200) {
 
-	        // do we have a total count?
-	        if (response["~d"]["~t"]) {
-	          $this._totalCount = response["~d"]["~t"];
-	        }
+          // do we have a total count?
+          if (response["~data"]["~total"]) {
+            $this._totalCount = response["~data"]["~total"];
+          }
 
-	        // add the items
-	        $this._responses.push(response);
-	        for (var i in response["~d"]["~i"]) {
+          // add the items
+          $this._responses.push(response);
+          for (var i in response["~data"]["~items"]) {
 
-	          var index = ($this._currentPage * $this._pageSize) + parseInt(i);
-	          $this._items[index] = response["~d"]["~i"][i];
-	          $this._loadedItemsCount++;
+            var index = ($this._currentPage * $this._pageSize) + parseInt(i);
+            $this._items[index] = response["~data"]["~items"][i];
+            $this._loadedItemsCount++;
 
-	        }
+          }
 
-	        $this._progressPercentage = Math.floor(100 / ($this._totalCount / $this._loadedItemsCount));
+          $this._progressPercentage = Math.floor(100 / ($this._totalCount / $this._loadedItemsCount));
 
-	        // update the progress
-	        $this.onProgress(response, $this._progressPercentage);
+          // update the progress
+          $this.onProgress(response, $this._progressPercentage);
 
-	        if ($this._loadedItemsCount == $this._totalCount || $this._totalCount <= 0) {
+          if ($this._loadedItemsCount == $this._totalCount || $this._totalCount <= 0) {
 
-	          // finished
-	          $this.onCompleted({
-	            "~s": 200,
-	            "~d": {
-	              "~t": $this._totalCount,
-	              "~c": $this._totalCount,
-	              "~i": $this._items
-	            }
-	          });
+            // finished
+            $this.onCompleted({
+              "~status": 200,
+              "~data": {
+                "~total": $this._totalCount,
+                "~count": $this._totalCount,
+                "~items": $this._items
+              }
+            });
 
-	        } else {
+          } else {
 
-	          // more pages
-	          window.setTimeout(function(){ $this.readNextPage(); }, $this._interval);
+            // more pages
+            window.setTimeout(function(){ $this.readNextPage(); }, $this._interval);
 
-	        }
+          }
 
-	      } else {
-	        // TODO: handle error
-	      }
+        } else {
 
-	    })
-	  ;
+          // finished with error
+          $this.onCompleted(response);
 
-	}
+        }
+
+      })
+    ;
+
+  }
 
 });
 

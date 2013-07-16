@@ -8,7 +8,7 @@ buster.testCase("Specific issues", {
       "question": "Does signing work? & no errors?"
     }).method("GET");
 
-    assert.equals(r.stringToSign(), 'GET&http://project.stretchr.com/api/v1/people?~always200=1&~body={"question":"Does signing work? & no errors?"}&~callback=Stretchr.callback&~key=pub&~method=GET&~private=priv');
+    assert.equals(r.stringToSign(), 'GET&http://project.stretchr.com/api/v1.1/people?always200=1&body={"question":"Does signing work? & no errors?"}&callback=Stretchr.callback&key=pub&method=GET&private=priv');
 
   }
 });
