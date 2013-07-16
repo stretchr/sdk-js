@@ -9,10 +9,10 @@ buster.testCase("Request", {
 		assert.equals(r._path, "path")
 
 		// ensure the key was set
-		assert.equals(r._params["~key"][0], "pub")
-		assert.equals(r._params["~always200"][0], "1")
-		assert.equals(r._params["~callback"][0], "Stretchr.callback")
-		assert.equals(r._params["~method"][0], "GET")
+		assert.equals(r._params["key"][0], "pub")
+		assert.equals(r._params["always200"][0], "1")
+		assert.equals(r._params["callback"][0], "Stretchr.callback")
+		assert.equals(r._params["method"][0], "GET")
 
 		assert.equals(r.onCompleted, Stretchr.doNothing)
 
@@ -23,8 +23,8 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
-		assert.equals(r.param("~limit", 2), r, "with should chain")
-		assert.equals(r._params["~limit"][0], 2, "params")
+		assert.equals(r.param("limit", 2), r, "with should chain")
+		assert.equals(r._params["limit"][0], 2, "params")
 
 		r.param("something", "one").param("something", "two")
 
@@ -37,8 +37,8 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "path")
 
-		assert.equals(r.param("~limit", 2), r, "with should chain")
-		assert.equals(r._params["~limit"][0], 2, "params")
+		assert.equals(r.param("limit", 2), r, "with should chain")
+		assert.equals(r._params["limit"][0], 2, "params")
 
 		r.param("something", "one").param("something", "two")
 
@@ -69,7 +69,7 @@ buster.testCase("Request", {
 		var r = Stretchr.NewRequest(s, "path")
 
 		assert.equals(r.method("POST"), r, "method should chain")
-		assert.equals(r._params["~method"][0], "POST")
+		assert.equals(r._params["method"][0], "POST")
 
 	},
 
@@ -82,19 +82,19 @@ buster.testCase("Request", {
 
 		assert.equals(r.body({name: "Mat", age: 30}), r, "body should chain")
 		assert.equals(r._body["age"], 30)
-		//assert.equals(r._params["~bodyhash"][0], "1bc102b3056f56c1851c6d11029c1086ad82ad33")
-		assert.equals(r._params["~body"][0], r.bodystring())
+		//assert.equals(r._params["bodyhash"][0], "1bc102b3056f56c1851c6d11029c1086ad82ad33")
+		assert.equals(r._params["body"][0], r.bodystring())
 
 		assert.equals(r.hasBody(), true)
 
 		assert.equals(r.body("{'name':'Mat','age':29}"), r, "body as string should chain")
 		assert.equals(r._body["age"], 29)
-		//assert.equals(r._params["~bodyhash"][0], "d8750963d5c0180dba3453e7c996c53df8bd557b")
+		//assert.equals(r._params["bodyhash"][0], "d8750963d5c0180dba3453e7c996c53df8bd557b")
 
 		assert.equals(r.hasBody(), true)
 
 		assert.equals(r.bodystring(), "{\"name\":\"Mat\",\"age\":29}")
-		assert.equals(r._params["~body"][0], r.bodystring())
+		assert.equals(r._params["body"][0], r.bodystring())
 
 	},
 
@@ -132,7 +132,7 @@ buster.testCase("Request", {
 			"something": true
 		})
 
-		assert.equals(r.allParamsString(), "~body={\"something\":true}")
+		assert.equals(r.allParamsString(), "body={\"something\":true}")
 
 	},
 
@@ -141,14 +141,14 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		r.where("name", "Mat").param("~limit", 1)
+		r.where("name", "Mat").param("limit", 1)
 
-		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.url(), "http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&callback=Stretchr.callback&key=pub&limit=1&method=GET")
 
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.url(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.url(), "http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&body={\"name\":\"Mat\"}&callback=Stretchr.callback&key=pub&limit=1&method=GET")
 
 	},
 
@@ -157,13 +157,13 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		r.where("name", "Mat").param("~limit", 1)
+		r.where("name", "Mat").param("limit", 1)
 		r.body({name: "Mat"})
 
 		// ensure url isn't corrupted by the stringToSign method
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&body={\"name\":\"Mat\"}&callback=Stretchr.callback&key=pub&limit=1&method=GET")
 		r.stringToSign()
-		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=GET")
+		assert.equals(r.safeUrl(), "http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&body={\"name\":\"Mat\"}&callback=Stretchr.callback&key=pub&limit=1&method=GET")
 
 	},
 
@@ -172,16 +172,16 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?~always200=1&~callback=Stretchr.callback&~key=pub&~method=GET&~private=priv")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1.1/people?always200=1&callback=Stretchr.callback&key=pub&method=GET&private=priv")
 
-		r.method("POST").param("~limit", 1).where("name", "Mat")
+		r.method("POST").param("limit", 1).where("name", "Mat")
 
-		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&callback=Stretchr.callback&key=pub&limit=1&method=POST&private=priv")
 
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body={\"name\":\"Mat\"}&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~private=priv")
+		assert.equals(r.stringToSign(), "GET&http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&body={\"name\":\"Mat\"}&callback=Stretchr.callback&key=pub&limit=1&method=POST&private=priv")
 
 	},
 
@@ -190,7 +190,18 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		assert.equals(r.signature(), "8a925d7541098af5a908c0da608cd847ec72bbbc")
+		assert.equals(r.signature(), "8114ac0f9ff46ca70272de3b9b46793b9fa24217")
+
+	},
+
+	"signature with + symbol": function(){
+
+		var s = Stretchr.NewSession("project", "pub", "priv")
+		var r = Stretchr.NewRequest(s, "people")
+
+		r.where(":symbol", "+")
+
+		assert.equals(r.signature(), "8114ac0f9ff46ca70272de3b9b46793b9fa24217")
 
 	},
 
@@ -199,12 +210,12 @@ buster.testCase("Request", {
 		var s = Stretchr.NewSession("project", "pub", "priv")
 		var r = Stretchr.NewRequest(s, "people")
 
-		r.method("POST").param("~limit", 1).where("name", "Mat")
+		r.method("POST").param("limit", 1).where("name", "Mat")
 
 		// set a body
 		r.body({name: "Mat"})
 
-		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1/people?:name=Mat&~always200=1&~body=%7B%22name%22%3A%22Mat%22%7D&~callback=Stretchr.callback&~key=pub&~limit=1&~method=POST&~sign=dfc91d33ce7fa341e3215a30c3d19bc46a8a3044")
+		assert.equals(r.signedUrl(), "http://project.stretchr.com/api/v1.1/people?:name=Mat&always200=1&body=%7B%22name%22%3A%22Mat%22%7D&callback=Stretchr.callback&key=pub&limit=1&method=POST&sign=aa43c391a03f18e318d7212d69a4b2dc288631d6")
 
 	}
 
