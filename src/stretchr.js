@@ -193,8 +193,6 @@ Stretchr.Session = oo.Class("Stretchr.Session", {
     var script = document.createElement('script');
     script.src = request.signedUrl();
 
-    console.info(script.src)
-
     document.getElementsByTagName('head')[0].appendChild(script);
 
   },
@@ -380,7 +378,6 @@ Stretchr.Request = oo.Class("Stretchr.Request", {
     this._params["private"] = [this._session._privateKey]
 
     var stringToSign = [this._method, "&", this.url()].join("")
-console.info(stringToSign)
     return stringToSign
 
   },
