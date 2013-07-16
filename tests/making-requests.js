@@ -35,7 +35,7 @@ buster.testCase("Making requests", {
 		assert.defined(Stretchr._requests["" + context], "_requests[context] should get defined")
 		assert.equals(makeRequestCalls, 1, "_makeRequest should get called")
 
-		assert.equals(r._params["~context"][0], context, "Context should be set on the request")
+		assert.equals(r._params["context"][0], context, "Context should be set on the request")
 
 	},
 

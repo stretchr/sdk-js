@@ -2,7 +2,7 @@ buster.testCase("Stretchr", {
 
 	"Namespaced object": function(){	
 		assert.defined(Stretchr, "Stretchr")
-		assert.equals(Stretchr.apiversion, "v1")
+		assert.equals(Stretchr.apiversion, "v1.1")
 	},
 
 	"Context value": function() {
