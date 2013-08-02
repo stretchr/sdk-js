@@ -56,7 +56,7 @@ var Stretchr = {
   /*
     version is the JavaScript SDK version.
   */
-  "version": "v1.0.1",
+  "version": "v1.1.2",
 
   /*
     _context keeps track of request context values.
