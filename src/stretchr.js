@@ -491,7 +491,7 @@ Stretchr.MultiplePageReader = oo.Class("Stretchr.MultiplePageReader", {
 
     this._request = request;
     this._currentPage = -1;
-    this._pageSize = 100;
+    this._pageSize = 1000;
     this._totalCount = -1;
     this._responses = [];
     this._items = [];
