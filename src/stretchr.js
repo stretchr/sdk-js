@@ -34,7 +34,7 @@
 var Stretchr = {
 
   /** version represents this SDK version. */
-  version: "2.0",
+  version: "1.2",
 
   /** apiVersion represents the default API version this SDK will
     * attempt to interact with. */
