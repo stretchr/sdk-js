@@ -47,8 +47,17 @@ var Stretchr = {
 
   /** apiVersion represents the default API version this SDK will
     * attempt to interact with. */
-  apiVersion: "1.1"
+  apiVersion: "1.1",
 
+  _counter: 0
+
+};
+
+/**
+ * Gets the next number in the global counter.
+ */
+Stretchr.counter = function(){
+  return ++Stretchr._counter;
 };
 
 /*
@@ -161,6 +170,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 /** @class
  * Stretchr.Transport is the base class for objects capable of communicating
  * with Stretchr services.
+ * @property {string} host The host where requests will be made to.
+ * @property {string} protocol The protocol to use when making requests (default: 'http')
+ * @property {float} APIVersion The API version to target (default: 1.1)
  */
 Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 
@@ -191,12 +203,17 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
   /**
    * makeRequest makes a JSONP request using the specified options.
    * @param {string} path The path of the request to make.
-  * @memberOf Stretchr.JSONPTransport.prototype
+   * @fires before
+   * @fires after
+   * @memberOf Stretchr.JSONPTransport.prototype
    */
   makeRequest: function(options) {
 
     // event: before
     this.fireWith("before", options, options);
+
+    // make the callback function
+
 
     // add the script tag (JSONP)
     var script = document.createElement('script');
