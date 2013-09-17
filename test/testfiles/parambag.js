@@ -44,6 +44,24 @@ buster.testCase("ParamBag", {
 
   },
 
+  "ParamBag magical param": function() {
+    var p = new Stretchr.ParamBag();
+    p.params("key", "value");
+    assert.equals(p.params("key")[0], "value");
+
+    p.params({key2: "value2", key3: "value3"});
+    assert.equals(p.params("key2")[0], "value2");
+    assert.equals(p.params("key3")[0], "value3");
+
+    //returns all params
+    var p2 = new Stretchr.ParamBag();
+    p2.params({key: "value", key2: "value2"});
+    assert.equals(p2.params()["key"][0], "value");
+
+    //should ignore undefined
+    assert.equals(p.params("key", undefined)[0], "value");
+  },
+
   "urlEncoded": function(){
 
     // make a param bag
