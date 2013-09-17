@@ -95,8 +95,9 @@ Stretchr.Session = oo.Class("Stretchr.Session", oo.Events, oo.Properties, {
   },
 
   /**
-    Starts a new Request for the given path.
-    @param {string} path The path of the new request.
+   * Starts a new Request for the given path.
+   * @param {string} path The path of the new request.
+   * @memberOf Stretchr.Session.prototype
   */
   at: function(path) {
     return new Stretchr.Request(this, path);
@@ -123,10 +124,11 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   },
 
   /**
-  * Adds an item to the params, takes a key/value add("key", "value) or an 
+  * Adds an item to the params, takes a key/value add("key", "value) or an
   * object of multiple keys/values add({key: "value", key2: "value2"})
   * @param {key} either a string key or an object of multiple key/values
   * @param {value} the value if a string key was provided for key
+  * @memberOf Stretchr.Request.prototype
   */
   params: function(key, value) {
     return this._params.params(key, value) || this;
@@ -137,6 +139,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * object of multiple keys/values add({key: "value", key2: "value2"})
   * @param {key} either a string key or an object of multiple key/values
   * @param {value} the value if a string key was provided for key
+  * @memberOf Stretchr.Request.prototype
   */
   param: function(key, value) {
     return this._params.params(key, value) || this;
@@ -147,6 +150,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * object of multiple keys/values add({key: "value", key2: "value2"})
   * @param {key} either a string key or an object of multiple key/values
   * @param {value} the value if a string key was provided for key
+  * @memberOf Stretchr.Request.prototype
   */
   where: function(key, value) {
     return this._where.params(key, value) || this;
@@ -168,7 +172,7 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
   },
 
   url: function(path) {
-    return [this.protocol(), "://", this.host(), "/api/v", this.APIVersion(), path].join("")
+    return [this.protocol(), "://", this.host(), "/api/v", this.APIVersion(), path].join("");
   }
 
 });
@@ -182,6 +186,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
   /**
    * makeRequest makes a JSONP request using the specified options.
    * @param {string} path The path of the request to make.
+  * @memberOf Stretchr.JSONPTransport.prototype
    */
   makeRequest: function(options) {
 
@@ -212,8 +217,9 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
   /**
   * Adds an item to the params, takes a key/value add("key", "value) or an
   * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {key} either a string key or an object of multiple key/values
-  * @param {value} the value if a string key was provided for key
+  * @param {string} key Either a string key or an object of multiple key/values
+  * @param {string} value The value if a string key was provided for key
+  * @memberOf Stretchr.ParamBag.prototype
   */
   add: function(key, value) {
     if (typeof(key) === "string") {
@@ -237,8 +243,9 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
 
   /**
   * Overwrites a param with a given key/value
-  * @param {key} A string that sets the key you want to overwrite
-  * @param {value} The value applied to the given key
+  * @param {string} key A string that sets the key you want to overwrite
+  * @param {string} value The value applied to the given key
+  * @memberOf Stretchr.ParamBag.prototype
   */
   set: function(key, value) {
     this._params[key] = [];
@@ -248,19 +255,12 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
 
   /**
   * Returns a specific key/value combination or all of them
-  * @param {key} (Optional) States the key that you want to get the value for.
+  * @param {string} key (Optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
+  * @memberOf Stretchr.ParamBag.prototype
   */
   get: function(key) {
     return key ? this._params[key] : this._params;
-  },
-
-  /**
-   * Gets the number of parameters that have been set in this
-   * bag.
-   */
-  size: function(){
-    return this._params ? this._params.length : 0;
   },
 
   /**
@@ -269,9 +269,10 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
   * - Returns all if no key or value is given
   * - Sets the key if a key/value is given
   * - Sets many keys if an object of keys/values is given
-  * @param {key} (Optional) States the key that you want to get the value for.
+  * @param {string} key (Optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
-  * @param {value} (Optional) States the value that should be applied to the above key
+  * @param {string} value (Optional) States the value that should be applied to the above key
+  * @memberOf Stretchr.ParamBag.prototype
   */
   params: function(key, value) {
     if (value || (key && typeof(key) === "object")) {
@@ -284,9 +285,10 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
 
   /**
   * Returns a URL encoded version of the params
-  * @param {options} Settings for the url encoding process.
+  * @param {object} options Settings for the url encoding process.
   * currently only supports {keyPrefix: ":"} which will set the
   * prefix applied to all keys
+  * @memberOf Stretchr.ParamBag.prototype
   */
   urlEncoded: function(options) {
     var d = [],
