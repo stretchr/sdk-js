@@ -66,6 +66,15 @@ buster.testCase("ParamBag", {
     refute.equals(-1, e.indexOf("numbers=one,two,three"));
     refute.equals(-1, e.indexOf("encoding=%20%26"));
 
+    var e = p.urlEncoded({
+      keyPrefix: "--"
+    });
+    refute.equals(-1, e.indexOf("--name=Ryan"));
+    refute.equals(-1, e.indexOf("--age=26"));
+    refute.equals(-1, e.indexOf("--lovely=true"));
+    refute.equals(-1, e.indexOf("--numbers=one,two,three"));
+    refute.equals(-1, e.indexOf("--encoding=%20%26"));
+
   }
 
 });
