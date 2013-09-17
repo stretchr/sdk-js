@@ -171,6 +171,11 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
     this.setProtocol("http");
   },
 
+  /**
+   * url generates a URL that makes up the request of the specified path.
+   * @param {string} path The relative path of the request.
+   * @memberOf Stretchr.Transport.prototype
+   */
   url: function(path) {
     return [this.protocol(), "://", this.host(), "/api/v", this.APIVersion(), path].join("");
   }
