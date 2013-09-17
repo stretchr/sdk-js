@@ -70,11 +70,11 @@ buster.testCase("ParamBag", {
     var e = p.urlEncoded({
       keyPrefix: "--"
     });
+    console.info(e)
     refute.equals(-1, e.indexOf("--name=Ryan"));
     refute.equals(-1, e.indexOf("--age=26"));
     refute.equals(-1, e.indexOf("--lovely=true"));
-    //TODO : Ask mat if this should be url encoded or not
-    //refute.equals(-1, e.indexOf("--numbers=one,two,three"));
+    refute.equals(-1, e.indexOf("--numbers=one%2Ctwo%2Cthree"));
     refute.equals(-1, e.indexOf("--encoding=%20%26"));
 
   }
