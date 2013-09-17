@@ -1,9 +1,9 @@
-buster.testCase("ParamBag", {
+buster.testCase("Bag", {
 
-  "ParamBag get, add and set": function(){
+  "Bag get, add and set": function(){
 
     // make a param bag
-    var p = new Stretchr.ParamBag();
+    var p = new Stretchr.Bag();
 
     // set one
     assert.equals(p, p.add("key", "value"));
@@ -44,8 +44,8 @@ buster.testCase("ParamBag", {
 
   },
 
-  "ParamBag magical param": function() {
-    var p = new Stretchr.ParamBag();
+  "Bag magical param": function() {
+    var p = new Stretchr.Bag();
     p.params("key", "value");
     assert.equals(p.params("key")[0], "value");
 
@@ -54,7 +54,7 @@ buster.testCase("ParamBag", {
     assert.equals(p.params("key3")[0], "value3");
 
     //returns all params
-    var p2 = new Stretchr.ParamBag();
+    var p2 = new Stretchr.Bag();
     p2.params({key: "value", key2: "value2"});
     assert.equals(p2.params()["key"][0], "value");
 
@@ -65,7 +65,7 @@ buster.testCase("ParamBag", {
   "urlEncoded": function(){
 
     // make a param bag
-    var p = new Stretchr.ParamBag();
+    var p = new Stretchr.Bag();
 
     p.add({
       "name": "Ryan",
@@ -96,24 +96,5 @@ buster.testCase("ParamBag", {
     refute.equals(-1, e.indexOf("--%20%26=and"));
 
   }
-
-  // ,
-
-  // "Merging param bags": function(){
-
-  //   var p = new Stretchr.ParamBag();
-  //   var p2 = new Stretchr.ParamBag();
-
-  //   p.set("name", "Ryon");
-  //   p2.set("name", "Ryan");
-  //   p2.set("age", 26);
-
-  //   assert.equals(p, p.add(p2));
-
-  //   assert.equals("Ryon", p.get("name")[0]);
-  //   assert.equals("Ryan", p.get("name")[1]);
-  //   assert.equals(26, p.get("age")[0]);
-
-  // }
 
 });
