@@ -85,12 +85,14 @@ buster.testCase("ParamBag", {
     var p2 = new Stretchr.ParamBag();
 
     p.set("name", "Ryon");
-    p2.set("realname", "Ryan");
+    p2.set("name", "Ryan");
+    p2.set("age", 26);
 
     assert.equals(p, p.add(p2));
 
     assert.equals("Ryon", p.get("name")[0]);
-    assert.equals("Ryan", p.get("realname")[0]);
+    assert.equals("Ryan", p.get("name")[1]);
+    assert.equals(26, p.get("age")[0]);
 
   }
 
