@@ -37,7 +37,7 @@
  */
 
 /**
- * @namespace 
+ * @namespace
  * @version 1.2
  */
 var Stretchr = {
@@ -55,7 +55,7 @@ var Stretchr = {
   oo
   v1.2.2
   github.com/stretchr/oo
-  
+
   The worlds simplest JavaScript OO implementation.
   For if you just need cool classes, and nothing else.
 
@@ -84,15 +84,6 @@ Stretchr.Session = oo.Class("Stretchr.Session", oo.Events, oo.Properties, {
 
   properties: ["projectName", "publicKey", "privateKey"],
 
-  /**
-   * Initialises a new session with the specified details.  The init constructor
-   * method is called when you create a new `Stretchr.Session` object.
-   * @param {string} projectName The full name of your Stretchr project (i.e. `proj.company`).
-   * @param {string} publicKey Your application public key.
-   * @param {string} privateKey Your application private key.
-   * @function
-   * @memberOf Stretchr.Session.prototype
-   */
   init: function(projectName, publicKey, privateKey){
 
     this
@@ -101,15 +92,36 @@ Stretchr.Session = oo.Class("Stretchr.Session", oo.Events, oo.Properties, {
       .setPrivateKey(privateKey)
     ;
 
+  },
+
+  /**
+    Starts a new Request for the given path.
+    @param {string} path The path of the new request.
+  */
+  at: function(path) {
+    return new Stretchr.Request(this, path);
   }
 
 });
 
+/** @class
+ * Stretchr.Request represents a single request to Stretchr services.
+ * It is recommended that you use the `at` method on Stretchr.Session
+ * instead of constructing this object directly.
+ * @property {Stretchr.Session} session The session to use when making the
+ * request.
+ * @property {string} path The path for this Request.
+ */
+Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
-/*
-  Security
-  =====================================================================
-*/
+  properties: ["session", "path"],
+
+  init: function(session, path){
+    this.setSession(session).setPath(path);
+  }
+
+});
+
 
 /**
  * hashSHA1 hashes the specified value using the SHA1 algorithm.

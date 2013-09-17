@@ -9,6 +9,16 @@ buster.testCase("Session", {
 
   },
 
-  
+  "at": function(){
+
+    var session = new Stretchr.Session("proj", "pub", "priv");
+    var request = session.at("/path/to/something");
+
+    refute.equals(undefined, request, "at() should return a request.")
+
+    assert.equals(session, request.session())
+    assert.equals("/path/to/something", request.path())
+
+  }
 
 });
