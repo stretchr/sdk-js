@@ -58,13 +58,14 @@ buster.testCase("ParamBag", {
     p.add("numbers", "two");
     p.add("numbers", "three");
     p.add("encoding", " &");
+    p.add(" &", "and");
 
     var e = p.urlEncoded();
     refute.equals(-1, e.indexOf("name=Ryan"));
     refute.equals(-1, e.indexOf("age=26"));
     refute.equals(-1, e.indexOf("lovely=true"));
     refute.equals(-1, e.indexOf("numbers=one%2Ctwo%2Cthree"));
-    refute.equals(-1, e.indexOf("encoding=%20%26"));
+    refute.equals(-1, e.indexOf("%20%26=and"));
 
     var e = p.urlEncoded({
       keyPrefix: "--"
@@ -74,6 +75,7 @@ buster.testCase("ParamBag", {
     refute.equals(-1, e.indexOf("--lovely=true"));
     refute.equals(-1, e.indexOf("--numbers=one%2Ctwo%2Cthree"));
     refute.equals(-1, e.indexOf("--encoding=%20%26"));
+    refute.equals(-1, e.indexOf("--%20%26=and"));
 
   }
 
