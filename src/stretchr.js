@@ -178,8 +178,8 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 });
 
 /** @class
- * Stretchr.JSONPTransport is the base class for objects capable of communicating
- * with Stretchr services.
+ * Stretchr.JSONPTransport is the class for objects capable of communicating
+ * with Stretchr services via JSONP.
  */
 Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport, {
 
