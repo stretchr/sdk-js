@@ -32,6 +32,9 @@ buster.testCase("Request", {
     assert.equals("value2", r.params()["key2"][0])
     assert.equals("value3", r.params()["key3"][0])
 
+    //set many chaining
+    assert.equals(r, r.params({"key4":"value4"}));
+
     // add another value
     r.param("key", "another-value");
     assert.equals("value", r.params()["key"][0])

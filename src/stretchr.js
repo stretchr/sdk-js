@@ -120,7 +120,16 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     this.setSession(session).setPath(path);
     this._params = new Stretchr.ParamBag();
     this._where = new Stretchr.ParamBag();
-    this.params = this._params.params.bind(this._params);
+  },
+
+  /**
+  * Adds an item to the params, takes a key/value add("key", "value) or an 
+  * object of multiple keys/values add({key: "value", key2: "value2"})
+  * @param {key} either a string key or an object of multiple key/values
+  * @param {value} the value if a string key was provided for key
+  */
+  params: function(key, value) {
+    return this._params.params(key, value) || this;
   },
 
   /**
