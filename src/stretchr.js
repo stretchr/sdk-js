@@ -118,6 +118,29 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   init: function(session, path){
     this.setSession(session).setPath(path);
+    this._params = new Stretchr.ParamBag();
+    this._where = new Stretchr.ParamBag();
+    this.params = this._params.params.bind(this._params);
+  },
+
+  /**
+  * Adds an item to the params, takes a key/value add("key", "value) or an
+  * object of multiple keys/values add({key: "value", key2: "value2"})
+  * @param {key} either a string key or an object of multiple key/values
+  * @param {value} the value if a string key was provided for key
+  */
+  param: function(key, value) {
+    return this._params.params(key, value) || this;
+  },
+
+  /**
+  * Adds an item to the filters, takes a key/value add("key", "value) or an
+  * object of multiple keys/values add({key: "value", key2: "value2"})
+  * @param {key} either a string key or an object of multiple key/values
+  * @param {value} the value if a string key was provided for key
+  */
+  where: function(key, value) {
+    return this._where.params(key, value) || this;
   }
 
 });
@@ -229,6 +252,25 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
    */
   size: function(){
     return this._params ? this._params.length : 0;
+  },
+
+  /**
+  * Abstracts the get/set methods and makes assumptions for you
+  * - Returns the value if just a key is given
+  * - Returns all if no key or value is given
+  * - Sets the key if a key/value is given
+  * - Sets many keys if an object of keys/values is given
+  * @param {key} (Optional) States the key that you want to get the value for.
+  * Returns all key/value pairs if none is given
+  * @param {value} (Optional) States the value that should be applied to the above key
+  */
+  params: function(key, value) {
+    if (value || (key && typeof(key) === "object")) {
+      //typical setter, just do it
+      this.add(key, value);
+    } else {
+      return this.get(key);
+    }
   },
 
   /**
