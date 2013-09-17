@@ -7,10 +7,12 @@ buster.testCase("ParamBag", {
 
     // set one
     assert.equals(p, p.add("key", "value"));
+    assert.equals(p.size(), 1, "size")
     assert.equals("value", p.get("key")[0]);
 
     // set many
     assert.equals(p, p.add({"key2": "value2", "key3": "value3"}));
+    assert.equals(p.size(), 3, "size")
     assert.equals("value", p.get("key")[0]);
     assert.equals("value2", p.get("key2")[0]);
     assert.equals("value3", p.get("key3")[0]);
