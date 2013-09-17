@@ -49,7 +49,15 @@ var Stretchr = {
     * attempt to interact with. */
   apiVersion: "1.1",
 
-  _counter: 0
+  // _counter is the internal counter for Stretchr JSONP
+  // requests.
+  _counter: 0,
+
+  ResponseKeyStatus: "~status",
+  ResponseKeyData: "~data",
+  ResponseKeyErrors: "~errors",
+  ResponseKeyErrorsMessage: "~message",
+  ResponseKeyContext: "~context"
 
 };
 
@@ -167,13 +175,28 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
 });
 
+/** @class
+ * Stretchr.Response represents a repsonse to a single Stretchr.Request.
+ * @property {int} status The HTTP Status code returned by the server.
+ */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
-  properties: ["status"],
+  getters: ["status", "data", "success", "errors", "context"],
 
   init: function(r) {
 
-    this.setStatus(r["~status"])
+    this._status = r[Stretchr.ResponseKeyStatus];
+    this._data = r[Stretchr.ResponseKeyData];
+    this._success = this._status >= 200 && this._status <= 299;
+    this._context = r[Stretchr.ResponseKeyContext]
+
+    // collect any errors
+    if (r[Stretchr.ResponseKeyErrors]) {
+      this._errors = [];
+      for (var err in r[Stretchr.ResponseKeyErrors]) {
+        this._errors.push(r[Stretchr.ResponseKeyErrors][err][Stretchr.ResponseKeyErrorsMessage])
+      }
+    }
 
   }
 
