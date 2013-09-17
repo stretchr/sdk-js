@@ -76,14 +76,14 @@ buster.testCase("ParamBag", {
     p.add("numbers", "two");
     p.add("numbers", "three");
     p.add("encoding", " &");
+    p.add(" &", "and");
 
     var e = p.urlEncoded();
     refute.equals(-1, e.indexOf("name=Ryan"));
     refute.equals(-1, e.indexOf("age=26"));
     refute.equals(-1, e.indexOf("lovely=true"));
-    //TODO : Ask mat if this shoudl be url encoded or not
-    //refute.equals(-1, e.indexOf("numbers=one,two,three"));
-    refute.equals(-1, e.indexOf("encoding=%20%26"));
+    refute.equals(-1, e.indexOf("numbers=one%2Ctwo%2Cthree"));
+    refute.equals(-1, e.indexOf("%20%26=and"));
 
     var e = p.urlEncoded({
       keyPrefix: "--"
@@ -91,9 +91,26 @@ buster.testCase("ParamBag", {
     refute.equals(-1, e.indexOf("--name=Ryan"));
     refute.equals(-1, e.indexOf("--age=26"));
     refute.equals(-1, e.indexOf("--lovely=true"));
-    //TODO : Ask mat if this should be url encoded or not
-    //refute.equals(-1, e.indexOf("--numbers=one,two,three"));
+    refute.equals(-1, e.indexOf("--numbers=one%2Ctwo%2Cthree"));
     refute.equals(-1, e.indexOf("--encoding=%20%26"));
+    refute.equals(-1, e.indexOf("--%20%26=and"));
+
+  },
+
+  "Merging param bags": function(){
+
+    var p = new Stretchr.ParamBag();
+    var p2 = new Stretchr.ParamBag();
+
+    p.set("name", "Ryon");
+    p2.set("name", "Ryan");
+    p2.set("age", 26);
+
+    assert.equals(p, p.add(p2));
+
+    assert.equals("Ryon", p.get("name")[0]);
+    assert.equals("Ryan", p.get("name")[1]);
+    assert.equals(26, p.get("age")[0]);
 
   }
 

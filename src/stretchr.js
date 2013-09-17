@@ -155,7 +155,7 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
   },
 
   /**
-  * Adds an item to the params, takes a key/value add("key", "value) or an 
+  * Adds an item to the params, takes a key/value add("key", "value) or an
   * object of multiple keys/values add({key: "value", key2: "value2"})
   * @param {key} either a string key or an object of multiple key/values
   * @param {value} the value if a string key was provided for key
@@ -193,7 +193,7 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
 
   /**
   * Returns a specific key/value combination or all of them
-  * @param {key} (Optional) States the key that you want to get the value for.  
+  * @param {key} (Optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
   */
   get: function(key) {
@@ -222,7 +222,7 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
   /**
   * Returns a URL encoded version of the params
   * @param {options} Settings for the url encoding process.
-  * currently only supports {keyPrefix: ":"} which will set the 
+  * currently only supports {keyPrefix: ":"} which will set the
   * prefix applied to all keys
   */
   urlEncoded: function(options) {
@@ -235,7 +235,7 @@ Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
     }
 
     for (var key in this._params) {
-      d.push( options.keyPrefix + key + "=" + encodeURIComponent( this._params[key].join(",") ) );
+      d.push( encodeURIComponent(options.keyPrefix + key) + "=" + encodeURIComponent( this._params[key].join(",") ) );
     }
     return d.join("&");
   }
