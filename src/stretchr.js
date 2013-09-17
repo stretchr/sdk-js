@@ -167,6 +167,18 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
 });
 
+Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
+
+  properties: ["status"],
+
+  init: function(r) {
+
+    this.setStatus(r["~status"])
+
+  }
+
+});
+
 /** @class
  * Stretchr.Transport is the base class for objects capable of communicating
  * with Stretchr services.
@@ -213,15 +225,24 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
     this.fireWith("before", options, options);
 
     // make the callback function
+    var callbackFunctionName = "cb" + Stretchr.counter();
+    window[callbackFunctionName] = function(response) {
 
+      // event: after
+      this.fireWith("after", options, options);
+
+      // delete this function
+      delete window[callbackFunctionName];
+
+    }.bind(this);
 
     // add the script tag (JSONP)
     var script = document.createElement('script');
     script.src = options.path;
     document.getElementsByTagName('head')[0].appendChild(script);
 
-    // event: after
-    this.fireWith("after", options, options);
+    // save this for test use
+    this.lastCallbackFunctionName = callbackFunctionName;
 
   }
 
