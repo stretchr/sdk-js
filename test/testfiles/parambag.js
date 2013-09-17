@@ -77,6 +77,21 @@ buster.testCase("ParamBag", {
     refute.equals(-1, e.indexOf("--encoding=%20%26"));
     refute.equals(-1, e.indexOf("--%20%26=and"));
 
+  },
+
+  "Merging param bags": function(){
+
+    var p = new Stretchr.ParamBag();
+    var p2 = new Stretchr.ParamBag();
+
+    p.set("name", "Ryon");
+    p2.set("realname", "Ryan");
+
+    assert.equals(p, p.add(p2));
+
+    assert.equals("Ryon", p.get("name")[0]);
+    assert.equals("Ryan", p.get("realname")[0]);
+
   }
 
 });
