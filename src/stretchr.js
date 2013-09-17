@@ -122,6 +122,83 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
 });
 
+/** @class
+ * Stretchr.ParamBag is a container for params when building a stretchr
+ * request.  It should be used through the request object, not necessarily on its own.
+ */
+Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
+  init: function() {
+    this._params = [];
+  },
+
+  /**
+  * Adds an item to the params, takes a key/value add("key", "value) or an 
+  * object of multiple keys/values add({key: "value", key2: "value2"})
+  * @param {key} either a string key or an object of multiple key/values
+  * @param {value} the value if a string key was provided for key
+  */
+  add: function(key, value) {
+    if (typeof(key) === "string") {
+      //initialize the key as an array
+      this._params[key] = this._params[key] || [];
+      if (value instanceof Array) {
+        //because this is an array, we want to concat it to what we already have
+        this._params[key] = this._params[key].concat(value);
+      } else {
+        //not an array, just push it on
+        this._params[key].push(value);
+      }
+    } else if (typeof(key) === "object") {
+      //we were given an object of multiple key/value pairs, so iterate through them and call add
+      for (var i in key) {
+        this.add(i, key[i]);
+      }
+    }
+    return this;
+  },
+
+  /**
+  * Overwrites a param with a given key/value
+  * @param {key} A string that sets the key you want to overwrite
+  * @param {value} The value applied to the given key
+  */
+  set: function(key, value) {
+    this._params[key] = [];
+    this.add(key, value);
+    return this;
+  },
+
+  /**
+  * Returns a specific key/value combination or all of them
+  * @param {key} (Optional) States the key that you want to get the value for.  
+  * Returns all key/value pairs if none is given
+  */
+  get: function(key) {
+    return key ? this._params[key] : this._params;
+  },
+
+  /**
+  * Returns a URL encoded version of the params
+  * @param {options} Settings for the url encoding process.
+  * currently only supports {keyPrefix: ":"} which will set the 
+  * prefix applied to all keys
+  */
+  urlEncoded: function(options) {
+    var d = [],
+      options = options || {};
+
+    //set some defaults
+    options = {
+      keyPrefix: options.keyPrefix || ""
+    }
+
+    for (var key in this._params) {
+      d.push( options.keyPrefix + key + "=" + encodeURIComponent( this._params[key].join(",") ) );
+    }
+    return d.join("&");
+  }
+});
+
 
 /**
  * hashSHA1 hashes the specified value using the SHA1 algorithm.
