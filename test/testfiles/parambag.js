@@ -44,7 +44,6 @@ buster.testCase("Bag", {
 
   },
 
-/*
   "bag events": function(){
 
     var p = new Stretchr.ParamBag();
@@ -71,7 +70,6 @@ buster.testCase("Bag", {
     }
 
   },
-*/
 
   "Bag magical param": function() {
 
