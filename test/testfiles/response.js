@@ -127,21 +127,6 @@ var responseFixtures = {
       assert.equals(resource2.data("~id"), "abc2")
 
     }
-  ],
-
-  "Error in response": [
-    {
-      "~status":500,
-      "~errors":[
-        {"~message": "Something went wrong"}
-      ]
-    },
-    function(r,n){
-
-      assert.equals(r.success(), false);
-      assert.equals(r.errors()[0], "Something went wrong");
-
-    }
   ]
 
 };
