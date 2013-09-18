@@ -66,7 +66,6 @@ buster.testCase("JSONPTransport", {
 
   "JSONPTransport.makeRequest errors": function(){
 
-
     var s = new Stretchr.Session();
     var t = new Stretchr.JSONPTransport(s);
     var options = {
