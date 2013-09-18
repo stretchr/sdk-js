@@ -49,6 +49,7 @@ buster.testCase("Request", {
   },
 
   "where" : function() {
+
     var s = new Stretchr.Session("proj", "pub", "priv");
     var r = new Stretchr.Request(s, "/path/to/something");
 

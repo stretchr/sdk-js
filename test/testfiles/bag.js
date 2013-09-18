@@ -1,99 +1,105 @@
 buster.testCase("Bag", {
 
-  "Bag get, add and set": function(){
+  "init": function(){
 
-    // make a param bag
-    var p = new Stretchr.Bag();
+    var b = new Stretchr.Bag();
 
-    // set one
-    assert.equals(p, p.add("key", "value"));
-    assert.equals("value", p.get("key")[0]);
-
-    // set many
-    assert.equals(p, p.add({"key2": "value2", "key3": "value3"}));
-    assert.equals("value", p.get("key")[0]);
-    assert.equals("value2", p.get("key2")[0]);
-    assert.equals("value3", p.get("key3")[0]);
-
-    // set many more
-    assert.equals(p, p.add({"key2": "value2b", "key3": "value3b"}));
-    assert.equals("value", p.get("key")[0]);
-    assert.equals("value2", p.get("key2")[0]);
-    assert.equals("value3", p.get("key3")[0]);
-    assert.equals("value2b", p.get("key2")[1]);
-    assert.equals("value3b", p.get("key3")[1]);
-
-    // set array
-    assert.equals(p, p.add("key4", ["value4a", "value4b"]));
-    assert.equals("value4a", p.get("key4")[0]);
-    assert.equals("value4b", p.get("key4")[1]);
-
-    // get them all
-    var params = p.get();
-    assert.equals("value", params["key"][0]);
-    assert.equals("value2", params["key2"][0]);
-    assert.equals("value2b", params["key2"][1]);
-    assert.equals("value3", params["key3"][0]);
-    assert.equals("value3b", params["key3"][1]);
-    assert.equals("value4a", params["key4"][0]);
-    assert.equals("value4b", params["key4"][1]);
-
-    // set overwirtes the whole array
-    assert.equals(p, p.set("key4", "FOUR"));
-    assert.equals("FOUR", p.get("key4")[0]);
+    refute.isNull(b._data)
 
   },
 
-  "Bag magical param": function() {
-    var p = new Stretchr.Bag();
-    p.params("key", "value");
-    assert.equals(p.params("key")[0], "value");
+  "init with data": function(){
 
-    p.params({key2: "value2", key3: "value3"});
-    assert.equals(p.params("key2")[0], "value2");
-    assert.equals(p.params("key3")[0], "value3");
+    var data = {
+      "name": "Ryon"
+    };
+    var b = new Stretchr.Bag(data);
 
-    //returns all params
-    var p2 = new Stretchr.Bag();
-    p2.params({key: "value", key2: "value2"});
-    assert.equals(p2.params()["key"][0], "value");
+    assert.equals(data, b._data)
 
-    //should ignore undefined
-    assert.equals(p.params("key", undefined)[0], "value");
   },
 
-  "urlEncoded": function(){
+  "Bag get and set": function(){
 
-    // make a param bag
-    var p = new Stretchr.Bag();
+    var b = new Stretchr.Bag();
 
-    p.add({
-      "name": "Ryan",
-      "age": 26,
-      "lovely": true,
-      "numbers": "one"
+    // set key / value
+    assert.equals(b, b.set("name", "Ryon"), "set should chain");
+    assert.equals("Ryon", b._data["name"]);
+
+    // get with param
+    assert.equals("Ryon", b.get("name"));
+
+    // get entire data
+    assert.equals(b._data, b.get());
+
+  },
+
+  "events": function(){
+
+    var b = new Stretchr.Bag();
+
+    var changeCalls = [];
+    var beforeChangeCalls = [];
+    // register the change event
+    b.change(function(){
+      changeCalls.push(arguments);
     });
-    p.add("numbers", "two");
-    p.add("numbers", "three");
-    p.add("encoding", " &");
-    p.add(" &", "and");
-
-    var e = p.urlEncoded();
-    refute.equals(-1, e.indexOf("name=Ryan"));
-    refute.equals(-1, e.indexOf("age=26"));
-    refute.equals(-1, e.indexOf("lovely=true"));
-    refute.equals(-1, e.indexOf("numbers=one%2Ctwo%2Cthree"));
-    refute.equals(-1, e.indexOf("%20%26=and"));
-
-    var e = p.urlEncoded({
-      keyPrefix: "--"
+    b.on("before:change", function(){
+      beforeChangeCalls.push(arguments);
     });
-    refute.equals(-1, e.indexOf("--name=Ryan"));
-    refute.equals(-1, e.indexOf("--age=26"));
-    refute.equals(-1, e.indexOf("--lovely=true"));
-    refute.equals(-1, e.indexOf("--numbers=one%2Ctwo%2Cthree"));
-    refute.equals(-1, e.indexOf("--encoding=%20%26"));
-    refute.equals(-1, e.indexOf("--%20%26=and"));
+
+    b.set("name", "Ryon");
+
+    if (assert.equals(changeCalls.length, 1)) {
+      assert.equals(beforeChangeCalls.length, 1)
+      assert.equals(changeCalls[0][0], "name")
+      assert.equals(changeCalls[0][1], undefined)
+      assert.equals(changeCalls[0][2], "Ryon")
+    }
+
+    // see if the bag is dirty
+    assert.equals(b.dirty(), true);
+    b.clean();
+    assert.equals(b.dirty(), false);
+
+    b.set("name", "Mat");
+    assert.equals(b.dirty(), true);
+
+    if (assert.equals(changeCalls.length, 2)) {
+      assert.equals(beforeChangeCalls.length, 2)
+      assert.equals(changeCalls[0][0], "name")
+      assert.equals(changeCalls[0][1], "Ryon")
+      assert.equals(changeCalls[0][2], "Mat")
+    }
+
+  },
+
+  "data shortcut method": function(){
+
+    var b = new Stretchr.Bag();
+
+    // stub out the methods
+    var setCalls = [], getCalls = [];
+    b.set = function(){ setCalls.push(arguments); return setCalls; }
+    b.get = function(){ getCalls.push(arguments); return getCalls; }
+
+    // set something
+    b.data("name", "Ryon");
+
+    assert.equals(setCalls[0][0], "name", "set should be called")
+    assert.equals(setCalls[0][1], "Ryon", "set should be called")
+
+    // get it
+    assert.equals(b.data("name"), getCalls, "get should be called");
+
+    // set the whole thing
+    var newData = {};
+    b.data(newData);
+    assert.equals(b._data, newData);
+
+    // get the whole thing
+    assert.equals(b._data, b.data())
 
   }
 

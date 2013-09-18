@@ -136,8 +136,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   init: function(session, path){
     this.setSession(session).setPath(path);
-    this._params = new Stretchr.Bag();
-    this._where = new Stretchr.Bag();
+    this._params = new Stretchr.ParamBag();
+    this._where = new Stretchr.ParamBag();
   },
 
   /**
@@ -289,10 +289,60 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 });
 
 /** @class
- * Stretchr.Bag is a container for params when building a stretchr
+ * Stretchr.Bag is a container for data.
+ */
+Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
+
+  properties: ["dirty"],
+  events: ["change"],
+
+  init: function(data){
+    this._data = data || {};
+  },
+
+  set: function(key, value) {
+    this.setDirty(true)
+    this.withEvent("change", this._data[key], value, function(){
+      this._data[key] = value;
+    }.bind(this));
+    return this;
+  },
+
+  get: function(key) {
+    return key ? this._data[key] : this._data;
+  },
+
+  clean: function(){
+    this.setDirty(false);
+  },
+
+  data: function(keyOrObject, value) {
+
+    if (arguments.length == 0) {
+      return this._data;
+    }
+
+    if (typeof value != "undefined" && typeof keyOrObject != "object") {
+      // normal setter
+      this.set(keyOrObject, value);
+    } else if (typeof keyOrObject != "object") {
+      // getter (with value)
+      return this.get(keyOrObject);
+    }
+
+    // set the whole object
+    this._data = keyOrObject;
+
+  }
+
+});
+
+/** @class
+ * Stretchr.ParamBag is a container for params when building a stretchr
  * request.  It should be used through the request object, not necessarily on its own.
  */
-Stretchr.Bag = oo.Class("Stretchr.Bag", {
+Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
+
   init: function() {
     this._params = {};
   },
@@ -302,7 +352,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", {
   * object of multiple keys/values add({key: "value", key2: "value2"})
   * @param {string} key Either a string key or an object of multiple key/values
   * @param {string} value The value if a string key was provided for key
-  * @memberOf Stretchr.Bag.prototype
+  * @memberOf Stretchr.ParamBag.prototype
   */
   add: function(key, value) {
     if (typeof(key) === "string") {
@@ -328,7 +378,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", {
   * Overwrites a param with a given key/value
   * @param {string} key A string that sets the key you want to overwrite
   * @param {string} value The value applied to the given key
-  * @memberOf Stretchr.Bag.prototype
+  * @memberOf Stretchr.ParamBag.prototype
   */
   set: function(key, value) {
     this._params[key] = null;
@@ -341,7 +391,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", {
   * Returns a specific key/value combination or all of them
   * @param {string} key (Optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
-  * @memberOf Stretchr.Bag.prototype
+  * @memberOf Stretchr.ParamBag.prototype
   */
   get: function(key) {
     return key ? this._params[key] : this._params;
@@ -356,7 +406,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", {
   * @param {string} key (Optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
   * @param {string} value (Optional) States the value that should be applied to the above key
-  * @memberOf Stretchr.Bag.prototype
+  * @memberOf Stretchr.ParamBag.prototype
   */
   params: function(key, value) {
     if (value || (key && typeof(key) === "object")) {
@@ -372,7 +422,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", {
   * @param {object} options Settings for the url encoding process.
   * currently only supports {keyPrefix: ":"} which will set the
   * prefix applied to all keys
-  * @memberOf Stretchr.Bag.prototype
+  * @memberOf Stretchr.ParamBag.prototype
   */
   urlEncoded: function(options) {
     var d = [],
