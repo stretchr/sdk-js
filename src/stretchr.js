@@ -361,6 +361,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
   init: function(data){
     this._data = data || {};
+    this.clean();
   },
 
   /**

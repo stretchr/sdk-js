@@ -15,7 +15,8 @@ buster.testCase("Bag", {
     };
     var b = new Stretchr.Bag(data);
 
-    assert.equals(b._data, data)
+    assert.equals(b._data, data);
+    assert.equals(b.dirty(), false, "Should not dirty");
 
   },
 
