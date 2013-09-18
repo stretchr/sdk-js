@@ -58,11 +58,11 @@ buster.testCase("ResourceCollection", {
     var session = new Stretchr.Session();
     var r = new Stretchr.ResourceCollection(session, data);
 
-    assert.equals(r.rawData(), data)
+    assert.equals(r.rawData(), data);
 
     assert.equals(r.count(), 2);
-    assert.equals(r.items()[0].data("name"), "Ryon")
-    assert.equals(r.items()[1].data("name"), "Tyler")
+    assert.equals(r.items()[0].data("name"), "Ryon");
+    assert.equals(r.items()[1].data("name"), "Tyler");
 
   }
 
