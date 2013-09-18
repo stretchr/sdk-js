@@ -57,7 +57,9 @@ var Stretchr = {
   ResponseKeyData: "~data",
   ResponseKeyErrors: "~errors",
   ResponseKeyErrorsMessage: "~message",
-  ResponseKeyContext: "~context"
+  ResponseKeyContext: "~context",
+
+  ResponseKeyCollectionItems: "~items"
 
 };
 
@@ -196,8 +198,20 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
   },
 
+  /**
+  * Gets the Stretchr.Resource from this response.
+  * @memberOf Stretchr.Response.prototype
+  */
   resource: function(){
     return new Stretchr.Resource(this.session(), this.data());
+  },
+
+  /**
+  * Gets the Stretchr.ResourceCollection from this response.
+  * @memberOf Stretchr.Response.prototype
+  */
+  resources: function(){
+    return new Stretchr.ResourceCollection(this.session(), this.data());
   }
 
 });
@@ -231,6 +245,12 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
 });
 
+/** @class
+ * Stretchr.ResourceCollection represents a collection of Stretchr.Resource objects.
+ * @property {Stretchr.Session} session The session that relates to this resource.
+ * @property {array} rawData The raw data that makes up this collection.
+ * @property (array of Stretchr.Resource) items The Resource items that make up this collection.
+ */
 Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Properties, {
 
   getters: ["session", "rawData", "items"],
@@ -242,12 +262,17 @@ Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Propert
     this._items = [];
 
     // make a Resource for each item
-    for (var index in data) {
-      this._items.push(new Stretchr.Resource(session, data[index]));
+    var items = data[Stretchr.ResponseKeyCollectionItems];
+    for (var index in items) {
+      this._items.push(new Stretchr.Resource(session, items[index]));
     }
 
   },
 
+  /**
+  * Gets the number of resources currently held in this collection.
+  * @memberOf Stretchr.ResourceCollection.prototype
+  */
   count: function(){
     return this._items.length;
   }

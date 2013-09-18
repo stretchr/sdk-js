@@ -93,6 +93,40 @@ var responseFixtures = {
       assert.equals(resource.data()["something"], true)
 
     }
+  ],
+
+  "ResourceCollection from response": [
+    {
+      "~data":{
+        "~count":2,
+        "~items":[
+          {
+            "name":"Laurie",
+            "~id":"abc1"
+          },
+          {
+            "name":"Simon",
+            "~id":"abc2"
+          }
+        ]
+      },
+      "~status":200
+    },
+    function(r, n){
+
+      resources = r.resources();
+
+      assert.equals(resources.count(), 2)
+
+      resource1 = resources.items()[0]
+      resource2 = resources.items()[1]
+
+      assert.equals(resource1.data("name"), "Laurie")
+      assert.equals(resource1.data("~id"), "abc1")
+      assert.equals(resource2.data("name"), "Simon")
+      assert.equals(resource2.data("~id"), "abc2")
+
+    }
   ]
 
 };
