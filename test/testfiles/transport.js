@@ -59,7 +59,7 @@ buster.testCase("JSONPTransport", {
     assert.equals(eventCallbacks[2], "after");
 
     window.setTimeout(function(){
-      assert.equals(TestFileValue, 2);
+      refute.equals(TestFileValue, 0);
     }, 500);
 
   },
@@ -108,7 +108,7 @@ buster.testCase("JSONPTransport", {
     assert.equals(eventCallbacks[2], "after");
 
     window.setTimeout(function(){
-      assert.equals(TestFileValue, 2);
+      refute.equals(TestFileValue, 0);
     }, 500);
 
   }
