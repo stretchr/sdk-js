@@ -10,6 +10,7 @@ buster.testCase("Resource", {
     };
     var session = new Stretchr.Session();
     var r = new Stretchr.Resource(session, data);
+    assert.equals(r._data.$class, Stretchr.Bag);
     assert.equals(r.data(), data);
 
   }

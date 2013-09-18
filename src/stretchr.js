@@ -199,11 +199,23 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
 Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
-  getters: ["data", "session"],
+  getters: ["session"],
 
   init: function(session, data) {
     this._session = session;
-    this._data = data;
+    this._data = new Stretchr.Bag(data);
+  },
+
+  /**
+  * Enables interacting with the data of this resource.
+  * Adds an item to the data, takes a key/value add("key", "value) or an
+  * object of multiple keys/values add({key: "value", key2: "value2"})
+  * @param {string} key either a string key or an object of multiple key/values
+  * @param {anything} value the value if a string key was provided for key
+  * @memberOf Stretchr.Resource.prototype
+  */
+  data: function() {
+    return this._data.data.apply(this._data, arguments) || this;
   }
 
 });
