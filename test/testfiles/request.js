@@ -17,7 +17,8 @@ buster.testCase("Request", {
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one
-    r.param("key", "value")
+    r.params("key", "value")
+
     assert.equals("value", r.params()["key"][0])
 
     // set many
@@ -34,16 +35,16 @@ buster.testCase("Request", {
     assert.equals(r, r.params({"key4":"value4"}));
 
     // add another value
-    r.param("key", "another-value");
+    r.params("key", "another-value");
     assert.equals("value", r.params()["key"][0])
     assert.equals("another-value", r.params()["key"][1])
 
     // get a value out of a single key
-    var e = r.param("key");
+    var e = r.params("key");
     assert.equals("value", e[0]);
 
     // should allow chaining
-    var t = r.param("key", "value3");
+    var t = r.params("key", "value3");
     assert.equals(t, r);
 
   },

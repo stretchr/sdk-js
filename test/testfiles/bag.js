@@ -15,7 +15,7 @@ buster.testCase("Bag", {
     };
     var b = new Stretchr.Bag(data);
 
-    assert.equals(data, b._data)
+    assert.equals(b._data, data)
 
   },
 
@@ -117,6 +117,37 @@ buster.testCase("Bag", {
 
     // get the whole thing
     assert.equals(b._data, b.data())
+
+  },
+
+  "data shortcut method via .apply": function(){
+
+    var b = new Stretchr.Bag();
+
+    // stub out the methods
+    var setCalls = [], getCalls = [];
+    b.set = function(){ setCalls.push(arguments); return setCalls; }
+    b.get = function(){ getCalls.push(arguments); return getCalls; }
+
+    // set something
+    var f = function(){
+      return b.data.apply(b, arguments);
+    };
+    f("name", "Ryon");
+
+    assert.equals(setCalls[0][0], "name", "set should be called")
+    assert.equals(setCalls[0][1], "Ryon", "set should be called")
+
+    // get it
+    assert.equals(f("name"), getCalls, "get should be called");
+
+    // set the whole thing
+    var newData = {};
+    f(newData);
+    assert.equals(b._data, newData);
+
+    // get the whole thing
+    assert.equals(b._data, f())
 
   }
 

@@ -76,12 +76,12 @@ buster.testCase("Bag", {
   "Bag magical param": function() {
 
     var p = new Stretchr.ParamBag();
-    p.params("key", "value");
-    assert.equals(p.params("key")[0], "value");
+    p.data("key", "value");
+    assert.equals(p.data("key")[0], "value");
 
-    p.params({key2: "value2", key3: "value3"});
-    assert.equals(p.params("key2")[0], "value2");
-    assert.equals(p.params("key3")[0], "value3");
+    p.data({key2: "value2", key3: "value3"});
+    assert.equals(p.data("key2")[0], "value2");
+    assert.equals(p.data("key3")[0], "value3");
 
     //returns all params
     var p2 = new Stretchr.ParamBag();
@@ -89,7 +89,7 @@ buster.testCase("Bag", {
     assert.equals(p2.params()["key"][0], "value");
 
     //should ignore undefined
-    assert.equals(p.params("key", undefined)[0], "value");
+    assert.equals(p.data("key", undefined)[0], "value");
   },
 
   "urlEncoded": function(){

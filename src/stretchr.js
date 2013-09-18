@@ -70,7 +70,7 @@ Stretchr.counter = function(){
 
 /*
   oo
-  v1.3
+  v1.3.1
   github.com/stretchr/oo
 
   The worlds simplest JavaScript OO implementation.
@@ -80,7 +80,7 @@ Stretchr.counter = function(){
   Please consider promoting this project if you find it useful.
   Be sure to check out the Licence: https://github.com/stretchr/oo#licence
 */
-eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('5 1o=6(){5 m={2a:"1.3",11:[],14:{},L:6(d){7(m.14[d]){15 K m.10(d);n Y}5 e=6(){7(!4.$1e){15 K m.1f(d);}4.$1e.v(4);4.y.v(4,9)};e.8.y=6(){};e.$Z={};e.8.$1e=6(){o(5 a u 4.$w.$Z){5 b=4.$w.$Z[a];o(5 c u b.8){7(G b.8[c]=="6"){7(c.1h(0,1)!="$"){b.8[c]=b.8[c].P(4)}}}}};5 f=[];o(5 i=1,l=9.p-1;i<l;i++){5 g=9[i];7(g){7(g.$1t){g=g.$1t(e,9)}7(!g)24;7(g.$1n){e.$Z[g.$X]=g;V(g.8,e.8);e.8[g.$X]=g.8}D 7(G g=="1B"){V(g,e.8)}7(g.$1m){g.$1m(e,9)}7(g.$U){f.r(g.$U.P(g,e,9))}}D{1l("1w 1j 28 "+g+" 1c 27 "+d+" w.")}}7(9.p>1){5 h=9[9.p-1];o(5 j u h){5 k=h[j];7(j.1h(0,1)==="$"){e[j]=k}D{e.8[j]=k}}}e.1i=6(){n"<{ x.L: "+4.$X+" }>"};e.$1n=C;e.8.25=e.8.$w=e;m.11[m.11.p]=e.$X=d;m.14[d]=e;7(f.p>0){o(5 i u f){f[i]()}}n e}};m.B={$T:6(c,d){c[d]=(6(){5 b=d;n 6(){7(9.p===1&&G 9[0]=="6"){5 a=[b,9[0]];4.M.v(4,a)}D{5 a=[b];V(9,a);4.E.v(4,a)}n 4}})()},$U:6(a){a.M=m.B.M;a.E=m.B.E;a.W=m.B.W;a.1a=m.B.1a;7(a.8.16){o(5 i u a.8.16){5 b=a.8.16[i];m.B.$T(a.8,b)}}},M:6(a,b){4.q=4.q||{};4.q[a]=4.q[a]||[];4.q[a].r(b);n 4},W:6(a,b){5 c=[];5 d=[a,4];o(5 i=2;i<9.p;i++){c.r(9[i]);d.r(9[i])}7(4.$w&&4.$w.q&&4.$w.q[a]){4.$w.E.v(4.$w,d)}5 e=[];7(4.q&&4.q[a]){e=4.q[a]}7(b&&b[a]){e.r(b[a])}7(e.p>0){o(5 i u e){5 f=e[i];5 g=f.v(4,c);7(g===A){n A}}}},E:6(a){5 b=[a,Y];o(5 i=1;i<9.p;i++){b.r(9[i])}n 4.W.v(4,b)},1a:6(a,b){7(4.q&&4.q[a]){o(5 i u 4.q[a]){5 c=4.q[a][i];7(c==b){4.q[a].1G(i,1);n C}}}n A},N:6(a){5 b=9[9.p-1];7(G b!=="6"){15 K m.1d("N","26 29 1x 1y 1A 1b 1H 1j 1L.");}5 c=[];o(5 i=1;i<9.p-1;i++){c.r(9[i])}c.1S("1T:"+a);5 d=4.E.v(4,c);7(d===A){n A}d=b();c.r(d);c[0]=a;4.E.v(4,c);n d}};m.H={$U:6(a){7(a.8.Q&&a.8.Q.p){o(5 b u a.8.Q){m.H.$I(a.8,a.8.Q[b],C,C)}}7(a.8.R&&a.8.R.p){o(5 b u a.8.R){m.H.$I(a.8,a.8.R[b],C,A)}}7(a.8.S&&a.8.S.p){o(5 b u a.8.S){m.H.$I(a.8,a.8.S[b],A,C)}}},I:6(){5 a=[4];o(5 b u 9){a.r(9[b])}m.H.$I.v(4,a);n 4}};m.H.$I=6(c,d,e,f){7(c.M){7(!c.17){m.B.$T(c,"17")}m.B.$T(c,d+"1k")}5 g=d;5 h;c.F=c.F||6(a){n"1z"+a};5 i=c.F(d);c.13=c.13||6(a,b){7(4.N){4.N("17",d,4[i],b,6(){4.N(a+"1k",4[i],b,6(){4[4.F(a)]=b}.P(4))}.P(4))}D{4[4.F(a)]=b}n 4};c.12=c.12||6(a){n 4[4.F(a)]};c[i]=Y;7(f!==A){7(f===C){h="1C"+d.1D(0).1E()+d.1F(1)}D{h=f}c[h]=c[h]||6(a){4.13(d,a);n 4}}7(e!==A){7(e!==C){g=e}c[g]=c[g]||6(){n 4.12(d)}}n c};m.z=m.L("x.z",{y:6(a){4.1g=a},1i:6(){n"x.z: \\" + 1g + \\""}});m.10=m.L("x.10",m.z,{y:6(a){4["x.z"].y("1I 1J a w 1K \'"+a+"\' 1v 1M, 1N 1O 1P w 1Q; e.g. 1R."+a)}});m.1f=m.L("x.1f",m.z,{y:6(a){4["x.z"].y("1p 1q 1c 1U a K 1V; 1W\'t 1X 1Y 1b 1Z, 20 1b K 21: 5 22 = K "+a+"();")}});m.1d=m.L("x.1d",m.z,{y:6(a,b){4["x.z"].y("1p 1q 1c 23 "+a+"; "+b)}});n m};5 1l=6(a){7(19){7(19.1r){19.1r(a)}}};5 V=6(a,b){7(G a.p!="1s"&&G b.p!="1s"){o(5 s u a){b.r(a[s])}}D{o(5 s u a){b[s]=a[s]}}};5 x=1o();5 1u=6(){5 b=9[0]||Y,18=9[1]||4,O=[],i=2,l=9.p,J;o(;i<l;i++){O.r(9[i])}J=6(){5 a=[];5 i=0;o(i=0,l=O.p;i<l;i++){a.r(O[i])}o(i=0,l=9.p;i<l;i++){a.r(9[i])}n b.v(18,a)};J.2b=b;J.2c=18;J.2d=O;n J};2e.8.P=6(){5 a=[],i=0,l=9.p;a.r(4);o(;i<l;i++){a.r(9[i])}n 1u.v(2f,a)};',62,140,'||||this|var|function|if|prototype|arguments||||||||||||||return|for|length|ooevents|push|||in|apply|class|oo|init|Exception|false|Events|true|else|fire|getPropertyInternalName|typeof|Properties|addProperty|bound|new|Class|on|withEvent|_args|bind|properties|getters|setters|addEvent|afterClassDefined|ooextend|fireWith|className|null|bases|DuplicateClassNameException|classes|getProperty|setProperty|classesmap|throw|events|propertyChanged|_obj|console|removeCallback|the|when|IncorrectArgumentsException|initialiseBases|IncorrectSyntaxException|message|substr|toString|to|Changed|oowarn|afterInherited|isClass|ooreset|Incorrect|syntax|warn|undefined|beforeInherited|oobind|already|Failed|argument|must|_|be|object|set|charAt|toUpperCase|slice|splice|codeblock|Cannot|define|because|execute|exists|consider|namespacing|your|names|YourCompany|unshift|before|creating|instance|don|just|call|method|use|keyword|obj|calling|continue|constructor|The|building|inherit|last|version|func|context|args|Function|window'.split('|'),0,{}))
+eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('5 1h=8(){5 k={1u:"1.3.1",10:[],11:{},L:8(c){6(k.11[c]){12 M k.13(c);m G}5 d=8(){6(!4.$14){12 M k.15(c);}4.$14.u(4);4.A.u(4,9)};d.7.A=8(){};d.$U={};d.7.$14=8(){n(5 a p 4.$w.$U){4[a]={};V=4.$w.$U[a].7;n(5 b p V){6(B V[b]==="8"){4[a][b]=V[b].P(4)}}}};5 e=[];n(5 i=1,l=9.o-1;i<l;i++){5 f=9[i];6(f){6(f.$1i){f=f.$1i(d,9)}6(!f)1v;6(f.$1j){d.$U[f.$16]=f;W(f.7,d.7)}y 6(B f=="1w"){W(f,d.7)}6(f.$1k){f.$1k(d,9)}6(f.$X){e.q(f.$X.P(f,d,9))}}y{1l("1x 1m 1y "+f+" 17 1z "+c+" w.")}}6(9.o>1){5 g=9[9.o-1];n(5 h p g){5 j=g[h];6(h.1A(0,1)==="$"){d[h]=j}y{d.7[h]=j}}}d.1n=8(){m"<{ z.L: "+4.$16+" }>"};d.$1j=v;d.7.1B=d.7.$w=d;k.10[k.10.o]=d.$16=c;k.11[c]=d;6(e.o>0){n(5 i p e){e[i]()}}m d}};k.F={$Y:8(c,d){c[d]=(8(){5 b=d;m 8(){6(9.o===1&&B 9[0]=="8"){5 a=[b,9[0]];4.Q.u(4,a)}y{5 a=[b];W(9,a);4.H.u(4,a)}m 4}})()},$X:8(a){a.Q=k.F.Q;a.H=k.F.H;a.Z=k.F.Z;a.18=k.F.18;6(a.7.19){n(5 i p a.7.19){5 b=a.7.19[i];k.F.$Y(a.7,b)}}},Q:8(a,b){4.r=4.r||{};4.r[a]=4.r[a]||[];4.r[a].q(b);m 4},Z:8(a,b){5 c=[];5 d=[a,4];n(5 i=2;i<9.o;i++){c.q(9[i]);d.q(9[i])}6(4.$w&&4.$w.r&&4.$w.r[a]){4.$w.H.u(4.$w,d)}5 e=[];6(4.r&&4.r[a]){e=4.r[a]}6(b&&b[a]){e.q(b[a])}6(e.o>0){n(5 i p e){5 f=e[i];5 g=f.u(4,c);6(g===x){m x}}}},H:8(a){5 b=[a,G];n(5 i=1;i<9.o;i++){b.q(9[i])}m 4.Z.u(4,b)},18:8(a,b){6(4.r&&4.r[a]){n(5 i p 4.r[a]){5 c=4.r[a][i];6(c==b){4.r[a].1C(i,1);m v}}}m x},R:8(a){5 b=9[9.o-1];6(B b!=="8"){12 M k.1a("R","1D 1E 1F 1G 1H 1b 1I 1m 1J.");}5 c=[];n(5 i=1;i<9.o-1;i++){c.q(9[i])}c.1K("1L:"+a);5 d=4.H.u(4,c);6(d===x){m x}d=b();c.q(d);c[0]=a;4.H.u(4,c);m d}};k.C={$X:8(a){6(a.7.I&&B a.7.I.o!="S"){n(5 b p a.7.I){k.C.$D(a.7,a.7.I[b],v,v,G)}}y 6(a.7.I){n(5 b p a.7.I){k.C.$D(a.7,b,v,v,a.7.I[b])}}6(a.7.J&&B a.7.J.o!="S"){n(5 b p a.7.J){k.C.$D(a.7,a.7.J[b],v,x,G)}}y 6(a.7.J){n(5 b p a.7.J){k.C.$D(a.7,b,v,x,a.7.J[b])}}6(a.7.K&&B a.7.K.o!="S"){n(5 b p a.7.K){k.C.$D(a.7,a.7.K[b],x,v,G)}}y 6(a.7.K){n(5 b p a.7.K){k.C.$D(a.7,b,x,v,a.7.K[b])}}},D:8(){5 a=[4];n(5 b p 9){a.q(9[b])}k.C.$D.u(4,a);m 4}};k.C.$D=8(c,d,e,f,g){6(c.Q){6(!c.1c){k.F.$Y(c,"1c")}k.F.$Y(c,d+"1o")}5 h=d;5 i;c.N=c.N||8(a){m"1M"+a};5 j=c.N(d);c.1d=c.1d||8(a,b){6(4.R){4.R("1c",d,4[j],b,8(){4.R(a+"1o",4[j],b,8(){4[4.N(a)]=b}.P(4))}.P(4))}y{4[4.N(a)]=b}m 4};c.1e=c.1e||8(a){m 4[4.N(a)]};c[j]=g||G;6(f!==x){6(f===v){i="1N"+d.1O(0).1P()+d.1Q(1)}y{i=f}c[i]=c[i]||8(a){4.1d(d,a);m 4}}6(e!==x){6(e!==v){h=e}c[h]=c[h]||8(){m 4.1e(d)}}m c};k.E=k.L("z.E",{A:8(a){4.1p=a},1n:8(){m"z.E: \\" + 1p + \\""}});k.13=k.L("z.13",k.E,{A:8(a){4["z.E"].A("1R 1S a w 1T \'"+a+"\' 1U 1V, 1W 1X 1Y w 1Z; e.g. 20."+a)}});k.15=k.L("z.15",k.E,{A:8(a){4["z.E"].A("1q 1r 17 21 a M 22; 23\'t 24 25 1b 26, 27 1b M 28: 5 29 = M "+a+"();")}});k.1a=k.L("z.1a",k.E,{A:8(a,b){4["z.E"].A("1q 1r 17 2a "+a+"; "+b)}});m k};5 1l=8(a){6(1f){6(1f.1s){1f.1s(a)}}};5 W=8(a,b){6(B a.o!=="S"&&B b.o!=="S"){n(5 s p a){b.q(a[s])}}y{n(5 s p a){6(a.2b(s))b[s]=a[s]}}};5 z=1h();5 1t=8(){5 b=9[0]||G,1g=9[1]||4,T=[],i=2,l=9.o,O;n(;i<l;i++){T.q(9[i])}O=8(){5 a=[];5 i=0;n(i=0,l=T.o;i<l;i++){a.q(T[i])}n(i=0,l=9.o;i<l;i++){a.q(9[i])}m b.u(1g,a)};O.2c=b;O.2d=1g;O.2e=T;m O};2f.7.P=8(){5 a=[],i=0,l=9.o;a.q(4);n(;i<l;i++){a.q(9[i])}m 1t.u(2g,a)};',62,141,'||||this|var|if|prototype|function|arguments|||||||||||||return|for|length|in|push|ooevents|||apply|true|class|false|else|oo|init|typeof|Properties|addProperty|Exception|Events|null|fire|properties|getters|setters|Class|new|getPropertyInternalName|bound|bind|on|withEvent|undefined|_args|bases|basePrototype|ooextend|afterClassDefined|addEvent|fireWith|classes|classesmap|throw|DuplicateClassNameException|initialiseBases|IncorrectSyntaxException|className|when|removeCallback|events|IncorrectArgumentsException|the|propertyChanged|setProperty|getProperty|console|_obj|ooreset|beforeInherited|isClass|afterInherited|oowarn|to|toString|Changed|message|Incorrect|syntax|warn|oobind|version|continue|object|Failed|inherit|building|substr|constructor|splice|The|last|argument|must|be|codeblock|execute|unshift|before|_|set|charAt|toUpperCase|slice|Cannot|define|because|already|exists|consider|namespacing|your|names|YourCompany|creating|instance|don|just|call|method|use|keyword|obj|calling|hasOwnProperty|func|context|args|Function|window'.split('|'),0,{}))
 
 /*
   Session
@@ -143,23 +143,12 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   /**
   * Adds an item to the params, takes a key/value add("key", "value) or an
   * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {key} either a string key or an object of multiple key/values
-  * @param {value} the value if a string key was provided for key
+  * @param {string} key either a string key or an object of multiple key/values
+  * @param {string} value the value if a string key was provided for key
   * @memberOf Stretchr.Request.prototype
   */
-  params: function(key, value) {
-    return this._params.params(key, value) || this;
-  },
-
-  /**
-  * Adds an item to the params, takes a key/value add("key", "value) or an
-  * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {key} either a string key or an object of multiple key/values
-  * @param {value} the value if a string key was provided for key
-  * @memberOf Stretchr.Request.prototype
-  */
-  param: function(key, value) {
-    return this._params.params(key, value) || this;
+  params: function() {
+    return this._params.data.apply(this._params, arguments) || this;
   },
 
   /**
@@ -169,8 +158,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * @param {value} the value if a string key was provided for key
   * @memberOf Stretchr.Request.prototype
   */
-  where: function(key, value) {
-    return this._where.params(key, value) || this;
+  where: function() {
+    return this._where.data.apply(this._where, arguments) || this;
   }
 
 });
@@ -322,7 +311,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Bag.prototype
    */
   set: function(key, value) {
-    this.setDirty(true)
+    this.setDirty(true);
     this.withEvent("change", this._data[key], value, function(){
       this._set(key, value);
     }.bind(this));
@@ -361,19 +350,26 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   data: function(keyOrObject, value) {
 
     if (arguments.length == 0) {
+      // data()
       return this._data;
     }
 
-    if (typeof value != "undefined" && typeof keyOrObject != "object") {
-      // normal setter
+    if (typeof keyOrObject != "object" && typeof value != "undefined") {
+      // normal setter - data(keystring, value)
       this.set(keyOrObject, value);
-    } else if (typeof keyOrObject != "object") {
-      // getter (with value)
-      return this.get(keyOrObject);
-    }
 
-    // set the whole object
-    this._data = keyOrObject;
+    } else if (typeof keyOrObject != "object") {
+      // getter with key - data(keystring)
+
+      return this.get(keyOrObject);
+    } else {
+
+      // set the all the items in the object - data(newData)
+      for (var k in keyOrObject) {
+        this._set(k, keyOrObject[k]);
+      }
+
+    }
 
   }
 
@@ -383,101 +379,18 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
  * Stretchr.ParamBag is a container for params when building a stretchr
  * request.  It should be used through the request object, not necessarily on its own.
  */
-Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", {
+Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", Stretchr.Bag, {
 
-  init: function() {
-    this._params = {};
-  },
+  _set: function(key, value) {
 
-  /**
-  * Adds an item to the params, takes a key/value add("key", "value) or an
-  * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {string} key Either a string key or an object of multiple key/values
-  * @param {string} value The value if a string key was provided for key
-  * @memberOf Stretchr.ParamBag.prototype
-  */
-  add: function(key, value) {
-    if (typeof(key) === "string") {
-      //initialize the key as an array
-      this._params[key] = this._params[key] || [];
-      if (value instanceof Array) {
-        //because this is an array, we want to concat it to what we already have
-        this._params[key] = this._params[key].concat(value);
-      } else {
-        //not an array, just push it on
-        this._params[key].push(value);
-      }
-    } else if (typeof(key) === "object") {
-      //we were given an object of multiple key/value pairs, so iterate through them and call add
-      for (var i in key) {
-        this.add(i, key[i]);
-      }
-    }
-    return this;
-  },
-
-  /**
-  * Overwrites a param with a given key/value
-  * @param {string} key A string that sets the key you want to overwrite
-  * @param {string} value The value applied to the given key
-  * @memberOf Stretchr.ParamBag.prototype
-  */
-  set: function(key, value) {
-    this._params[key] = null;
-    delete this._params[key];
-    this.add(key, value);
-    return this;
-  },
-
-  /**
-  * Returns a specific key/value combination or all of them
-  * @param {string} key (Optional) States the key that you want to get the value for.
-  * Returns all key/value pairs if none is given
-  * @memberOf Stretchr.ParamBag.prototype
-  */
-  get: function(key) {
-    return key ? this._params[key] : this._params;
-  },
-
-  /**
-  * Abstracts the get/set methods and makes assumptions for you
-  * - Returns the value if just a key is given
-  * - Returns all if no key or value is given
-  * - Sets the key if a key/value is given
-  * - Sets many keys if an object of keys/values is given
-  * @param {string} key (Optional) States the key that you want to get the value for.
-  * Returns all key/value pairs if none is given
-  * @param {string} value (Optional) States the value that should be applied to the above key
-  * @memberOf Stretchr.ParamBag.prototype
-  */
-  params: function(key, value) {
-    if (value || (key && typeof(key) === "object")) {
-      //typical setter, just do it
-      this.add(key, value);
-    } else {
-      return this.get(key);
-    }
-  },
-
-  /**
-  * Returns a URL encoded version of the params
-  * @param {object} options Settings for the url encoding process.
-  * currently only supports {keyPrefix: ":"} which will set the
-  * prefix applied to all keys
-  * @memberOf Stretchr.ParamBag.prototype
-  */
-  urlEncoded: function(options) {
-    var d = [],
-      options = options || {};
-
-    //set some defaults
-    options = {
-      keyPrefix: options.keyPrefix || ""
+    if (typeof this._data[key] === "object" && typeof this._data[key].length !== "undefined") {
+      // already an array
+      this._data[key].push(value)
+    } else if (typeof this._data[key] === "undefined") {
+      // no key
+      this._data[key] = [value];
     }
 
-    for (var key in this._params) {
-      d.push( encodeURIComponent(options.keyPrefix + key) + "=" + encodeURIComponent( this._params[key].join(",") ) );
-    }
-    return d.join("&");
   }
+
 });
