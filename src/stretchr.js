@@ -202,7 +202,10 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
 });
 
-
+/** @class
+ * Stretchr.Resource represents a single resource.
+ * @property {Stretchr.Session} session The session that relates to this resource.
+ */
 Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
   getters: ["session"],
@@ -224,6 +227,29 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
   */
   data: function() {
     return this._data.data.apply(this._data, arguments) || this;
+  }
+
+});
+
+Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Properties, {
+
+  getters: ["session", "rawData", "items"],
+
+  init: function(session, data) {
+
+    this._session = session;
+    this._rawData = data;
+    this._items = [];
+
+    // make a Resource for each item
+    for (var index in data) {
+      this._items.push(new Stretchr.Resource(session, data[index]));
+    }
+
+  },
+
+  count: function(){
+    return this._items.length;
   }
 
 });
