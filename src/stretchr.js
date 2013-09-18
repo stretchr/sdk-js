@@ -305,7 +305,13 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
  * Stretchr.JSONPTransport is the class for objects capable of communicating
  * with Stretchr services via JSONP.
  */
-Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport, {
+Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport, oo.Properties, {
+
+  properties: ["session"],
+
+  init: function(session) {
+    this._session = session;
+  },
 
   /**
    * makeRequest makes a JSONP request using the specified options.
@@ -322,6 +328,15 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
     // make the callback function
     var callbackFunctionName = "cb" + Stretchr.counter();
     window[callbackFunctionName] = function(response) {
+
+      // make the response object
+      var responseObject = new Stretchr.Response(this.session(), response);
+
+      if (responseObject.success()) {
+        this.success(responseObject);
+      } else {
+        this.error(responseObject);
+      }
 
       // event: after
       this.fireWith("after", options, options);
