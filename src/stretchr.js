@@ -141,24 +141,30 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   },
 
   /**
-  * Adds an item to the params, takes a key/value add("key", "value) or an
-  * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {string} key either a string key or an object of multiple key/values
-  * @param {string} value the value if a string key was provided for key
+  * Gets or sets parameters.
+  * () = gets all the data
+  * (key) = gets the value for the data with that key
+  * (key, value) = sets the value for the data with that key
+  * ({key:value,key2:value}) = sets the values for the keys in the object
+  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Request.prototype
   */
-  params: function() {
+  params: function(keyOrObject, value) {
     return this._params.data.apply(this._params, arguments) || this;
   },
 
   /**
-  * Adds an item to the filters, takes a key/value add("key", "value) or an
-  * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {key} either a string key or an object of multiple key/values
-  * @param {value} the value if a string key was provided for key
+  * Gets or sets filters.
+  * () = gets all the data
+  * (key) = gets the value for the data with that key
+  * (key, value) = sets the value for the data with that key
+  * ({key:value,key2:value}) = sets the values for the keys in the object
+  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Request.prototype
   */
-  where: function() {
+  where: function(keyOrObject, value) {
     return this._where.data.apply(this._where, arguments) || this;
   }
 
@@ -207,11 +213,13 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
   },
 
   /**
-  * Enables interacting with the data of this resource.
-  * Adds an item to the data, takes a key/value add("key", "value) or an
-  * object of multiple keys/values add({key: "value", key2: "value2"})
-  * @param {string} key either a string key or an object of multiple key/values
-  * @param {anything} value the value if a string key was provided for key
+  * Gets or sets data.
+  * () = gets all the data
+  * (key) = gets the value for the data with that key
+  * (key, value) = sets the value for the data with that key
+  * ({key:value,key2:value}) = sets the values for the keys in the object
+  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Resource.prototype
   */
   data: function() {
