@@ -9,9 +9,7 @@ buster.testCase("Request", {
     assert.equals(r.session(), s);
     assert.equals(r.path(), "/path/to/something");
 
-  }
-
-  ,
+  },
 
   "params": function(){
 
@@ -48,9 +46,7 @@ buster.testCase("Request", {
     var t = r.param("key", "value3");
     assert.equals(t, r);
 
-  }
-
-  ,
+  },
 
   "where" : function() {
     var s = new Stretchr.Session("proj", "pub", "priv");

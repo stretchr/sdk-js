@@ -19,7 +19,6 @@ buster.testCase("JSONPTransport", {
 
     var t = new Stretchr.JSONPTransport();
     var options = {
-      method: "GET",
       path: "testfiles/includes/IncreaseTestFileValueByOne.js"
     };
 
