@@ -127,6 +127,21 @@ var responseFixtures = {
       assert.equals(resource2.data("~id"), "abc2")
 
     }
+  ],
+
+  "Change info": [
+    {"~changes":{"~created":5,"~updated":4,"~deleted":6,"~deltas":[{"~id":"ABC123"}]},"~status":201},
+    function(r, n){
+
+      changes = r.changes();
+
+      assert.equals(changes.created(), 5);
+      assert.equals(changes.updated(), 4);
+      assert.equals(changes.deleted(), 6);
+
+      assert.equals(changes.deltas()[0].data("~id"), "ABC123");
+
+    }
   ]
 
 };
