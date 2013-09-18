@@ -3,7 +3,7 @@
   Stretchr JavaScript SDK
   /api/v1.1
 
-  Copyright (c) 2013 Mat Ryer
+  Copyright (c) 2013 Mat Ryer and Ryan Quinn
 
   Please consider promoting this project if you find it useful.
 
