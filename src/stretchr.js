@@ -289,7 +289,10 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 });
 
 /** @class
- * Stretchr.Bag is a container for data.
+ * Stretchr.Bag is a container for data.  Whenever data changes, the bag
+ * raises the `change` event, and will become `dirty()` until it is cleaned
+ * with the `clean()` method.
+ * @property {boolean} dirty() Whether the bag is dirty or not.
  */
 Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
@@ -300,22 +303,61 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
     this._data = data || {};
   },
 
+  /**
+   * _set sets the value to the specified key in the data but bypasses
+   * events and clean/dirty considerations.
+   *
+   * It is used internally by set.
+   * @memberOf Stretchr.Bag.prototype
+   */
+  _set: function(key, value) {
+    this._data[key] = value;
+  },
+
+  /**
+   * Sets the value to the specified key.
+   * @param {string} key The key to get.
+   * @param {anything} value The value to assign to key.
+   * @fires change
+   * @memberOf Stretchr.Bag.prototype
+   */
   set: function(key, value) {
     this.setDirty(true)
     this.withEvent("change", this._data[key], value, function(){
-      this._data[key] = value;
+      this._set(key, value);
     }.bind(this));
     return this;
   },
 
+  /**
+   * Gets the value for a specific key, or gets all the data.
+   * @param {string} key (optional) The key whose value should be returned.
+   * @memberOf Stretchr.Bag.prototype
+   */
   get: function(key) {
     return key ? this._data[key] : this._data;
   },
 
+  /**
+   * Cleans the bag - meaning .dirty() will return false until something else
+   * changes.
+   * @memberOf Stretchr.Bag.prototype
+   */
   clean: function(){
     this.setDirty(false);
   },
 
+  /**
+  * Abstracts the get/set methods and makes assumptions for you.
+  * - Returns the value if just a key is given
+  * - Returns all if no key or value is given
+  * - Sets the key if a key/value is given
+  * - Sets many keys if an object of keys/values is given
+  * @param {string} keyOrObject (optional) States the key that you want to get the value for.
+  * Returns all key/value pairs if none is given
+  * @param {string} value (optional) States the value that should be applied to the above key
+  * @memberOf Stretchr.Bag.prototype
+  */
   data: function(keyOrObject, value) {
 
     if (arguments.length == 0) {

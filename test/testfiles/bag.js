@@ -35,6 +35,23 @@ buster.testCase("Bag", {
 
   },
 
+  // set should use _set underneath
+  "_set": function(){
+
+    var b = new Stretchr.Bag();
+
+    var _setCalls = [];
+    b._set = function(){
+      _setCalls.push(arguments);
+    };
+
+    b.set("name", "Ryon");
+    assert.equals(_setCalls.length, 1);
+    assert.equals(_setCalls[0][0], "name");
+    assert.equals(_setCalls[0][1], "Ryon");
+
+  },
+
   "events": function(){
 
     var b = new Stretchr.Bag();
