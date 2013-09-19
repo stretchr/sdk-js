@@ -329,7 +329,8 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   },
 
   /**
-  * Gets an array of Stretchr.Bags containing data that changed.
+  * Gets an array containing data that changed.  The order of the
+  * array reflects the order of the items from the request.
   * @memberOf Stretchr.ChangeInfo.prototype
   */
   deltas: function(){
