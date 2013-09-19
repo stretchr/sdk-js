@@ -566,11 +566,9 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   querystring: function(){
 
     var items = [];
-    for (var keyI in this._data) {
-      for (var valueI in this._data[keyI]) {
+    for (var keyI in this._data)
+      for (var valueI in this._data[keyI])
         items.push(encodeURIComponent(keyI) + "=" + encodeURIComponent(this._data[keyI][valueI]));
-      }
-    }
 
     return items.join("&");
 
