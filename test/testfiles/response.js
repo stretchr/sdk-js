@@ -150,14 +150,14 @@ buster.testCase("Response", {
 
   "fixtures": function(){
 
-    var session = new Stretchr.Session();
+    var client = new Stretchr.Client();
 
     for (var name in responseFixtures) {
 
       var rawResponse = responseFixtures[name][0]
       var assertions = responseFixtures[name][1];
 
-      var r = new Stretchr.Response(session, rawResponse);
+      var r = new Stretchr.Response(client, rawResponse);
       assertions(r, name);
 
     }
@@ -166,10 +166,10 @@ buster.testCase("Response", {
 
   "init": function(){
 
-    var session = new Stretchr.Session();
-    var r = new Stretchr.Response(session, {});
+    var client = new Stretchr.Client();
+    var r = new Stretchr.Response(client, {});
 
-    assert.equals(r.session(), session, "Session");
+    assert.equals(r.client(), client, "client");
 
   }
 

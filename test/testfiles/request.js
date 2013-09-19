@@ -2,18 +2,18 @@ buster.testCase("Request", {
 
   "init": function(){
 
-    var s = new Stretchr.Session("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "pub", "priv");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     refute.equals(undefined, r);
-    assert.equals(r.session(), s);
+    assert.equals(r.client(), s);
     assert.equals(r.path(), "/path/to/something");
 
   },
 
   "params": function(){
 
-    var s = new Stretchr.Session("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "pub", "priv");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one
@@ -51,7 +51,7 @@ buster.testCase("Request", {
 
   "where" : function() {
 
-    var s = new Stretchr.Session("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "pub", "priv");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one

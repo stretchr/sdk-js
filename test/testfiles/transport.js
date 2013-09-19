@@ -17,7 +17,7 @@ buster.testCase("JSONPTransport", {
 
   "JSONPTransport.makeRequest": function(){
 
-    var s = new Stretchr.Session();
+    var s = new Stretchr.Client();
     var t = new Stretchr.JSONPTransport(s);
     var options = {
       path: "testfiles/includes/IncreaseTestFileValueByOne.js"
@@ -66,7 +66,7 @@ buster.testCase("JSONPTransport", {
 
   "JSONPTransport.makeRequest errors": function(){
 
-    var s = new Stretchr.Session();
+    var s = new Stretchr.Client();
     var t = new Stretchr.JSONPTransport(s);
     var options = {
       path: "testfiles/includes/IncreaseTestFileValueByOne.js"

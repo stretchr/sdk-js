@@ -8,8 +8,8 @@ buster.testCase("Resource", {
       "number": 26,
       "something": true
     };
-    var session = new Stretchr.Session();
-    var r = new Stretchr.Resource(session, data);
+    var client = new Stretchr.Client();
+    var r = new Stretchr.Resource(client, data);
     assert.equals(r._data.$class, Stretchr.Bag);
 
   },
@@ -22,8 +22,8 @@ buster.testCase("Resource", {
       "number": 26,
       "something": true
     };
-    var session = new Stretchr.Session();
-    var r = new Stretchr.Resource(session, data);
+    var client = new Stretchr.Client();
+    var r = new Stretchr.Resource(client, data);
     assert.equals(r._data.$class, Stretchr.Bag);
     assert.equals(r.data(), data);
 
@@ -55,8 +55,8 @@ buster.testCase("ResourceCollection", {
       }]
     };
 
-    var session = new Stretchr.Session();
-    var r = new Stretchr.ResourceCollection(session, data);
+    var client = new Stretchr.Client();
+    var r = new Stretchr.ResourceCollection(client, data);
 
     assert.equals(r.rawData(), data);
 
