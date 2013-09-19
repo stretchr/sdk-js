@@ -539,6 +539,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
 });
 
+
 /** @class
  * Stretchr.ParamBag is a container for params when building a stretchr
  * request.  It should be used through the request object, not necessarily on its own.
