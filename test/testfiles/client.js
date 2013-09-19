@@ -10,7 +10,7 @@ buster.testCase("Client", {
 
   "at": function(){
 
-    var client = new Stretchr.Client("proj", "pub", "priv");
+    var client = new Stretchr.Client("proj", "key");
     var request = client.at("/path/to/something");
 
     refute.equals(undefined, request, "at() should return a request.")

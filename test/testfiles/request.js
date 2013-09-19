@@ -2,7 +2,7 @@ buster.testCase("Request", {
 
   "init": function(){
 
-    var s = new Stretchr.Client("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     refute.equals(undefined, r);
@@ -13,7 +13,7 @@ buster.testCase("Request", {
 
   "params": function(){
 
-    var s = new Stretchr.Client("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one
@@ -51,7 +51,7 @@ buster.testCase("Request", {
 
   "where" : function() {
 
-    var s = new Stretchr.Client("proj", "pub", "priv");
+    var s = new Stretchr.Client("proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one

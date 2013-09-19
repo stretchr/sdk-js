@@ -136,8 +136,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   init: function(client, path){
     this.setClient(client).setPath(path);
-    this._params = new Stretchr.ParamBag();
-    this._where = new Stretchr.ParamBag();
+    this._params = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
+    this._where = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
   },
 
   /**
@@ -166,6 +166,10 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   */
   where: function(keyOrObject, value) {
     return this._where.data.apply(this._where, arguments) || this;
+  },
+
+  querystring: function(){
+
   }
 
 });
@@ -444,6 +448,8 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
  * Stretchr.Bag is a container for data.  Whenever data changes, the bag
  * raises the `change` event, and will become `dirty()` until it is cleaned
  * with the `clean()` method.
+ * @property {object} data (optional) The initial data to be stored in this bag.
+ * @property {object} options (optional) An object of options.  "valueArrays"
  * @property {boolean} dirty() Whether the bag is dirty or not.
  */
 Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
@@ -451,8 +457,9 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   properties: ["dirty"],
   events: ["change"],
 
-  init: function(data){
+  init: function(data, options){
     this._data = data || {};
+    this._options = options || {};
     this.clean();
   },
 
@@ -464,7 +471,21 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Bag.prototype
    */
   _set: function(key, value) {
-    this._data[key] = value;
+
+    if (!this._options["valueArrays"]) {
+      this._data[key] = value;
+    } else {
+
+      if (typeof this._data[key] === "object" && typeof this._data[key].length !== "undefined") {
+        // already an array
+        this._data[key].push(value)
+      } else if (typeof this._data[key] === "undefined") {
+        // no key
+        this._data[key] = [value];
+      }
+
+    }
+
   },
 
   /**
@@ -519,13 +540,15 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
     }
 
     if (typeof keyOrObject != "object" && typeof value != "undefined") {
+
       // normal setter - data(keystring, value)
       this.set(keyOrObject, value);
 
     } else if (typeof keyOrObject != "object") {
-      // getter with key - data(keystring)
 
+      // getter with key - data(keystring)
       return this.get(keyOrObject);
+
     } else {
 
       // set the all the items in the object - data(newData)
@@ -535,28 +558,31 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
     }
 
-  }
+  },
 
-});
+  /**
+   * Gets a URL query string representing the data in this map.
+   */
+  querystring: function(){
 
-
-/** @class
- * Stretchr.ParamBag is a container for params when building a stretchr
- * request.  It should be used through the request object, not necessarily on its own.
- * @inherits Stretchr.Bag
- */
-Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", Stretchr.Bag, {
-
-  _set: function(key, value) {
-
-    if (typeof this._data[key] === "object" && typeof this._data[key].length !== "undefined") {
-      // already an array
-      this._data[key].push(value)
-    } else if (typeof this._data[key] === "undefined") {
-      // no key
-      this._data[key] = [value];
+    var items = [];
+    for (var keyI in this._data) {
+      for (var valueI in this._data[keyI]) {
+        items.push(encodeURIComponent(keyI) + "=" + encodeURIComponent(this._data[keyI][valueI]));
+      }
     }
 
+    return items.join("&");
+
   }
 
 });
+
+/**
+ * Stretchr.Bag.ParamBagOptions is a set of options that describe
+ * bag behaviour for URL parameters.  It should be passed in as the
+ * 2nd argument to the Stretchr.Bag consturctor.
+ */
+Stretchr.Bag.ParamBagOptions = {
+  valueArrays: true
+};

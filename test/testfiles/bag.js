@@ -36,6 +36,21 @@ buster.testCase("Bag", {
 
   },
 
+  "options: valueArrays": function(){
+
+    assert.equals(Stretchr.Bag.ParamBagOptions.valueArrays, true);
+
+    var b = new Stretchr.Bag(null, {
+      valueArrays: true
+    });
+    assert.equals(b, b.set("name", "Ryon"), "set should chain");
+    assert.equals("Ryon", b._data["name"][0]);
+    assert.equals(b, b.set("name", "Mat"), "set should chain");
+    assert.equals("Ryon", b._data["name"][0]);
+    assert.equals("Mat", b._data["name"][1]);
+
+  },
+
   // set should use _set underneath
   "_set": function(){
 
@@ -149,6 +164,20 @@ buster.testCase("Bag", {
 
     // get the whole thing
     assert.equals(b._data, f())
+
+  },
+
+  "querystring": function(){
+
+    var b = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
+    b.set("name", "Mat")
+      .set("name", "Ryan")
+      .set("something", true)
+      .set("age", 30)
+      .set(" & ", " & ")
+    ;
+
+    assert.equals(b.querystring(), "name=Mat&name=Ryan&something=true&age=30&%20%26%20=%20%26%20")
 
   }
 
