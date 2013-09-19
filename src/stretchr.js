@@ -149,7 +149,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * (key) = gets the value for the data with that key
   * (key, value) = sets the value for the data with that key
   * ({key:value,key2:value}) = sets the values for the keys in the object
-  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string|object} keyOrObject (optional) Either a string key or an object of multiple key/values
   * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Request.prototype
   */
@@ -175,7 +175,12 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
 /** @class
  * Stretchr.Response represents a repsonse to a single Stretchr.Request.
- * @property {int} status The HTTP Status code returned by the server.
+ * @property {int} status() The HTTP Status code returned by the server.
+ * @property {bool} success() Whether the request was a success or not.
+ * @property {object} data() The data returned in the response.
+ * @property {array} errors() A list of any errors that occurred.
+ * @property {Stretchr.Session} session() The session used to generate this Repsonse.
+ * @property {string} context() The client-context returned in the Response.
  */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
@@ -200,7 +205,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   },
 
   /**
-  * Gets the Stretchr.Resource from this response.
+  * Gets the Stretchr.Resource from the data in this response.
   * @memberOf Stretchr.Response.prototype
   */
   resource: function(){
@@ -208,7 +213,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   },
 
   /**
-  * Gets the Stretchr.ResourceCollection from this response.
+  * Gets the Stretchr.ResourceCollection from the data in this response.
   * @memberOf Stretchr.Response.prototype
   */
   resources: function(){
@@ -216,7 +221,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   },
 
   /**
-  * Gets the Stretchr.ChangeInfo from this response.
+  * Gets the Stretchr.ChangeInfo from the data in this response.
   * @memberOf Stretchr.Response.prototype
   */
   changes: function(){
@@ -244,7 +249,7 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
   * (key) = gets the value for the data with that key
   * (key, value) = sets the value for the data with that key
   * ({key:value,key2:value}) = sets the values for the keys in the object
-  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string|object} keyOrObject (optional) Either a string key or an object of multiple key/values
   * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Resource.prototype
   */
@@ -343,7 +348,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   * (key) = gets the value for the data with that key
   * (key, value) = sets the value for the data with that key
   * ({key:value,key2:value}) = sets the values for the keys in the object
-  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string|object} keyOrObject (optional) Either a string key or an object of multiple key/values
   * @param {string} value (optional) the value if a string key was provided
   * @memberOf Stretchr.Resource.prototype
   */
@@ -504,7 +509,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   * - Returns all if no key or value is given
   * - Sets the key if a key/value is given
   * - Sets many keys if an object of keys/values is given
-  * @param {string} keyOrObject (optional) States the key that you want to get the value for.
+  * @param {string|object} keyOrObject (optional) States the key that you want to get the value for.
   * Returns all key/value pairs if none is given
   * @param {string} value (optional) States the value that should be applied to the above key
   * @memberOf Stretchr.Bag.prototype
@@ -540,6 +545,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 /** @class
  * Stretchr.ParamBag is a container for params when building a stretchr
  * request.  It should be used through the request object, not necessarily on its own.
+ * @inherits Stretchr.Bag
  */
 Stretchr.ParamBag = oo.Class("Stretchr.ParamBag", Stretchr.Bag, {
 
