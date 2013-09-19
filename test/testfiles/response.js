@@ -130,7 +130,7 @@ var responseFixtures = {
   ],
 
   "Change info": [
-    {"~changes":{"~created":5,"~updated":4,"~deleted":6,"~deltas":[{"~id":"ABC123"}]},"~status":201},
+    {"~data":{"~changes":{"~created":5,"~updated":4,"~deleted":6,"~deltas":[{"~id":"ABC123"}]}},"~status":201},
     function(r, n){
 
       changes = r.changes();
@@ -139,7 +139,7 @@ var responseFixtures = {
       assert.equals(changes.updated(), 4);
       assert.equals(changes.deleted(), 6);
 
-      assert.equals(changes.deltas()[0].data("~id"), "ABC123");
+      assert.equals(changes.deltas()[0]["~id"], "ABC123");
 
     }
   ]
@@ -169,7 +169,7 @@ buster.testCase("Response", {
     var session = new Stretchr.Session();
     var r = new Stretchr.Response(session, {});
 
-    assert.equals(r.session(), session, "Session")
+    assert.equals(r.session(), session, "Session");
 
   }
 

@@ -54,7 +54,13 @@ var Stretchr = {
   ResponseKeyErrorsMessage: "~message",
   ResponseKeyContext: "~context",
 
-  ResponseKeyCollectionItems: "~items"
+  ResponseKeyCollectionItems: "~items",
+
+  ResponseKeyDataChanges: "~changes",
+  ResponseKeyChangeInfoCreated: "~created",
+  ResponseKeyChangeInfoUpdated: "~updated",
+  ResponseKeyChangeInfoDeleted: "~deleted",
+  ResponseKeyChangeInfoDeltas: "~deltas"
 
 };
 
@@ -207,6 +213,14 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   */
   resources: function(){
     return new Stretchr.ResourceCollection(this.session(), this.data());
+  },
+
+  /**
+  * Gets the Stretchr.ChangeInfo from this response.
+  * @memberOf Stretchr.Response.prototype
+  */
+  changes: function(){
+    return new Stretchr.ChangeInfo(this.data()[Stretchr.ResponseKeyDataChanges]);
   }
 
 });
@@ -270,6 +284,71 @@ Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Propert
   */
   count: function(){
     return this._items.length;
+  }
+
+});
+
+/** @class
+ * Stretchr.ChangeInfo holds details about changes that were made in response to
+ * a request.
+ * @property {array} rawData The raw data that makes up this collection.
+ */
+Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
+
+  properties: ["rawData"],
+
+  init: function(data) {
+
+    this.setRawData(data);
+    this._data = new Stretchr.Bag(data);
+
+  },
+
+  /**
+  * Gets the number of resources that were created.
+  * @memberOf Stretchr.ChangeInfo.prototype
+  */
+  created: function(){
+    return this.data(Stretchr.ResponseKeyChangeInfoCreated);
+  },
+
+  /**
+  * Gets the number of resources that were updated.
+  * @memberOf Stretchr.ChangeInfo.prototype
+  */
+  updated: function(){
+    return this.data(Stretchr.ResponseKeyChangeInfoUpdated);
+  },
+
+  /**
+  * Gets the number of resources that were deleted.
+  * @memberOf Stretchr.ChangeInfo.prototype
+  */
+  deleted: function(){
+    return this.data(Stretchr.ResponseKeyChangeInfoDeleted);
+  },
+
+  /**
+  * Gets an array of Stretchr.Bags containing data that changed.
+  * @memberOf Stretchr.ChangeInfo.prototype
+  */
+  deltas: function(){
+    return this.data(Stretchr.ResponseKeyChangeInfoDeltas);
+  },
+
+  /**
+  * Gets or sets data.
+  * () = gets all the data
+  * (key) = gets the value for the data with that key
+  * (key, value) = sets the value for the data with that key
+  * ({key:value,key2:value}) = sets the values for the keys in the object
+  * @param {string} keyOrObject (optional) Either a string key or an object of multiple key/values
+  * @param {string} value (optional) the value if a string key was provided
+  * @memberOf Stretchr.Resource.prototype
+  */
+  data: function() {
+    var v = this._data.data.apply(this._data, arguments);
+    return typeof v === "undefined" ? this : v;
   }
 
 });
