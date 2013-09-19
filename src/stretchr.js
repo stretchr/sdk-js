@@ -28,6 +28,11 @@
 /**
  * @fileOverview A comprehensive client-side JavaScript SDK for HTML5 applications
  * interacting with Stretchr services.  See the {@link Stretchr} namespace.
+ *
+ * The Stretchr JavaScript SDK was written atop OO - http://github.com/stretchr/oo our
+ * lightweight JavaScript object-orientation library.  See oo documentation for details
+ * on how to use events and properties for the classes within this documentation.
+ *
  * @name Stretchr JavaScript SDK
  */
 
