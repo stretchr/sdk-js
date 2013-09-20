@@ -170,6 +170,9 @@ buster.testCase("Bag", {
   "querystring": function(){
 
     var b = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
+
+    assert.equals(b.querystring(), "")
+
     b.set("name", "Mat")
       .set("name", "Ryan")
       .set("something", true)
