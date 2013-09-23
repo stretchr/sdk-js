@@ -610,16 +610,17 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
  */
 Stretchr.Bag.querystring = function(){
 
-  var combined = new Stretchr.Bag();
+  var segments = [];
   for (var a in arguments) {
     var bag = arguments[a];
-    if (bag.$class != Stretchr.Bag) {
-      throw "Stretchr.Bag.querystring: Must only pass Stretchr.Bag objects."
+    if (bag.$class != Stretchr.Bag) throw "Stretchr.Bag.querystring: Must only pass Stretchr.Bag objects."
+    var qs = bag.querystring();
+    if (qs != "") {
+      segments.push(qs);
     }
-    combined.set(bag);
   }
 
-  return combined.querystring();
+  return segments.join("&");
 
 };
 

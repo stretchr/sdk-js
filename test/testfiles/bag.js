@@ -210,8 +210,8 @@ buster.testCase("Bag", {
 
     b.set("name", "Mat")
       .set("name", "Ryan")
-      .set("something", true)
-      .set("age", 29)
+      .set("else", true)
+      .set("egg", 29)
       .set(" & ", " & ")
     ;
 
@@ -229,7 +229,7 @@ buster.testCase("Bag", {
 
     assert.equals(
       Stretchr.Bag.querystring(b, b2),
-      "name=Tyler&something=true&age=30&%20%26%20=%20%26%20"
+      "name=Mat&name=Ryan&else=true&egg=29&%20%26%20=%20%26%20&%3Aname=Tyler&%3Asomething=true&%3Aage=30"
     )
 
   }
