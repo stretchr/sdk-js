@@ -102,6 +102,20 @@ buster.testCase("Request", {
       "total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
     );
 
+  },
+
+  read: function(){
+
+    var client = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(client, "/people");
+
+    r.read({
+      success: function(){},
+      before: function(){},
+      after: function(){},
+      error: function(){}
+    });
+
   }
 
 });

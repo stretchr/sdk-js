@@ -18,6 +18,16 @@ buster.testCase("Client", {
     assert.equals(client, request.client())
     assert.equals("/path/to/something", request.path())
 
+  },
+
+  "getTransport": function(){
+
+    var client = new Stretchr.Client("proj", "key");
+    var t = client.transport();
+
+    assert.equals(t.client(), client);
+    assert.equals(t.$class, Stretchr.JSONPTransport);
+
   }
 
 });

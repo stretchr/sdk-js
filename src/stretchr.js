@@ -113,16 +113,19 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  * interact with.
  * @property {string} apiKey The API key to use  when interacting with
  * the Stretchr services.
+ * @property {Stretchr.Transport} transport The Transport object to use when making
+ * real requests.
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey"],
+  properties: ["projectName", "apiKey", "transport"],
 
   init: function(projectName, apiKey){
 
     this
       .setProjectName(projectName)
       .setApiKey(apiKey)
+      .setTransport(new Stretchr.JSONPTransport(this))
     ;
 
   },
@@ -186,6 +189,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     return this._where.data.apply(this._where, arguments) || this;
   },
 
+  /**
+   * Gets the querystring segment for this request.
+   */
   querystring: function(){
     return Stretchr.Bag.querystring(this._params, this._where);
   }
@@ -387,11 +393,14 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
  */
 Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 
-  properties: ["host", "protocol", "APIVersion"],
+  properties: ["client", "host", "protocol", "APIVersion"],
   events: ["before", "after", "success", "error"],
 
-  init: function(){
-    this.setProtocol("http");
+  init: function(client){
+    this
+      .setProtocol("http")
+      .setClient(client)
+    ;
   },
 
   /**
@@ -401,6 +410,64 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
    */
   url: function(path) {
     return [this.protocol(), "://", this.host(), "/api/v", this.APIVersion(), path].join("");
+  },
+
+  /**
+   * When overidden in a child class, makes a real request using the specified
+   * options.
+   */
+  makeRequest: function(){
+    throw "Stretchr.Transport.makeRequest: Cannot use abstract Stretchr.Transport class, use a more concrete version instead.  Like Stretchr.JSONPTransport.";
+  }
+
+});
+
+/**
+ * Stretchr.TestTransport is a handy Transport alternative that allows you to easily
+ * write unit tests for your Stretchr service code.  Simply make a TestTransport object,
+ * assign it to the Stretchr.Client that you're using, then override the fakeResponse
+ * method to take control of interactions.
+ */
+Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, {
+
+  /**
+   * makeRequest calls fakeResponse to get a test response and handles it in the
+   * normal way.
+   * @fires before
+   * @fires after
+   * @fires success
+   * @fires error
+   * @memberOf Stretchr.TestTransport.prototype
+   */
+  makeRequest: function(options) {
+
+    // event: before
+    this.fireWith("before", options, options);
+
+    var response = this.fakeResponse(options);
+
+    // make the response object
+    var responseObject = new Stretchr.Response(this.client(), response);
+
+    if (responseObject.success()) {
+      this.success(responseObject);
+    } else {
+      this.error(responseObject);
+    }
+
+    // event: after
+    this.fireWith("after", options, options);
+
+  },
+
+  /**
+   * Override fakeResponse to provide your own responses to the requests.
+   * @memberOf Stretchr.TestTransport.prototype
+   */
+  fakeResponse: function(options){
+    return {
+      Stretchr.ResponseKeyStatus: "200"
+    };
   }
 
 });
@@ -409,19 +476,15 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
  * Stretchr.JSONPTransport is the class for objects capable of communicating
  * with Stretchr services via JSONP.
  */
-Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport, oo.Properties, {
-
-  properties: ["client"],
-
-  init: function(client) {
-    this._client = client;
-  },
+Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport, {
 
   /**
    * makeRequest makes a JSONP request using the specified options.
    * @param {string} path The path of the request to make.
    * @fires before
    * @fires after
+   * @fires success
+   * @fires error
    * @memberOf Stretchr.JSONPTransport.prototype
    */
   makeRequest: function(options) {
@@ -430,7 +493,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
     this.fireWith("before", options, options);
 
     // make the callback function
-    var callbackFunctionName = "cb" + Stretchr.counter();
+    var callbackFunctionName = "scb" + Stretchr.counter();
     window[callbackFunctionName] = function(response) {
 
       // make the response object
@@ -446,6 +509,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
       this.fireWith("after", options, options);
 
       // delete this function
+      window[callbackFunctionName] = null;
       delete window[callbackFunctionName];
 
     }.bind(this);
