@@ -563,12 +563,15 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   /**
    * Gets a URL query string representing the data in this map.
    */
-  querystring: function(){
+  querystring: function(options) {
+
+    var options = options || {};
+    var keyPrefix = options["keyPrefix"] || "";
 
     var items = [];
     for (var keyI in this._data)
       for (var valueI in this._data[keyI])
-        items.push(encodeURIComponent(keyI) + "=" + encodeURIComponent(this._data[keyI][valueI]));
+        items.push(encodeURIComponent(keyPrefix + keyI) + "=" + encodeURIComponent(this._data[keyI][valueI]));
 
     return items.join("&");
 

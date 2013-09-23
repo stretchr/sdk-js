@@ -181,6 +181,9 @@ buster.testCase("Bag", {
     ;
 
     assert.equals(b.querystring(), "name=Mat&name=Ryan&something=true&age=30&%20%26%20=%20%26%20")
+    assert.equals(b.querystring({
+      keyPrefix: ":"
+    }), "%3Aname=Mat&%3Aname=Ryan&%3Asomething=true&%3Aage=30&%3A%20%26%20=%20%26%20")
 
   }
 
