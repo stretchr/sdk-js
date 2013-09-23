@@ -80,6 +80,28 @@ buster.testCase("Request", {
     // should allow chaining
     var t = r.where("key", "value3");
     assert.equals(t, r);
+  },
+
+  "querystring": function(){
+
+    var s = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(s, "/path/to/something");
+
+    r.where({
+      "name": "Ryan",
+      "lives": "Airport"
+    });
+
+    r.params({
+      "total": true,
+      "exclude": "~timestamps"
+    });
+
+    assert.equals(
+      r.querystring(),
+      "total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
+    );
+
   }
 
 });
