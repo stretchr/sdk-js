@@ -13,6 +13,25 @@ buster.testCase("Stretchr", {
 
     assert.equals(1.2, Stretchr.version, "Stretchr version " + Stretchr.version)
 
+  },
+
+  "merge": function(){
+
+    var o = Stretchr.merge({
+      one: 1,
+      x: 1
+    },undefined,{
+      two: 2,
+      x: 2
+    },null,{
+      three: 3
+    })
+
+    assert.equals(o.one, 1);
+    assert.equals(o.two, 2);
+    assert.equals(o.three, 3);
+    assert.equals(o.x, 2);
+
   }
 
 });

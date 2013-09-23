@@ -36,6 +36,21 @@ buster.testCase("Bag", {
 
   },
 
+  "set another bag": function(){
+
+    var b = new Stretchr.Bag();
+    var b2 = new Stretchr.Bag();
+
+    b.set("name", "Mat");
+    b2.set("age", 30);
+
+    b.set(b2);
+
+    assert.equals(b.get("name"), "Mat");
+    assert.equals(b.get("age"), 30);
+
+  },
+
   "options: valueArrays": function(){
 
     assert.equals(Stretchr.Bag.ParamBagOptions.valueArrays, true);
@@ -184,6 +199,38 @@ buster.testCase("Bag", {
     assert.equals(b.querystring({
       keyPrefix: ":"
     }), "%3Aname=Mat&%3Aname=Ryan&%3Asomething=true&%3Aage=30&%3A%20%26%20=%20%26%20")
+
+  },
+
+  "querystring of multiple bags": function(){
+
+    var b = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
+
+    assert.equals(b.querystring(), "")
+
+    b.set("name", "Mat")
+      .set("name", "Ryan")
+      .set("something", true)
+      .set("age", 29)
+      .set(" & ", " & ")
+    ;
+
+
+    var b2 = new Stretchr.Bag(null, Stretchr.merge(Stretchr.Bag.ParamBagOptions, {
+      keyPrefix: ":"
+    }));
+
+    assert.equals(b2.querystring(), "")
+
+    b2.set("name", "Tyler")
+      .set("something", true)
+      .set("age", 30)
+    ;
+
+    assert.equals(
+      Stretchr.Bag.querystring(b, b2),
+      "name=Tyler&something=true&age=30&%20%26%20=%20%26%20"
+    )
 
   }
 

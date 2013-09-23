@@ -76,6 +76,20 @@ Stretchr.counter = function(){
   return ++Stretchr._counter;
 };
 
+/**
+ * Merges many objects into a new one.  None of the arguments
+ * will be changed, and a fresh POJO is returned containing a shallow
+ * copy of all arguments.
+ */
+Stretchr.merge = function(){
+  var o = {};
+  for (var a in arguments) {
+    var arg = arguments[a];
+    for (var k in arg) o[k] = arg[k];
+  }
+  return o;
+};
+
 /*
   oo
   v1.3.1
@@ -490,12 +504,22 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
   /**
    * Sets the value to the specified key.
-   * @param {string} key The key to get.
+   * @param {string|Stretchr.bag} key The key to set, or the Stretchr.Bag to merge in.
    * @param {anything} value The value to assign to key.
    * @fires change
    * @memberOf Stretchr.Bag.prototype
    */
   set: function(key, value) {
+
+    // handle set(bag)
+    if (key.$class === Stretchr.Bag) {
+      for (var k in key._data) {
+        this.set(k, key._data[k]);
+      }
+      return this;
+    }
+
+    // handle set(key, value)
     this.setDirty(true);
     this.withEvent("change", this._data[key], value, function(){
       this._set(key, value);
@@ -565,7 +589,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    */
   querystring: function(options) {
 
-    var options = options || {};
+    var options = Stretchr.merge(this._options, options);
     var keyPrefix = options["keyPrefix"] || "";
 
     var items = [];
@@ -578,6 +602,26 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   }
 
 });
+
+/**
+ * Generates a URL query string representing all the data specified
+ * in all the specified bags.
+ * @memberOf Stretchr.Bag
+ */
+Stretchr.Bag.querystring = function(){
+
+  var combined = new Stretchr.Bag();
+  for (var a in arguments) {
+    var bag = arguments[a];
+    if (bag.$class != Stretchr.Bag) {
+      throw "Stretchr.Bag.querystring: Must only pass Stretchr.Bag objects."
+    }
+    combined.set(bag);
+  }
+
+  return combined.querystring();
+
+};
 
 /**
  * Stretchr.Bag.ParamBagOptions is a set of options that describe
