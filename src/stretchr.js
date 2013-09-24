@@ -58,6 +58,7 @@ var Stretchr = {
   ParamKey: "key",
   ParamCallback: "callback",
   ParamBody: "body",
+  ParamAlways200: "always200",
 
   PrefixFilterFields: ":",
 
@@ -688,7 +689,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 
     // setup the JSONP stuff for this request
     request.params(Stretchr.ParamCallback, callbackFunctionName);
-
+    request.params(Stretchr.ParamAlways200, 1);
     if (request.hasBody()) {
       request.params(Stretchr.ParamBody, request.bodystr());
     }
