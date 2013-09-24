@@ -70,6 +70,7 @@ var Stretchr = {
   MethodPost: "POST",
   MethodPatch: "PATCH",
   MethodDelete: "DELETE",
+  MethodPut: "PUT",
 
   ResourceKeyId: "~id",
 
@@ -352,7 +353,17 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Request.prototype
    */
   create: function(data, options) {
-    this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
+
+    if (this.isCollective()) {
+      // e.g.  POST /people
+      this.setMethod(Stretchr.MethodPost);
+    } else {
+      // e.g.  PUT /people/123
+      this.setMethod(Stretchr.MethodPut);
+    }
+
+    this.body(data).client().transport().makeRequest(this, options);
+
     return this;
   },
 
@@ -394,12 +405,13 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
  * @property {bool} success() Whether the request was a success or not.
  * @property {object} data() The data returned in the response.
  * @property {array} errors() A list of any errors that occurred.
+ * @property {array} errorMessage() The message from the last error in the errors, or an empty string if there aren't any errors.
  * @property {Stretchr.Client} client() The client used to generate this Repsonse.
  * @property {string} context() The client-context returned in the Response.
  */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
-  getters: ["status", "data", "success", "errors", "context", "client", "request", "path"],
+  getters: ["status", "data", "success", "errors", "errorMessage", "context", "client", "request", "path"],
 
   init: function(client, request, response) {
 
@@ -410,12 +422,14 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     this._context = response[Stretchr.ResponseKeyContext];
     this._path = request.path();
     this._request = request;
+    this._errorMessage = "";
 
     // collect any errors
     if (response[Stretchr.ResponseKeyErrors]) {
       this._errors = [];
       for (var err in response[Stretchr.ResponseKeyErrors]) {
-        this._errors.push(response[Stretchr.ResponseKeyErrors][err][Stretchr.ResponseKeyErrorsMessage])
+        this._errorMessage = response[Stretchr.ResponseKeyErrors][err][Stretchr.ResponseKeyErrorsMessage];
+        this._errors.push(this._errorMessage);
       }
     }
 
@@ -665,7 +679,7 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
     }
 
     // event: after
-    this.fireWith("after", options, request, options);
+    this.fireWith("after", options, responseObject, response, options);
 
   },
 
@@ -730,7 +744,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
         }
 
         // event: after
-        this.fireWith("after", options, request, options);
+        this.fireWith("after", options, responseObject, response, options);
 
         // delete this function
         window[callbackFunctionName] = null;

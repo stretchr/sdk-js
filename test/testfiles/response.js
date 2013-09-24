@@ -72,6 +72,19 @@ var responseFixtures = {
     }
   ],
 
+  "errorMessage": [
+    {
+      "~status": 500,
+      "~errors": [{"~message": "Something went wrong"},{"~message": "Something else went wrong"}]
+    },
+    function(r, n){
+
+      assert.equals(r.success(), false);
+      assert.equals(r.errorMessage(), "Something else went wrong");
+
+    }
+  ],
+
   /*
     Responses
   */

@@ -313,6 +313,67 @@ buster.testCase("Request", {
 
   },
 
+  "create with ID in path": function(){
+
+    var client = new Stretchr.Client("proj", "key");
+    var transport = new Stretchr.TestTransport();
+    client.setTransport(transport);
+
+    var testData = {
+      "name": "Ryon",
+      "age": 26,
+      "crazy": true
+    };
+
+    transport.fakeResponse = function(request, options){
+      var response = {};
+
+      response[Stretchr.ResponseKeyDataChanges] = {};
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoCreated] = 1;
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoDeltas] = [{
+        "~id": "returned-id",
+        "~created": 123456,
+        "~updated": 234567,
+        "~createdby": "1",
+        "~updatedby": "2"
+      }];
+      return {"~data":response,"~status":201};
+    };
+
+    var r = new Stretchr.Request(client, "/people/123");
+
+    var calls = {};
+
+    var options = {
+      success: function(){
+        calls["success"] = calls["success"] || [];
+        calls["success"].push(arguments);
+      },
+      before: function(){
+        calls["before"] = calls["before"] || [];
+        calls["before"].push(arguments);
+      },
+      after: function(){
+        calls["after"] = calls["after"] || [];
+        calls["after"].push(arguments);
+      },
+      error: function(){
+        calls["error"] = calls["error"] || [];
+        calls["error"].push(arguments);
+      }
+    };
+    assert.equals(r.create(testData, options), r, "chain?");
+
+    assert.equals(r.body(), testData);
+    assert.equals(r.method(), Stretchr.MethodPut);
+    assert.equals(transport.requests()[0][0], r);
+
+    // success(response)
+    assert.equals(calls["success"].length, 1, "success should get raised");
+    var response = calls["success"][0][0];
+
+  },
+
   "update": function(){
 
     var client = new Stretchr.Client("proj", "key");
