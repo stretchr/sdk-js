@@ -501,8 +501,8 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     this._data = response[Stretchr.ResponseKeyData];
     this._success = this._status >= 200 && this._status <= 299;
     this._context = response[Stretchr.ResponseKeyContext];
-    this._path = request.path();
     this._request = request;
+    if (request) this._path = request.path();
     this._errorMessage = "";
 
     // collect any errors
@@ -540,6 +540,16 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     return new Stretchr.ChangeInfo(this.data()[Stretchr.ResponseKeyDataChanges]);
   }
 
+});
+
+/**
+ * Stretchr.ResponseNothingToDo is a constant Stretchr.Response object that is returned
+ * when methods did no actual work (e.g. when you call save() after no data has changed).
+ *
+ * `s of this kind are still considered successful.
+ */
+Stretchr.ResponseNothingToDo = new Stretchr.Response(null, null, {
+  "~status": 200
 });
 
 /** @class
@@ -588,6 +598,57 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
    */
   id: function(){
     return this.data(Stretchr.ResourceKeyId);
+  },
+
+  save: function(options){
+
+    console.info("save()")
+
+    if (!this._data.dirty()) {
+
+      // nothing to save - just return success to the event handlers
+      this.fireWith("success", options, Stretchr.ResponseNothingToDo, null, options);
+      this.fireWith("after", options, Stretchr.ResponseNothingToDo, null, options);
+
+    } else {
+
+      // something to save
+
+      var request = this._client.at(this.path());
+      options.$success = options.success;
+      options.success = function(response){
+
+        var changes = response.changes().deltas()[0];
+        this._data.data(changes);
+
+        // call original method
+        if (options.$success) options.$success.apply(options, arguments);
+
+      }.bind(this);
+
+      if (this.hasId()) {
+
+        // ensure the path contains the ID
+        if (request.isCollective()) {
+          // append the ID to the path
+          request._path += "/" + this.id();
+        }
+
+        // update
+        request.update(this, options);
+
+      } else {
+
+        // create
+        request.create(this, options);
+
+      }
+
+    }
+
+    // chaining
+    return this;
+
   }
 
 });
