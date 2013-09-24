@@ -15,6 +15,22 @@ buster.testCase("Stretchr.ChangeInfo", {
     assert.equals(changes.deltas()[0]["~id"], "ABC123");
     assert.equals(changes.deltas()[1]["~id"], "DEF456");
 
+  },
+
+  "defaults": function(){
+
+    var data = {};
+    var changes = new Stretchr.ChangeInfo(data)
+
+    assert.equals(changes.rawData(), data);
+    assert.equals(changes.data(), data);
+
+    assert.equals(changes.created(), 0);
+    assert.equals(changes.updated(), 0);
+    assert.equals(changes.deleted(), 0);
+
+    assert.equals(changes.deltas().length, 0);
+
   }
 
 });

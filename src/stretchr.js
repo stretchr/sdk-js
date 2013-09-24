@@ -61,6 +61,7 @@ var Stretchr = {
   PrefixFilterFields: ":",
 
   MethodGet: "GET",
+  MethodPost: "POST",
 
   ResourceKeyId: "~id",
 
@@ -285,6 +286,17 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   read: function(options){
     this.setMethod(Stretchr.MethodGet).client().transport().makeRequest(this, options);
+    return this;
+  },
+
+  /**
+   * Creates the specified resource.
+   * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
+   * @memberOf Stretchr.Request.prototype
+   */
+  create: function(data, options) {
+    this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
+    return this;
   }
 
 });
@@ -450,7 +462,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   * @memberOf Stretchr.ChangeInfo.prototype
   */
   created: function(){
-    return this.data(Stretchr.ResponseKeyChangeInfoCreated);
+    return this.data(Stretchr.ResponseKeyChangeInfoCreated) || 0;
   },
 
   /**
@@ -458,7 +470,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   * @memberOf Stretchr.ChangeInfo.prototype
   */
   updated: function(){
-    return this.data(Stretchr.ResponseKeyChangeInfoUpdated);
+    return this.data(Stretchr.ResponseKeyChangeInfoUpdated) || 0;
   },
 
   /**
@@ -466,7 +478,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   * @memberOf Stretchr.ChangeInfo.prototype
   */
   deleted: function(){
-    return this.data(Stretchr.ResponseKeyChangeInfoDeleted);
+    return this.data(Stretchr.ResponseKeyChangeInfoDeleted) || 0;
   },
 
   /**
@@ -475,7 +487,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   * @memberOf Stretchr.ChangeInfo.prototype
   */
   deltas: function(){
-    return this.data(Stretchr.ResponseKeyChangeInfoDeltas);
+    return this.data(Stretchr.ResponseKeyChangeInfoDeltas) || [];
   },
 
   /**
