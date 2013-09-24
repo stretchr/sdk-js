@@ -602,8 +602,6 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
   save: function(options){
 
-    console.info("save()")
-
     if (!this._data.dirty()) {
 
       // nothing to save - just return success to the event handlers
