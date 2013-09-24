@@ -31,6 +31,8 @@ buster.testCase("JSONPTransport", {
 
     t.makeRequest(r, options);
 
+    assert.equals(r.params(Stretchr.ParamCallback)[0], t.lastCallbackFunctionName)
+
     assert.equals(1, eventCallbacks.length, "before event should get called")
 
     // call the callback

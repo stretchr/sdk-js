@@ -55,6 +55,7 @@ var Stretchr = {
   _counter: 0,
 
   ParamKey: "key",
+  ParamCallback: "callback",
 
   PrefixFilterFields: ":",
 
@@ -556,6 +557,9 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
       delete window[callbackFunctionName];
 
     }.bind(this);
+
+    // setup the JSONP stuff for this request
+    request.params(Stretchr.ParamCallback, callbackFunctionName);
 
     // add the script tag (JSONP)
     var script = document.createElement('script');

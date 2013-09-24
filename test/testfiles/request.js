@@ -153,6 +153,7 @@ buster.testCase("Request", {
     };
     r.read(options);
 
+    assert.equals(r.method(), Stretchr.MethodGet);
     assert.equals(transport.requests()[0][0], r)
 
   }
