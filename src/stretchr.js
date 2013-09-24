@@ -242,6 +242,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   */
 
   read: function(options){
+    this.setMethod(Stretchr.MethodGet);
     this.client().transport().makeRequest(this, options);
   }
 
