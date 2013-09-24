@@ -228,11 +228,17 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Gets the querystring segment for this request.
+   * @memberOf Stretchr.Request.prototype
    */
   querystring: function(){
     return Stretchr.Bag.querystring(this._params, this._where);
   },
 
+  /**
+   * Gets the absolute URL (by consulting the Client) for the current
+   * path of this Request.
+   * @memberOf Stretchr.Request.prototype
+   */
   url: function(){
     var qs = this.querystring();
     return this.client().url(this.path() + (qs != "" ? "?"+qs : ""))
@@ -244,9 +250,12 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     ----------------------------------------------------------------
   */
 
+  /**
+   * Performs a read request.
+   * @memberOf Stretchr.Request.prototype
+   */
   read: function(options){
-    this.setMethod(Stretchr.MethodGet);
-    this.client().transport().makeRequest(this, options);
+    this.setMethod(Stretchr.MethodGet).client().transport().makeRequest(this, options);
   }
 
 });
