@@ -12,6 +12,22 @@ buster.testCase("Request", {
 
   },
 
+  "isCollective": function(){
+
+    var client = new Stretchr.Client("proj", "key");
+
+    var r = new Stretchr.Request(client, "/people");
+    assert.equals(r.isCollective(), true);
+    var r = new Stretchr.Request(client, "people");
+    assert.equals(r.isCollective(), true);
+
+    var r = new Stretchr.Request(client, "/people/123");
+    assert.equals(r.isCollective(), false);
+    var r = new Stretchr.Request(client, "people/123");
+    assert.equals(r.isCollective(), false);
+
+  },
+
   "body and hasBody": function(){
 
     var s = new Stretchr.Client("proj", "key");

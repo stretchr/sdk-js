@@ -198,6 +198,19 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   },
 
   /**
+   * Gets whether the path of this request referrs to a collection (true), or
+   * to a single resource (false).
+   * @memberOf Stretchr.Request.prototype
+   */
+  isCollective: function(){
+    var p = this.path();
+    if (p.indexOf("/") != 0) {
+      p = "/"+p;
+    }
+    return p.split("/").length % 2 == 0;
+  },
+
+  /**
   * Gets or sets parameters.
   * () = gets all the data
   * (key) = gets the value for the data with that key
