@@ -43,10 +43,13 @@
  */
 var Stretchr = {
 
-  /** version represents this SDK version. */
+  /** Whether to write out debug information or not. */
+  debug: true,
+
+  /** The SDK version. */
   version: "1.2",
 
-  /** apiVersion represents the default API version this SDK will
+  /** The default API version this SDK will
     * attempt to interact with.  You can modify this on a per Client
     * basis. */
   apiVersion: "1.1",
@@ -105,6 +108,19 @@ Stretchr.merge = function(){
   }
   return o;
 };
+
+/**
+ * Logs to the console if available and if Stretchr.debug is true, otherwise does nothing.
+ */
+Stretchr.log = function(){
+  if (!Stretchr.debug) return;
+  if (console) {
+    if (arguments[1] === true)
+      console.warn.apply(console, [arguments[0]]);
+    else
+      console.info.apply(console, arguments);
+  }
+}
 
 /*
   oo
@@ -668,6 +684,10 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
    */
   makeRequest: function(request, options) {
 
+    Stretchr.log("<begin> Make JSONP request", true);
+    Stretchr.log(request);
+    Stretchr.log(options);
+
     // event: before
     this.fireWith("before", options, request, options);
 
@@ -675,8 +695,13 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
     var callbackFunctionName = "sc" + Stretchr.counter();
     window[callbackFunctionName] = function(response) {
 
+      Stretchr.log("<begin> Received JSONP response", true);
+      Stretchr.log(response);
+
       // make the response object
       var responseObject = new Stretchr.Response(this.client(), request, response);
+
+      Stretchr.log(responseObject);
 
       if (responseObject.success()) {
         this.fireWith("success", options, responseObject, response, options);
@@ -690,6 +715,8 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
       // delete this function
       window[callbackFunctionName] = null;
       delete window[callbackFunctionName];
+
+      Stretchr.log("<end>", true);
 
     }.bind(this);
 
@@ -707,6 +734,8 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 
     // save this for test use
     this.lastCallbackFunctionName = callbackFunctionName;
+
+    Stretchr.log("<end>", true);
 
   }
 
