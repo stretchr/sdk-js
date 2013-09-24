@@ -32,6 +32,19 @@ buster.testCase("Stretchr", {
     assert.equals(o.three, 3);
     assert.equals(o.x, 2);
 
+  },
+
+  "fixoptions": function(){
+
+    var options = {
+      "success": function(){}
+    };
+
+    assert.equals(Stretchr.fixoptions(options).success, options.success);
+
+    var afterOnly = function(){};
+    assert.equals(Stretchr.fixoptions(afterOnly).after, afterOnly);
+
   }
 
 });

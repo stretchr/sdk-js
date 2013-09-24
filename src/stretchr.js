@@ -44,7 +44,7 @@
 var Stretchr = {
 
   /** Whether to write out debug information or not. */
-  debug: true,
+  debug: false,
 
   /** The SDK version. */
   version: "1.2",
@@ -108,6 +108,20 @@ Stretchr.merge = function(){
   }
   return o;
 };
+
+/**
+ * Builds an options map from the specified parameters.  If you pass an object,
+ * it will be returned untouched.  If you pass one or two functions, they will be
+ * interpreted as success and error functions respectively.
+ */
+Stretchr.fixoptions = function(){
+  if (typeof arguments[0] === "object") {
+    return arguments[0];
+  }
+  return {
+    "after": arguments[0] || null
+  };
+}
 
 /**
  * Logs to the console if available and if Stretchr.debug is true, otherwise does nothing.
@@ -631,6 +645,7 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
    */
   makeRequest: function(request, options) {
 
+    options = Stretchr.fixoptions(options);
     this._requests = this._requests || [];
     this._requests.push(arguments);
 
@@ -684,6 +699,8 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
    */
   makeRequest: function(request, options) {
 
+    options = Stretchr.fixoptions(options);
+
     Stretchr.log("<begin> Make JSONP request", true);
     Stretchr.log(request);
     Stretchr.log(options);
@@ -693,32 +710,36 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 
     // make the callback function
     var callbackFunctionName = "sc" + Stretchr.counter();
-    window[callbackFunctionName] = function(response) {
+    window[callbackFunctionName] = (function(){
 
-      Stretchr.log("<begin> Received JSONP response", true);
-      Stretchr.log(response);
+      return function(response) {
 
-      // make the response object
-      var responseObject = new Stretchr.Response(this.client(), request, response);
+        Stretchr.log("<begin> Received JSONP response", true);
+        Stretchr.log(response);
 
-      Stretchr.log(responseObject);
+        // make the response object
+        var responseObject = new Stretchr.Response(this.client(), request, response);
 
-      if (responseObject.success()) {
-        this.fireWith("success", options, responseObject, response, options);
-      } else {
-        this.fireWith("error", options, responseObject, response, options);
-      }
+        Stretchr.log(responseObject);
 
-      // event: after
-      this.fireWith("after", options, request, options);
+        if (responseObject.success()) {
+          this.fireWith("success", options, responseObject, response, options);
+        } else {
+          this.fireWith("error", options, responseObject, response, options);
+        }
 
-      // delete this function
-      window[callbackFunctionName] = null;
-      delete window[callbackFunctionName];
+        // event: after
+        this.fireWith("after", options, request, options);
 
-      Stretchr.log("<end>", true);
+        // delete this function
+        window[callbackFunctionName] = null;
+        delete window[callbackFunctionName];
 
-    }.bind(this);
+        Stretchr.log("<end>", true);
+
+      }.bind(this);
+
+    }.bind(this))();
 
     // setup the JSONP stuff for this request
     request.params(Stretchr.ParamCallback, callbackFunctionName);
