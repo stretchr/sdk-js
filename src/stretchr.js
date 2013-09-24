@@ -547,9 +547,9 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
       var responseObject = new Stretchr.Response(this.client(), request, response);
 
       if (responseObject.success()) {
-        this.success(responseObject);
+        this.fireWith("success", options, responseObject, response, options);
       } else {
-        this.error(responseObject);
+        this.fireWith("error", options, responseObject, response, options);
       }
 
       // event: after
