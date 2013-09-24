@@ -156,6 +156,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     }
 
     return [this.protocol(), "://", this.host(), "/api/v", this.apiVersion(), path].join("");
+
   },
 
 });
@@ -191,7 +192,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * @memberOf Stretchr.Request.prototype
   */
   params: function(keyOrObject, value) {
-    return this._params.data.apply(this._params, arguments) || this;
+    var v = this._params.data.apply(this._params, arguments);
+    return typeof v === "undefined" ? this : v;
   },
 
   /**
@@ -205,7 +207,8 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   * @memberOf Stretchr.Request.prototype
   */
   where: function(keyOrObject, value) {
-    return this._where.data.apply(this._where, arguments) || this;
+    var v = this._where.data.apply(this._where, arguments);
+    return typeof v === "undefined" ? this : v;
   },
 
   /**
@@ -218,11 +221,11 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /*
     Actions
+    ----------------------------------------------------------------
   */
+
   read: function(options){
-    this.client().transport().makeRequest({
-      path: this.client().url(this.path())
-    });
+    this.client().transport().makeRequest(this, options);
   }
 
 });
@@ -238,9 +241,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
  */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
-  getters: ["status", "data", "success", "errors", "context", "client"],
+  getters: ["status", "data", "success", "errors", "context", "client", "request"],
 
-  init: function(client, response) {
+  init: function(client, request, response) {
 
     this._client = client;
     this._status = response[Stretchr.ResponseKeyStatus];
@@ -287,6 +290,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 /** @class
  * Stretchr.Resource represents a single resource.
  * @property {Stretchr.Client} client The client that relates to this resource.
+ * @property {Stretchr.Request} request The request that caused this Response.
  */
 Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
@@ -435,7 +439,7 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
    * When overidden in a child class, makes a real request using the specified
    * options.
    */
-  makeRequest: function(){
+  makeRequest: function(request, options){
     throw "Stretchr.Transport.makeRequest: Cannot use abstract Stretchr.Transport class, use a more concrete version instead.  Like Stretchr.JSONPTransport.";
   }
 
@@ -459,18 +463,18 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
    * @fires error
    * @memberOf Stretchr.TestTransport.prototype
    */
-  makeRequest: function(options) {
+  makeRequest: function(request, options) {
 
     this._requests = this._requests || [];
     this._requests.push(options);
 
     // event: before
-    this.fireWith("before", options, options);
+    this.fireWith("before", options, request, options);
 
     var response = this.fakeResponse(options);
 
     // make the response object
-    var responseObject = new Stretchr.Response(this.client(), response);
+    var responseObject = new Stretchr.Response(this.client(), request, response);
 
     if (responseObject.success()) {
       this.success(responseObject);
@@ -479,7 +483,7 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
     }
 
     // event: after
-    this.fireWith("after", options, options);
+    this.fireWith("after", options, request, options);
 
   },
 
@@ -510,7 +514,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
    * @fires error
    * @memberOf Stretchr.JSONPTransport.prototype
    */
-  makeRequest: function(options) {
+  makeRequest: function(request, options) {
 
     // event: before
     this.fireWith("before", options, options);
@@ -520,7 +524,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
     window[callbackFunctionName] = function(response) {
 
       // make the response object
-      var responseObject = new Stretchr.Response(this.client(), response);
+      var responseObject = new Stretchr.Response(this.client(), request, response);
 
       if (responseObject.success()) {
         this.success(responseObject);

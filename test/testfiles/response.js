@@ -157,7 +157,7 @@ buster.testCase("Response", {
       var rawResponse = responseFixtures[name][0]
       var assertions = responseFixtures[name][1];
 
-      var r = new Stretchr.Response(client, rawResponse);
+      var r = new Stretchr.Response(client, null, rawResponse);
       assertions(r, name);
 
     }
@@ -167,7 +167,7 @@ buster.testCase("Response", {
   "init": function(){
 
     var client = new Stretchr.Client();
-    var r = new Stretchr.Response(client, {});
+    var r = new Stretchr.Response(client, null, {});
 
     assert.equals(r.client(), client, "client");
 

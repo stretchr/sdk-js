@@ -6,6 +6,7 @@ buster.testCase("JSONPTransport", {
 
     var s = new Stretchr.Client();
     var t = new Stretchr.JSONPTransport(s);
+    var r = s.at("people");
     var options = {
       path: "testfiles/includes/IncreaseTestFileValueByOne.js"
     };
@@ -26,7 +27,7 @@ buster.testCase("JSONPTransport", {
       eventCallbacks.push("success");
     });
 
-    t.makeRequest(options);
+    t.makeRequest(r, options);
 
     assert.equals(1, eventCallbacks.length, "before event should get called")
 
@@ -75,7 +76,7 @@ buster.testCase("JSONPTransport", {
       eventCallbacks.push("success");
     });
 
-    t.makeRequest(options);
+    t.makeRequest(null, options);
 
     assert.equals(1, eventCallbacks.length, "before event should get called")
 
