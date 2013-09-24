@@ -20,7 +20,7 @@ buster.testCase("Client", {
 
     assert.equals(request.client(), client)
     assert.equals(request.path(), "/path/to/something")
-    assert.equals(request.params("key"), "ABC123")
+    assert.equals(request.params("key")[0], "ABC123", ".at() should set the key param");
 
   },
 

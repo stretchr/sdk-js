@@ -54,6 +54,8 @@ var Stretchr = {
   // requests.
   _counter: 0,
 
+  ParamKey: "key",
+
   PrefixFilterFields: ":",
 
   ResponseKeyStatus: "~status",
@@ -140,7 +142,10 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Client.prototype
   */
   at: function(path) {
-    return new Stretchr.Request(this, path);
+    var r = new Stretchr.Request(this, path);
+    var params = {};
+    params[Stretchr.ParamKey] = this.apiKey();
+    return r.params(params);
   },
 
   /**
