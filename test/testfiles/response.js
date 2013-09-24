@@ -179,6 +179,8 @@ buster.testCase("Response", {
     assert.equals(r.request(), request, "request");
     assert.equals(r.path(), r.request().path(), "path");
 
+    assert.equals(r.resource().path(), r.request().path());
+
   }
 
 });
