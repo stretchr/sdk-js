@@ -47,7 +47,8 @@ var Stretchr = {
   version: "1.2",
 
   /** apiVersion represents the default API version this SDK will
-    * attempt to interact with. */
+    * attempt to interact with.  You can modify this on a per Client
+    * basis. */
   apiVersion: "1.1",
 
   // _counter is the internal counter for Stretchr JSONP
@@ -136,7 +137,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setTransport(new Stretchr.JSONPTransport(this))
       .setHost(projectName + ".stretchr.com")
       .setProtocol("http")
-      .setApiVersion(1.1)
+      .setApiVersion(Stretchr.apiVersion)
     ;
 
   },
