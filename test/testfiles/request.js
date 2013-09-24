@@ -12,6 +12,23 @@ buster.testCase("Request", {
 
   },
 
+  "body and hasBody": function(){
+
+    var s = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(s, "/path/to/something");
+
+    assert.equals(r.hasBody(), false);
+
+    assert.equals(r.body({
+      "name": "Mat"
+    }), r);
+
+    assert.equals(r._body["name"], "Mat");
+    assert.equals(r.body()["name"], "Mat");
+    assert.equals(r.hasBody(), true);
+
+  },
+
   "params": function(){
 
     var s = new Stretchr.Client("proj", "key");
