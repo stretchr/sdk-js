@@ -217,7 +217,6 @@ buster.testCase("Bag", {
       .set(" & ", " & ")
     ;
 
-
     var b2 = new Stretchr.Bag(null, Stretchr.merge(Stretchr.Bag.ParamBagOptions, {
       keyPrefix: ":"
     }));

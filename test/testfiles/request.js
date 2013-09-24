@@ -145,7 +145,6 @@ buster.testCase("Request", {
     };
 
     transport.fakeResponse = function(request, options){
-      console.info(arguments);
       var response = {};
       response[Stretchr.ResponseKeyStatus] = 200;
       response[Stretchr.ResponseKeyData] = testData;
