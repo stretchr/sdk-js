@@ -250,8 +250,17 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   body: function() {
     if (arguments.length === 1) {
+
+      var data = arguments[0];
+
+      // extract data from resource
+      if (data.$class === Stretchr.Resource) {
+        data = data.data();
+      }
+
       // setter
-      this._body = arguments[0];
+      this._body = data;
+
       return this;
     }
     return this._body;

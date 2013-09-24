@@ -29,6 +29,24 @@ buster.testCase("Request", {
 
   },
 
+  "body with resource extracts data": function(){
+
+    var data = {
+      "~id": "ABC123",
+      "name": "Ryon",
+      "number": 26,
+      "something": true
+    };
+    var client = new Stretchr.Client();
+    var res = new Stretchr.Resource(client, data);
+    var r = new Stretchr.Request(client, "/path/to/something");
+
+    r.body(res);
+
+    assert.equals(r._body, res.data(), "body(resource) should extract the data from the resource.");
+
+  },
+
   "params": function(){
 
     var s = new Stretchr.Client("proj", "key");
