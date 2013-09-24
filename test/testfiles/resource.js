@@ -153,6 +153,7 @@ buster.testCase("Resource", {
     var theRequest = transport.requests()[0][0];
     assert.equals(theRequest.method(), Stretchr.MethodPost);
     assert.equals(theRequest.path(), "people");
+    assert.equals(theRequest.body()["name"], "Mat");
 
     assert.equals(r.id(), "returned-id", "ID should be updated");
     assert.equals(r.data("~created"), 123456);
@@ -227,6 +228,8 @@ buster.testCase("Resource", {
     });
 
     var theRequest = transport.requests()[0][0];
+    assert.equals(theRequest.body()["name"], "Mat");
+    assert.equals(theRequest.body()["something"], undefined, "Only fields that have changed should appear in PATCH when saving");
     assert.equals(theRequest.method(), Stretchr.MethodPatch);
     assert.equals(theRequest.path(), "people/1");
 

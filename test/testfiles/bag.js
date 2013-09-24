@@ -20,6 +20,41 @@ buster.testCase("Bag", {
 
   },
 
+  "delta": function(){
+
+    var data = {
+      "name": "Ryon",
+      "age": 30,
+      "something": true
+    };
+    var b = new Stretchr.Bag(data);
+
+    b.set("name", "Mat");
+
+    assert.equals(b.delta()["name"], "Mat");
+    assert.equals(b.delta()["age"], undefined);
+    assert.equals(b.delta()["something"], undefined);
+
+    b.set("something", false);
+
+    assert.equals(b.delta()["name"], "Mat");
+    assert.equals(b.delta()["age"], undefined);
+    assert.equals(b.delta()["something"], false);
+
+    b.set("age", 31);
+
+    assert.equals(b.delta()["name"], "Mat");
+    assert.equals(b.delta()["age"], 31);
+    assert.equals(b.delta()["something"], false);
+
+    b.clean();
+
+    assert.equals(b.delta()["name"], undefined);
+    assert.equals(b.delta()["age"], undefined);
+    assert.equals(b.delta()["something"], undefined);
+
+  },
+
   "Bag get, set and has": function(){
 
     var b = new Stretchr.Bag();

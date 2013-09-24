@@ -635,7 +635,7 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
         }
 
         // update
-        request.update(this, options);
+        request.update(this._data.delta(), options);
 
       } else {
 
@@ -933,11 +933,13 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
   properties: ["dirty"],
+  getters: ["delta"],
   events: ["change"],
 
   init: function(data, options){
     this._data = data || {};
     this._options = options || {};
+    this._delta = {};
     this.clean();
   },
 
@@ -966,6 +968,8 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
       }
 
     }
+
+    this._delta[key] = this._data[key];
 
   },
 
@@ -1018,6 +1022,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    */
   clean: function(){
     this.setDirty(false);
+    this._delta = {}; // reset the delta
   },
 
   /**
