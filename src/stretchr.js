@@ -64,6 +64,8 @@ var Stretchr = {
 
   MethodGet: "GET",
   MethodPost: "POST",
+  MethodPatch: "PATCH",
+  MethodDelete: "DELETE",
 
   ResourceKeyId: "~id",
 
