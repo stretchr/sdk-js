@@ -9,8 +9,10 @@ buster.testCase("Resource", {
       "something": true
     };
     var client = new Stretchr.Client();
-    var r = new Stretchr.Resource(client, data);
+    var path = "people"
+    var r = new Stretchr.Resource(client, path, data);
     assert.equals(r._data.$class, Stretchr.Bag);
+    assert.equals(r.path(), path);
 
   },
 
@@ -23,7 +25,7 @@ buster.testCase("Resource", {
       "something": true
     };
     var client = new Stretchr.Client();
-    var r = new Stretchr.Resource(client, data);
+    var r = new Stretchr.Resource(client, "people", data);
     assert.equals(r._data.$class, Stretchr.Bag);
     assert.equals(r.data(), data);
 
@@ -31,6 +33,7 @@ buster.testCase("Resource", {
     assert.equals(r.data("~id"), "ABC123")
     assert.equals(r.data("number"), 26)
     assert.equals(r.data("something"), true)
+    assert.equals(r.path(), "people");
 
   },
 
@@ -42,7 +45,7 @@ buster.testCase("Resource", {
       "something": true
     };
     var client = new Stretchr.Client();
-    var r = new Stretchr.Resource(client, data);
+    var r = new Stretchr.Resource(client, "people", data);
 
     assert.equals(r.hasId(), false, "hasId()");
 
@@ -75,13 +78,16 @@ buster.testCase("ResourceCollection", {
     };
 
     var client = new Stretchr.Client();
-    var r = new Stretchr.ResourceCollection(client, data);
+    var r = new Stretchr.ResourceCollection(client, "people", data);
 
     assert.equals(r.rawData(), data);
+    assert.equals(r.path(), "people");
 
     assert.equals(r.count(), 2);
     assert.equals(r.items()[0].data("name"), "Ryon");
+    assert.equals(r.items()[0].path(), "people");
     assert.equals(r.items()[1].data("name"), "Tyler");
+    assert.equals(r.items()[1].path(), "people");
 
   }
 

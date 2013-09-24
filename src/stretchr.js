@@ -368,7 +368,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
  */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
-  getters: ["status", "data", "success", "errors", "context", "client", "request"],
+  getters: ["status", "data", "success", "errors", "context", "client", "request", "path"],
 
   init: function(client, request, response) {
 
@@ -377,6 +377,8 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     this._data = response[Stretchr.ResponseKeyData];
     this._success = this._status >= 200 && this._status <= 299;
     this._context = response[Stretchr.ResponseKeyContext];
+    this._path = request.path();
+    this._request = request;
 
     // collect any errors
     if (response[Stretchr.ResponseKeyErrors]) {
@@ -393,7 +395,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   * @memberOf Stretchr.Response.prototype
   */
   resource: function(){
-    return new Stretchr.Resource(this.client(), this.data());
+    return new Stretchr.Resource(this.client(), this.path(), this.data());
   },
 
   /**
@@ -401,7 +403,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   * @memberOf Stretchr.Response.prototype
   */
   resources: function(){
-    return new Stretchr.ResourceCollection(this.client(), this.data());
+    return new Stretchr.ResourceCollection(this.client(), this.path(), this.data());
   },
 
   /**
@@ -421,10 +423,11 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
  */
 Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
-  getters: ["client"],
+  getters: ["client", "path"],
 
-  init: function(client, data) {
+  init: function(client, path, data) {
     this._client = client;
+    this._path = path;
     this._data = new Stretchr.Bag(data);
   },
 
@@ -471,18 +474,19 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
  */
 Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Properties, {
 
-  getters: ["client", "rawData", "items"],
+  getters: ["client", "rawData", "items", "path"],
 
-  init: function(client, data) {
+  init: function(client, path, data) {
 
     this._client = client;
     this._rawData = data;
+    this._path = path;
     this._items = [];
 
     // make a Resource for each item
     var items = data[Stretchr.ResponseKeyCollectionItems];
     for (var index in items) {
-      this._items.push(new Stretchr.Resource(client, items[index]));
+      this._items.push(new Stretchr.Resource(client, path, items[index]));
     }
 
   },

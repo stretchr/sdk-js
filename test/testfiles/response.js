@@ -88,9 +88,9 @@ var responseFixtures = {
 
       resource = r.resource();
 
-      assert.equals(resource.data()["name"], "Ryon")
-      assert.equals(resource.data()["age"], 26)
-      assert.equals(resource.data()["something"], true)
+      assert.equals(resource.data()["name"], "Ryon");
+      assert.equals(resource.data()["age"], 26);
+      assert.equals(resource.data()["something"], true);
 
     }
   ],
@@ -153,13 +153,14 @@ buster.testCase("Response", {
   "fixtures": function(){
 
     var client = new Stretchr.Client();
+    var request = new Stretchr.Request();
 
     for (var name in responseFixtures) {
 
       var rawResponse = responseFixtures[name][0]
       var assertions = responseFixtures[name][1];
 
-      var r = new Stretchr.Response(client, null, rawResponse);
+      var r = new Stretchr.Response(client, request, rawResponse);
       assertions(r, name);
 
     }
@@ -169,9 +170,14 @@ buster.testCase("Response", {
   "init": function(){
 
     var client = new Stretchr.Client();
-    var r = new Stretchr.Response(client, null, {});
+    var request = new Stretchr.Request();
+    request.path("people/123");
+
+    var r = new Stretchr.Response(client, request, {});
 
     assert.equals(r.client(), client, "client");
+    assert.equals(r.request(), request, "request");
+    assert.equals(r.path(), r.request().path(), "path");
 
   }
 
