@@ -600,6 +600,10 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
     return this.data(Stretchr.ResourceKeyId);
   },
 
+  /**
+   * Saves the changes to this resource.
+   * @memberOf Stretchr.Resource.prototype
+   */
   save: function(options){
 
     if (!this._data.dirty()) {
