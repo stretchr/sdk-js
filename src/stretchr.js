@@ -57,6 +57,7 @@ var Stretchr = {
 
   ParamKey: "key",
   ParamCallback: "callback",
+  ParamBody: "body",
 
   PrefixFilterFields: ":",
 
@@ -286,6 +287,15 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   hasBody: function(){
     return this._body != null;
+  },
+
+  /**
+   * Gets the body as a JSON string.  Useful for JSONP requests that need to put
+   * the body into a URL query parameter.
+   * @memberOf Stretchr.Request.prototype
+   */
+  bodystr: function(){
+    return JSON.stringify(this._body);
   },
 
   /*
@@ -652,10 +662,10 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
   makeRequest: function(request, options) {
 
     // event: before
-    this.fireWith("before", options, options);
+    this.fireWith("before", options, request, options);
 
     // make the callback function
-    var callbackFunctionName = "scb" + Stretchr.counter();
+    var callbackFunctionName = "sc" + Stretchr.counter();
     window[callbackFunctionName] = function(response) {
 
       // make the response object
@@ -668,7 +678,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
       }
 
       // event: after
-      this.fireWith("after", options, options);
+      this.fireWith("after", options, request, options);
 
       // delete this function
       window[callbackFunctionName] = null;
@@ -678,6 +688,10 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 
     // setup the JSONP stuff for this request
     request.params(Stretchr.ParamCallback, callbackFunctionName);
+
+    if (request.hasBody()) {
+      request.params(Stretchr.ParamBody, request.bodystr());
+    }
 
     // add the script tag (JSONP)
     var script = document.createElement('script');

@@ -11,6 +11,7 @@ buster.testCase("JSONPTransport", {
 
     var t = new Stretchr.JSONPTransport(s);
     var r = s.at("testfiles/includes/IncreaseTestFileValueByOne.js");
+    r.body({name:"Mat"});
     var options = {};
 
     var eventCallbacks = [];
@@ -31,7 +32,8 @@ buster.testCase("JSONPTransport", {
 
     t.makeRequest(r, options);
 
-    assert.equals(r.params(Stretchr.ParamCallback)[0], t.lastCallbackFunctionName)
+    assert.equals(r.params(Stretchr.ParamCallback)[0], t.lastCallbackFunctionName);
+    assert.equals(r.params(Stretchr.ParamBody)[0], '{"name":"Mat"}');
 
     assert.equals(1, eventCallbacks.length, "before event should get called")
 

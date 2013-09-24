@@ -45,6 +45,19 @@ buster.testCase("Request", {
 
   },
 
+  "bodystr": function(){
+
+    var s = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(s, "/path/to/something");
+
+    assert.equals(r.body({
+      "name": "Mat"
+    }), r);
+
+    assert.equals(r.bodystr(), '{"name":"Mat"}');
+
+  },
+
   "body with resource extracts data": function(){
 
     var data = {
