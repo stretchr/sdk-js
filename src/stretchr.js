@@ -118,7 +118,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey", "transport"],
+  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport"],
 
   init: function(projectName, apiKey){
 
@@ -126,6 +126,9 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setProjectName(projectName)
       .setApiKey(apiKey)
       .setTransport(new Stretchr.JSONPTransport(this))
+      .setHost(projectName + ".stretchr.com")
+      .setProtocol("http")
+      .setApiVersion(1.1)
     ;
 
   },
@@ -137,7 +140,22 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
   */
   at: function(path) {
     return new Stretchr.Request(this, path);
-  }
+  },
+
+  /**
+   * url generates a URL that makes up the request of the specified path.
+   * @param {string} path The relative path of the request.
+   * @memberOf Stretchr.Client.prototype
+   */
+  url: function(path) {
+
+    // ensure it has the leading /
+    if (path.substr(0,1) != "/") {
+      path = "/"+path;
+    }
+
+    return [this.protocol(), "://", this.host(), "/api/v", this.apiVersion(), path].join("");
+  },
 
 });
 
@@ -194,6 +212,16 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   querystring: function(){
     return Stretchr.Bag.querystring(this._params, this._where);
+  },
+
+
+  /*
+    Actions
+  */
+  read: function(options){
+    this.client().transport().makeRequest({
+      path: this.client().url(this.path())
+    });
   }
 
 });
@@ -393,23 +421,13 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
  */
 Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 
-  properties: ["client", "host", "protocol", "APIVersion"],
+  properties: ["client"],
   events: ["before", "after", "success", "error"],
 
   init: function(client){
     this
-      .setProtocol("http")
       .setClient(client)
     ;
-  },
-
-  /**
-   * url generates a URL that makes up the request of the specified path.
-   * @param {string} path The relative path of the request.
-   * @memberOf Stretchr.Transport.prototype
-   */
-  url: function(path) {
-    return [this.protocol(), "://", this.host(), "/api/v", this.APIVersion(), path].join("");
   },
 
   /**
@@ -426,9 +444,10 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
  * Stretchr.TestTransport is a handy Transport alternative that allows you to easily
  * write unit tests for your Stretchr service code.  Simply make a TestTransport object,
  * assign it to the Stretchr.Client that you're using, then override the fakeResponse
- * method to take control of interactions.
  */
-Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, {
+Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, oo.Properties, {
+
+  properties: ["requests"],
 
   /**
    * makeRequest calls fakeResponse to get a test response and handles it in the
@@ -440,6 +459,9 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
    * @memberOf Stretchr.TestTransport.prototype
    */
   makeRequest: function(options) {
+
+    this._requests = this._requests || [];
+    this._requests.push(options);
 
     // event: before
     this.fireWith("before", options, options);
@@ -465,9 +487,9 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
    * @memberOf Stretchr.TestTransport.prototype
    */
   fakeResponse: function(options){
-    return {
-      Stretchr.ResponseKeyStatus: "200"
-    };
+    var r = {};
+    r[Stretchr.ResponseKeyStatus] = 200;
+    return r;
   }
 
 });

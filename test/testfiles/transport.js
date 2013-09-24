@@ -2,21 +2,6 @@ var TestFileValue = 0;
 
 buster.testCase("JSONPTransport", {
 
-  "Transport.url": function(){
-
-    var client = new Stretchr.Client();
-    var t = new Stretchr.Transport(client);
-    t.setHost("monkey.something.com");
-    t.setProtocol("http");
-    t.setAPIVersion(1.1);
-
-    var u = t.url("/people/1?name=Ryan");
-
-    assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
-    assert.equals(t.client(), client);
-
-  },
-
   "JSONPTransport.makeRequest": function(){
 
     var s = new Stretchr.Client();
@@ -26,8 +11,6 @@ buster.testCase("JSONPTransport", {
     };
 
     var eventCallbacks = [];
-
-    assert.equals(t._protocol, "http");
 
     // bind some events
     t.before(function(){

@@ -107,14 +107,26 @@ buster.testCase("Request", {
   read: function(){
 
     var client = new Stretchr.Client("proj", "key");
+    var transport = new Stretchr.TestTransport();
+    client.setTransport(transport);
+
+    transport.fakeResponse = function(options){
+      console.info(options);
+      return {};
+    };
+
     var r = new Stretchr.Request(client, "/people");
 
-    r.read({
+    var options = {
       success: function(){},
       before: function(){},
       after: function(){},
       error: function(){}
-    });
+    };
+    r.read(options);
+
+    var req = transport.requests()[0];
+    assert.equals(req.path, "http://proj.stretchr.com/api/v1.1/people");
 
   }
 

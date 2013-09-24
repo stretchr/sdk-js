@@ -5,6 +5,9 @@ buster.testCase("Client", {
     var s = new Stretchr.Client("proj", "pub");
     assert.equals(s.projectName(), "proj");
     assert.equals(s.apiKey(), "pub");
+    assert.equals(s.host(), "proj.stretchr.com");
+    assert.equals(s.protocol(), "http");
+    assert.equals(s.apiVersion(), "1.1");
 
   },
 
@@ -27,6 +30,21 @@ buster.testCase("Client", {
 
     assert.equals(t.client(), client);
     assert.equals(t.$class, Stretchr.JSONPTransport);
+
+  },
+
+  "url": function(){
+
+    var client = new Stretchr.Client();
+    client.setHost("monkey.something.com");
+    client.setProtocol("http");
+    client.setApiVersion(1.1);
+
+    var u = client.url("/people/1?name=Ryan");
+    assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
+
+    var u = client.url("people/1?name=Ryan");
+    assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
 
   }
 
