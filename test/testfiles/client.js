@@ -13,13 +13,14 @@ buster.testCase("Client", {
 
   "at": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("proj", "ABC123");
     var request = client.at("/path/to/something");
 
     refute.equals(undefined, request, "at() should return a request.")
 
-    assert.equals(client, request.client())
-    assert.equals("/path/to/something", request.path())
+    assert.equals(request.client(), client)
+    assert.equals(request.path(), "/path/to/something")
+    assert.equals(request.params("key"), "ABC123")
 
   },
 

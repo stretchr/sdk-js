@@ -193,7 +193,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   */
   params: function(keyOrObject, value) {
     var v = this._params.data.apply(this._params, arguments);
-    return typeof v === "undefined" ? this : v;
+    return v === Stretchr.Bag.NoValue ? this : v;
   },
 
   /**
@@ -208,7 +208,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   */
   where: function(keyOrObject, value) {
     var v = this._where.data.apply(this._where, arguments);
-    return typeof v === "undefined" ? this : v;
+    return v === Stretchr.Bag.NoValue ? this : v;
   },
 
   /**
@@ -417,7 +417,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
   */
   data: function() {
     var v = this._data.data.apply(this._data, arguments);
-    return typeof v === "undefined" ? this : v;
+    return v === Stretchr.Bag.NoValue ? this : v;
   }
 
 });
@@ -682,6 +682,9 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
     }
 
+    // nothing to return
+    return Stretchr.Bag.NoValue;
+
   },
 
   /**
@@ -702,6 +705,17 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
   }
 
 });
+
+/**
+ * NoValue is a special object that gets returned by the Stretchr.Bag.data method
+ * when no value is expected.  If you are writing a wrapper to the data method
+ * that supports chaining (the data method does not) then you should test for
+ * the return being Stretchr.Bag.NoValue, and if so return the object being
+ * chained.  Otherwise, return the
+ */
+Stretchr.Bag.NoValue = {
+  "Stretchr.Bag.NoValue": true
+};
 
 /**
  * Generates a URL query string representing all the data specified

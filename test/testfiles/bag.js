@@ -133,7 +133,7 @@ buster.testCase("Bag", {
     b.get = function(){ getCalls.push(arguments); return getCalls; }
 
     // set something
-    b.data("name", "Ryon");
+    assert.equals(b.data("name", "Ryon"), Stretchr.Bag.NoValue);
 
     assert.equals(setCalls[0][0], "name", "set should be called")
     assert.equals(setCalls[0][1], "Ryon", "set should be called")
@@ -143,7 +143,7 @@ buster.testCase("Bag", {
 
     // set the whole thing
     var newData = {};
-    b.data(newData);
+    assert.equals(b.data(newData), Stretchr.Bag.NoValue);
     assert.equals(b._data, newData);
 
     // get the whole thing
