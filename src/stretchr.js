@@ -157,6 +157,27 @@ Stretchr.log = function(){
 */
 eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('5 1h=8(){5 k={1u:"1.3.1",10:[],11:{},L:8(c){6(k.11[c]){12 M k.13(c);m G}5 d=8(){6(!4.$14){12 M k.15(c);}4.$14.u(4);4.A.u(4,9)};d.7.A=8(){};d.$U={};d.7.$14=8(){n(5 a p 4.$w.$U){4[a]={};V=4.$w.$U[a].7;n(5 b p V){6(B V[b]==="8"){4[a][b]=V[b].P(4)}}}};5 e=[];n(5 i=1,l=9.o-1;i<l;i++){5 f=9[i];6(f){6(f.$1i){f=f.$1i(d,9)}6(!f)1v;6(f.$1j){d.$U[f.$16]=f;W(f.7,d.7)}y 6(B f=="1w"){W(f,d.7)}6(f.$1k){f.$1k(d,9)}6(f.$X){e.q(f.$X.P(f,d,9))}}y{1l("1x 1m 1y "+f+" 17 1z "+c+" w.")}}6(9.o>1){5 g=9[9.o-1];n(5 h p g){5 j=g[h];6(h.1A(0,1)==="$"){d[h]=j}y{d.7[h]=j}}}d.1n=8(){m"<{ z.L: "+4.$16+" }>"};d.$1j=v;d.7.1B=d.7.$w=d;k.10[k.10.o]=d.$16=c;k.11[c]=d;6(e.o>0){n(5 i p e){e[i]()}}m d}};k.F={$Y:8(c,d){c[d]=(8(){5 b=d;m 8(){6(9.o===1&&B 9[0]=="8"){5 a=[b,9[0]];4.Q.u(4,a)}y{5 a=[b];W(9,a);4.H.u(4,a)}m 4}})()},$X:8(a){a.Q=k.F.Q;a.H=k.F.H;a.Z=k.F.Z;a.18=k.F.18;6(a.7.19){n(5 i p a.7.19){5 b=a.7.19[i];k.F.$Y(a.7,b)}}},Q:8(a,b){4.r=4.r||{};4.r[a]=4.r[a]||[];4.r[a].q(b);m 4},Z:8(a,b){5 c=[];5 d=[a,4];n(5 i=2;i<9.o;i++){c.q(9[i]);d.q(9[i])}6(4.$w&&4.$w.r&&4.$w.r[a]){4.$w.H.u(4.$w,d)}5 e=[];6(4.r&&4.r[a]){e=4.r[a]}6(b&&b[a]){e.q(b[a])}6(e.o>0){n(5 i p e){5 f=e[i];5 g=f.u(4,c);6(g===x){m x}}}},H:8(a){5 b=[a,G];n(5 i=1;i<9.o;i++){b.q(9[i])}m 4.Z.u(4,b)},18:8(a,b){6(4.r&&4.r[a]){n(5 i p 4.r[a]){5 c=4.r[a][i];6(c==b){4.r[a].1C(i,1);m v}}}m x},R:8(a){5 b=9[9.o-1];6(B b!=="8"){12 M k.1a("R","1D 1E 1F 1G 1H 1b 1I 1m 1J.");}5 c=[];n(5 i=1;i<9.o-1;i++){c.q(9[i])}c.1K("1L:"+a);5 d=4.H.u(4,c);6(d===x){m x}d=b();c.q(d);c[0]=a;4.H.u(4,c);m d}};k.C={$X:8(a){6(a.7.I&&B a.7.I.o!="S"){n(5 b p a.7.I){k.C.$D(a.7,a.7.I[b],v,v,G)}}y 6(a.7.I){n(5 b p a.7.I){k.C.$D(a.7,b,v,v,a.7.I[b])}}6(a.7.J&&B a.7.J.o!="S"){n(5 b p a.7.J){k.C.$D(a.7,a.7.J[b],v,x,G)}}y 6(a.7.J){n(5 b p a.7.J){k.C.$D(a.7,b,v,x,a.7.J[b])}}6(a.7.K&&B a.7.K.o!="S"){n(5 b p a.7.K){k.C.$D(a.7,a.7.K[b],x,v,G)}}y 6(a.7.K){n(5 b p a.7.K){k.C.$D(a.7,b,x,v,a.7.K[b])}}},D:8(){5 a=[4];n(5 b p 9){a.q(9[b])}k.C.$D.u(4,a);m 4}};k.C.$D=8(c,d,e,f,g){6(c.Q){6(!c.1c){k.F.$Y(c,"1c")}k.F.$Y(c,d+"1o")}5 h=d;5 i;c.N=c.N||8(a){m"1M"+a};5 j=c.N(d);c.1d=c.1d||8(a,b){6(4.R){4.R("1c",d,4[j],b,8(){4.R(a+"1o",4[j],b,8(){4[4.N(a)]=b}.P(4))}.P(4))}y{4[4.N(a)]=b}m 4};c.1e=c.1e||8(a){m 4[4.N(a)]};c[j]=g||G;6(f!==x){6(f===v){i="1N"+d.1O(0).1P()+d.1Q(1)}y{i=f}c[i]=c[i]||8(a){4.1d(d,a);m 4}}6(e!==x){6(e!==v){h=e}c[h]=c[h]||8(){m 4.1e(d)}}m c};k.E=k.L("z.E",{A:8(a){4.1p=a},1n:8(){m"z.E: \\" + 1p + \\""}});k.13=k.L("z.13",k.E,{A:8(a){4["z.E"].A("1R 1S a w 1T \'"+a+"\' 1U 1V, 1W 1X 1Y w 1Z; e.g. 20."+a)}});k.15=k.L("z.15",k.E,{A:8(a){4["z.E"].A("1q 1r 17 21 a M 22; 23\'t 24 25 1b 26, 27 1b M 28: 5 29 = M "+a+"();")}});k.1a=k.L("z.1a",k.E,{A:8(a,b){4["z.E"].A("1q 1r 17 2a "+a+"; "+b)}});m k};5 1l=8(a){6(1f){6(1f.1s){1f.1s(a)}}};5 W=8(a,b){6(B a.o!=="S"&&B b.o!=="S"){n(5 s p a){b.q(a[s])}}y{n(5 s p a){6(a.2b(s))b[s]=a[s]}}};5 z=1h();5 1t=8(){5 b=9[0]||G,1g=9[1]||4,T=[],i=2,l=9.o,O;n(;i<l;i++){T.q(9[i])}O=8(){5 a=[];5 i=0;n(i=0,l=T.o;i<l;i++){a.q(T[i])}n(i=0,l=9.o;i<l;i++){a.q(9[i])}m b.u(1g,a)};O.2c=b;O.2d=1g;O.2e=T;m O};2f.7.P=8(){5 a=[],i=0,l=9.o;a.q(4);n(;i<l;i++){a.q(9[i])}m 1t.u(2g,a)};',62,141,'||||this|var|if|prototype|function|arguments|||||||||||||return|for|length|in|push|ooevents|||apply|true|class|false|else|oo|init|typeof|Properties|addProperty|Exception|Events|null|fire|properties|getters|setters|Class|new|getPropertyInternalName|bound|bind|on|withEvent|undefined|_args|bases|basePrototype|ooextend|afterClassDefined|addEvent|fireWith|classes|classesmap|throw|DuplicateClassNameException|initialiseBases|IncorrectSyntaxException|className|when|removeCallback|events|IncorrectArgumentsException|the|propertyChanged|setProperty|getProperty|console|_obj|ooreset|beforeInherited|isClass|afterInherited|oowarn|to|toString|Changed|message|Incorrect|syntax|warn|oobind|version|continue|object|Failed|inherit|building|substr|constructor|splice|The|last|argument|must|be|codeblock|execute|unshift|before|_|set|charAt|toUpperCase|slice|Cannot|define|because|already|exists|consider|namespacing|your|names|YourCompany|creating|instance|don|just|call|method|use|keyword|obj|calling|hasOwnProperty|func|context|args|Function|window'.split('|'),0,{}))
 
+/**
+ * @class
+ * Stretchr.Error is the base class for all Stretchr code errors.  These are
+ * distinct from server errors, in that they will require you to change your code
+ * in order to correct the problem.
+ */
+Stretchr.Error = oo.Class("Stretchr.Error", oo.Properties, {
+  getters: ["error"],
+  toString: function(){
+    return "(" + this.$class.name + ") " + this.error();
+  }
+});
+
+Stretchr.ErrorAction = oo.Class("Stretchr.ErrorAction", Stretchr.Error, {
+  init: function(message){
+    this._error = message;
+  }
+});
+
+Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refer to a single resource a collection of resources.");
+
 /** @class
  * Stretchr.Client represents a client that can be used to interact
  * with Stretchr services.
@@ -347,21 +368,41 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     ----------------------------------------------------------------
   */
 
+  /**
+   * Sets the order parameter for the request.
+   * @memberOf Stretchr.Request.prototype
+   */
   order: function(value) {
     this._params.set(Stretchr.ParamOrder, value, true);
     return this;
   },
 
+  /**
+   * Sets the skip parameter for the request which indicates the number of
+   * resources to skip.  It is recommended that you use the page() method instead.
+   * @memberOf Stretchr.Request.prototype
+   */
   skip: function(value) {
     this._params.set(Stretchr.ParamSkip, value, true);
     return this;
   },
 
+  /**
+   * Sets the limit parameter for the request which indicates the number of
+   * resources to return.  It is recommended that you use the page() method instead.
+   * @memberOf Stretchr.Request.prototype
+   */
   limit: function(value) {
     this._params.set(Stretchr.ParamLimit, value, true);
     return this;
   },
 
+  /**
+   * Sets the page of resources to get.
+   * @param {number} page The number page to get (starting at 1)
+   * @param {number} pageSize (optional) The number of items to return per page.  Default: 10.
+   * @memberOf Stretchr.Request.prototype
+   */
   page: function(page, pageSize) {
     pageSize = pageSize || Stretchr.defaultPageSize;
     return this.skip(pageSize*(page-1)).limit(pageSize);
@@ -407,6 +448,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Request.prototype
    */
   replace: function(data, options) {
+
+    if (this.isCollective()) throw Stretchr.ErrorActionCollectiveResource;
+
     this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
     return this;
   },
@@ -417,6 +461,9 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Request.prototype
    */
   update: function(data, options) {
+
+    if (this.isCollective()) throw Stretchr.ErrorActionCollectiveResource;
+
     this.body(data).setMethod(Stretchr.MethodPatch).client().transport().makeRequest(this, options);
     return this;
   },
@@ -667,6 +714,7 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
   /**
    * When overidden in a child class, makes a real request using the specified
    * options.
+   * @memberOf Stretchr.Transport.prototype
    */
   makeRequest: function(request, options){
     throw "Stretchr.Transport.makeRequest: Cannot use abstract Stretchr.Transport class, use a more concrete version instead.  Like Stretchr.JSONPTransport.";
@@ -675,6 +723,7 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 });
 
 /**
+ * @class
  * Stretchr.TestTransport is a handy Transport alternative that allows you to easily
  * write unit tests for your Stretchr service code.  Simply make a TestTransport object,
  * assign it to the Stretchr.Client that you're using, then override the fakeResponse
@@ -954,6 +1003,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
 
   /**
    * Gets a URL query string representing the data in this map.
+   * @memberOf Stretchr.Bag.prototype
    */
   querystring: function(options) {
 

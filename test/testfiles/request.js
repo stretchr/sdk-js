@@ -451,7 +451,7 @@ buster.testCase("Request", {
       return {"~data":response,"~status":201};
     };
 
-    var r = new Stretchr.Request(client, "/people");
+    var r = new Stretchr.Request(client, "/people/1");
 
     var calls = {};
 
@@ -485,7 +485,7 @@ buster.testCase("Request", {
 
   },
 
-  "update": function(){
+  "replace": function(){
 
     var client = new Stretchr.Client("proj", "key");
     var transport = new Stretchr.TestTransport();
@@ -511,7 +511,7 @@ buster.testCase("Request", {
       return {"~data":response,"~status":201};
     };
 
-    var r = new Stretchr.Request(client, "/people");
+    var r = new Stretchr.Request(client, "/people/1");
 
     var calls = {};
 
