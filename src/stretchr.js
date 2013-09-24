@@ -218,6 +218,11 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     return Stretchr.Bag.querystring(this._params, this._where);
   },
 
+  url: function(){
+    var qs = this.querystring();
+    return this.client().url(this.path() + (qs != "" ? "?"+qs : ""))
+  },
+
 
   /*
     Actions
@@ -466,12 +471,12 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
   makeRequest: function(request, options) {
 
     this._requests = this._requests || [];
-    this._requests.push(options);
+    this._requests.push(arguments);
 
     // event: before
     this.fireWith("before", options, request, options);
 
-    var response = this.fakeResponse(options);
+    var response = this.fakeResponse(request, options);
 
     // make the response object
     var responseObject = new Stretchr.Response(this.client(), request, response);
@@ -543,7 +548,7 @@ Stretchr.JSONPTransport = oo.Class("Stretchr.JSONPTransport", Stretchr.Transport
 
     // add the script tag (JSONP)
     var script = document.createElement('script');
-    script.src = options.path;
+    script.src = request.url();
     document.getElementsByTagName('head')[0].appendChild(script);
 
     // save this for test use

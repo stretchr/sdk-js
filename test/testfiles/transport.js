@@ -5,11 +5,13 @@ buster.testCase("JSONPTransport", {
   "JSONPTransport.makeRequest": function(){
 
     var s = new Stretchr.Client();
+
+    // bypass real URL work
+    s.url = function(path) { return path };
+
     var t = new Stretchr.JSONPTransport(s);
-    var r = s.at("people");
-    var options = {
-      path: "testfiles/includes/IncreaseTestFileValueByOne.js"
-    };
+    var r = s.at("testfiles/includes/IncreaseTestFileValueByOne.js");
+    var options = {};
 
     var eventCallbacks = [];
 
@@ -55,10 +57,13 @@ buster.testCase("JSONPTransport", {
   "JSONPTransport.makeRequest errors": function(){
 
     var s = new Stretchr.Client();
+
+    // bypass real URL work
+    s.url = function(path) { return path };
+
     var t = new Stretchr.JSONPTransport(s);
-    var options = {
-      path: "testfiles/includes/IncreaseTestFileValueByOne.js"
-    };
+    var r = s.at("testfiles/includes/IncreaseTestFileValueByOne.js");
+    var options = {};
 
     var eventCallbacks = [];
 
@@ -76,7 +81,7 @@ buster.testCase("JSONPTransport", {
       eventCallbacks.push("success");
     });
 
-    t.makeRequest(null, options);
+    t.makeRequest(r, options);
 
     assert.equals(1, eventCallbacks.length, "before event should get called")
 

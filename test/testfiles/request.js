@@ -82,6 +82,33 @@ buster.testCase("Request", {
     assert.equals(t, r);
   },
 
+  "url": function(){
+
+    var s = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(s, "/path/to/something");
+
+    assert.equals(
+      r.url(),
+      "http://proj.stretchr.com/api/v1.1/path/to/something"
+    );
+
+    r.where({
+      "name": "Ryan",
+      "lives": "Airport"
+    });
+
+    r.params({
+      "total": true,
+      "exclude": "~timestamps"
+    });
+
+    assert.equals(
+      r.url(),
+      "http://proj.stretchr.com/api/v1.1/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
+    );
+
+  },
+
   "querystring": function(){
 
     var s = new Stretchr.Client("proj", "key");
@@ -125,8 +152,7 @@ buster.testCase("Request", {
     };
     r.read(options);
 
-    var req = transport.requests()[0];
-    assert.equals(req.path, "http://proj.stretchr.com/api/v1.1/people");
+    assert.equals(transport.requests()[0][0], r)
 
   }
 
