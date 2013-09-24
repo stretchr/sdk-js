@@ -132,29 +132,60 @@ buster.testCase("Request", {
 
   },
 
-  read: function(){
+  "read": function(){
 
     var client = new Stretchr.Client("proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
-    transport.fakeResponse = function(options){
-      console.info(options);
-      return {};
+    var testData = {
+      "name": "Ryon",
+      "age": 26,
+      "crazy": true
+    };
+
+    transport.fakeResponse = function(request, options){
+      console.info(arguments);
+      var response = {};
+      response[Stretchr.ResponseKeyStatus] = 200;
+      response[Stretchr.ResponseKeyData] = testData;
+      return response;
     };
 
     var r = new Stretchr.Request(client, "/people");
 
+    var calls = {};
+
     var options = {
-      success: function(){},
-      before: function(){},
-      after: function(){},
-      error: function(){}
+      success: function(){
+        calls["success"] = calls["success"] || [];
+        calls["success"].push(arguments);
+      },
+      before: function(){
+        calls["before"] = calls["before"] || [];
+        calls["before"].push(arguments);
+      },
+      after: function(){
+        calls["after"] = calls["after"] || [];
+        calls["after"].push(arguments);
+      },
+      error: function(){
+        calls["error"] = calls["error"] || [];
+        calls["error"].push(arguments);
+      }
     };
     r.read(options);
 
     assert.equals(r.method(), Stretchr.MethodGet);
-    assert.equals(transport.requests()[0][0], r)
+    assert.equals(transport.requests()[0][0], r);
+
+    // success(response)
+    assert.equals(calls["success"].length, 1, "success should get raised");
+    var response = calls["success"][0][0];
+
+    assert.equals(response.data()["name"], testData["name"])
+    assert.equals(response.data()["age"], testData["age"])
+    assert.equals(response.data()["crazy"], testData["crazy"])
 
   }
 

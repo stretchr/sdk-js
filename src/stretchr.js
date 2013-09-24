@@ -495,9 +495,9 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
     var responseObject = new Stretchr.Response(this.client(), request, response);
 
     if (responseObject.success()) {
-      this.success(responseObject);
+      this.fireWith("success", options, responseObject, response, options);
     } else {
-      this.error(responseObject);
+      this.fireWith("error", options, responseObject, response, options);
     }
 
     // event: after
@@ -507,6 +507,8 @@ Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, 
 
   /**
    * Override fakeResponse to provide your own responses to the requests.
+   * If you do not override fakeResponse, it will just return a successful
+   * response with no data and no errors.
    * @memberOf Stretchr.TestTransport.prototype
    */
   fakeResponse: function(options){
