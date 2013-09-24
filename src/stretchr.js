@@ -297,6 +297,36 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   create: function(data, options) {
     this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
     return this;
+  },
+
+  /**
+   * Replaces an entire resource.
+   * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
+   * @memberOf Stretchr.Request.prototype
+   */
+  replace: function(data, options) {
+    this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
+    return this;
+  },
+
+  /**
+   * Updates only some fields of a resource.
+   * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
+   * @memberOf Stretchr.Request.prototype
+   */
+  update: function(data, options) {
+    this.body(data).setMethod(Stretchr.MethodPatch).client().transport().makeRequest(this, options);
+    return this;
+  },
+
+  /**
+   * Removes a resource or many resources.
+   * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
+   * @memberOf Stretchr.Request.prototype
+   */
+  remove: function(options) {
+    this.setMethod(Stretchr.MethodDelete).client().transport().makeRequest(this, options);
+    return this;
   }
 
 });
