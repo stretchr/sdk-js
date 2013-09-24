@@ -66,6 +66,11 @@ buster.testCase("Bag", {
     assert.equals("Ryon", b._data["name"][0]);
     assert.equals("Mat", b._data["name"][1]);
 
+    // use absolute third arg
+    assert.equals(b, b.set("name", "Tyler", true), "set should chain");
+    assert.equals("Tyler", b._data["name"][0]);
+    assert.equals(b._data["name"].length, 1);
+
   },
 
   // set should use _set underneath

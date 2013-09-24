@@ -166,6 +166,38 @@ buster.testCase("Request", {
     assert.equals(t, r);
   },
 
+  "where helpers: order, skip, limit, page etc.": function(){
+
+    var s = new Stretchr.Client("proj", "key");
+    var r = new Stretchr.Request(s, "/path/to/something");
+
+    assert.equals(r.order("~created"), r)
+    assert.equals(r.params(Stretchr.ParamOrder)[0], "~created")
+
+    assert.equals(r.skip(50), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 50)
+
+    assert.equals(r.limit(20), r)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 20)
+
+    assert.equals(r.page(2), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 10)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 10)
+
+    assert.equals(r.page(3), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 20)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 10)
+
+    assert.equals(r.page(2, 20), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 20)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 20)
+
+    assert.equals(r.page(3, 20), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 40)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 20)
+
+  },
+
   "url": function(){
 
     var s = new Stretchr.Client("proj", "key");

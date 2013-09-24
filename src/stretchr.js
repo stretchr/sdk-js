@@ -54,6 +54,8 @@ var Stretchr = {
     * basis. */
   apiVersion: "1.1",
 
+  defaultPageSize: 10,
+
   // _counter is the internal counter for Stretchr JSONP
   // requests.
   _counter: 0,
@@ -63,6 +65,9 @@ var Stretchr = {
   ParamBody: "body",
   ParamAlways200: "always200",
   ParamMethod: "method",
+  ParamOrder: "order",
+  ParamSkip: "skip",
+  ParamLimit: "limit",
 
   PrefixFilterFields: ":",
 
@@ -335,6 +340,31 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   bodystr: function(){
     return JSON.stringify(this._body);
+  },
+
+  /*
+    Parameters
+    ----------------------------------------------------------------
+  */
+
+  order: function(value) {
+    this._params.set(Stretchr.ParamOrder, value, true);
+    return this;
+  },
+
+  skip: function(value) {
+    this._params.set(Stretchr.ParamSkip, value, true);
+    return this;
+  },
+
+  limit: function(value) {
+    this._params.set(Stretchr.ParamLimit, value, true);
+    return this;
+  },
+
+  page: function(page, pageSize) {
+    pageSize = pageSize || Stretchr.defaultPageSize;
+    return this.skip(pageSize*(page-1)).limit(pageSize);
   },
 
   /*
@@ -808,11 +838,14 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    * It is used internally by set.
    * @memberOf Stretchr.Bag.prototype
    */
-  _set: function(key, value) {
+  _set: function(key, value, absolute) {
 
     if (!this._options["valueArrays"]) {
       this._data[key] = value;
     } else {
+
+      if (absolute)
+        delete this._data[key];
 
       if (typeof this._data[key] === "object" && typeof this._data[key].length !== "undefined") {
         // already an array
@@ -833,7 +866,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    * @fires change
    * @memberOf Stretchr.Bag.prototype
    */
-  set: function(key, value) {
+  set: function(key, value, absolute) {
 
     // handle set(bag)
     if (key.$class === Stretchr.Bag) {
@@ -846,7 +879,7 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
     // handle set(key, value)
     this.setDirty(true);
     this.withEvent("change", this._data[key], value, function(){
-      this._set(key, value);
+      this._set(key, value, absolute);
     }.bind(this));
     return this;
   },
