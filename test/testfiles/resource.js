@@ -32,6 +32,25 @@ buster.testCase("Resource", {
     assert.equals(r.data("number"), 26)
     assert.equals(r.data("something"), true)
 
+  },
+
+  "id": function(){
+
+    var data = {
+      "name": "Ryon",
+      "number": 26,
+      "something": true
+    };
+    var client = new Stretchr.Client();
+    var r = new Stretchr.Resource(client, data);
+
+    assert.equals(r.hasId(), false, "hasId()");
+
+    r._data.set("~id", "ABC123");
+
+    assert.equals(r.hasId(), true, "hasId()");
+    assert.equals(r.id(), "ABC123");
+
   }
 
 });

@@ -61,6 +61,8 @@ var Stretchr = {
 
   MethodGet: "GET",
 
+  ResourceKeyId: "~id",
+
   ResponseKeyStatus: "~status",
   ResponseKeyData: "~data",
   ResponseKeyErrors: "~errors",
@@ -330,7 +332,26 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
   * @memberOf Stretchr.Resource.prototype
   */
   data: function() {
-    return this._data.data.apply(this._data, arguments) || this;
+    var v = this._data.data.apply(this._data, arguments);
+    return v === Stretchr.Bag.NoValue ? this : v;
+  },
+
+  /**
+   * Gets whether this resource has an ID or not.
+   * @memberOf Stretchr.Resource.prototype
+   */
+  hasId: function(){
+    return this._data.has(Stretchr.ResourceKeyId);
+  },
+
+  /**
+   * Gets the ID for this resource, or returned undefined if there is
+   * no ID.  You can use hasId() to see if there is an ID for this resource
+   * before calling id() to get it.
+   * @memberOf Stretchr.Resource.prototype
+   */
+  id: function(){
+    return this.data(Stretchr.ResourceKeyId);
   }
 
 });
@@ -652,6 +673,14 @@ Stretchr.Bag = oo.Class("Stretchr.Bag", oo.Events, oo.Properties, {
    */
   get: function(key) {
     return key ? this._data[key] : this._data;
+  },
+
+  /**
+   * Gets whether this bag has a value for the specified key or not.
+   * @memberOf Stretchr.Bag.prototype
+   */
+  has: function(key) {
+    return typeof this._data[key] !== "undefined";
   },
 
   /**

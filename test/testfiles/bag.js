@@ -20,12 +20,14 @@ buster.testCase("Bag", {
 
   },
 
-  "Bag get and set": function(){
+  "Bag get, set and has": function(){
 
     var b = new Stretchr.Bag();
 
     // set key / value
+    assert.equals(b.has("name"), false);
     assert.equals(b, b.set("name", "Ryon"), "set should chain");
+    assert.equals(b.has("name"), true);
     assert.equals("Ryon", b._data["name"]);
 
     // get with param
