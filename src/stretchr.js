@@ -294,6 +294,10 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     return this.client().url(this.path() + (qs != "" ? "?"+qs : ""))
   },
 
+  toString: function(){
+    return this.method() + " " + this.url();
+  },
+
   /**
    * Gets or sets the body for this request.  body() gets the body, body(newBody) sets it.
    * @memberOf Stretchr.Request.prototype

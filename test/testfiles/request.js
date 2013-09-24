@@ -76,6 +76,25 @@ buster.testCase("Request", {
 
   },
 
+  "toString function": function(){
+
+    var client = new Stretchr.Client("proj", "abc");
+    var r = new Stretchr.Request(client, "/path/to/something");
+
+    r.params({
+      "key2": "value2",
+      "key3": "value3"
+    });
+
+    r.where({
+      "name": "Ryan",
+      "lives": "Airport"
+    });
+
+    assert.equals(r.toString(), "GET http://proj.stretchr.com/api/v1.1/path/to/something?key2=value2&key3=value3&%3Aname=Ryan&%3Alives=Airport")
+
+  },
+
   "params": function(){
 
     var s = new Stretchr.Client("proj", "key");
