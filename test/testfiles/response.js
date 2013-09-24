@@ -123,8 +123,10 @@ var responseFixtures = {
 
       assert.equals(resource1.data("name"), "Laurie")
       assert.equals(resource1.data("~id"), "abc1")
+      assert.equals(resource1.id(), "abc1")
       assert.equals(resource2.data("name"), "Simon")
       assert.equals(resource2.data("~id"), "abc2")
+      assert.equals(resource2.id(), "abc2")
 
     }
   ],
