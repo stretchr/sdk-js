@@ -8,6 +8,7 @@ buster.testCase("Request", {
     refute.equals(undefined, r);
     assert.equals(r.client(), s);
     assert.equals(r.path(), "/path/to/something");
+    assert.equals(r.method(), Stretchr.MethodGet);
 
   },
 

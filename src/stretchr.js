@@ -58,6 +58,8 @@ var Stretchr = {
 
   PrefixFilterFields: ":",
 
+  MethodGet: "GET",
+
   ResponseKeyStatus: "~status",
   ResponseKeyData: "~data",
   ResponseKeyErrors: "~errors",
@@ -176,10 +178,14 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
  */
 Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
-  properties: ["client", "path"],
+  properties: ["client", "path", "method"],
 
   init: function(client, path){
-    this.setClient(client).setPath(path);
+    this
+      .setClient(client)
+      .setPath(path)
+      .setMethod(Stretchr.MethodGet)
+    ;
     this._params = new Stretchr.Bag(null, Stretchr.Bag.ParamBagOptions);
     this._where = new Stretchr.Bag(null, Stretchr.merge(Stretchr.Bag.ParamBagOptions, {
       keyPrefix: Stretchr.PrefixFilterFields
