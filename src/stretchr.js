@@ -281,14 +281,26 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return this.sessionStore().get(Stretchr.SessionKeyLoggedIn) == Stretchr.SessionKeyLoggedInYes;
   },
 
+  /**
+   * Gets the URL that the user should be redirected to in order to log in.
+   * @memberOf Stretchr.Client.prototype
+   */
   loginUrl: function(provider) {
     return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + location.href;
   },
 
+  /**
+   * Redirects the browser to the loginUrl() which lets the user log in.
+   * @memberOf Stretchr.Client.prototype
+   */
   login: function(provider) {
     location.href = this.loginUrl(provider);
   },
 
+  /**
+   * Sets the appropriate keys in the sessionStore to log the user in.
+   * @memberOf Stretchr.Client.prototype
+   */
   doLogin: function(authCode, userData) {
 
     // set some stuff in the store
@@ -302,6 +314,10 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
   },
 
+  /**
+   * Logs the user out by removing the necessary keys from the sessionStore.
+   * @memberOf Stretchr.Client.prototype
+   */
   logout: function(){
 
     // clear stuff out
@@ -314,10 +330,18 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return true;
   },
 
+  /**
+   * Gets the auth code of the currently logged in user.
+   * @memberOf Stretchr.Client.prototype
+   */
   authCode: function(){
     return this.sessionStore().get(Stretchr.SessionKeyAuthCode);
   },
 
+  /**
+   * Gets the data for the currently logged in user.
+   * @memberOf Stretchr.Client.prototype
+   */
   userData: function(){
     var v = null;
     try {
