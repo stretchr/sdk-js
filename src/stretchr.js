@@ -190,7 +190,7 @@ Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refe
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport"],
+  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore"],
 
   init: function(projectName, apiKey){
 
@@ -201,6 +201,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setHost(projectName + ".stretchr.com")
       .setProtocol("http")
       .setApiVersion(Stretchr.apiVersion)
+      .setSessionStore(new Stretchr.CookieSessionStore())
     ;
 
   },

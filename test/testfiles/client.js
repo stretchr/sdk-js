@@ -9,6 +9,8 @@ buster.testCase("Client", {
     assert.equals(s.protocol(), "http");
     assert.equals(s.apiVersion(), "1.1");
 
+    assert.equals(s.sessionStore().$class, Stretchr.CookieSessionStore);
+
   },
 
   "at": function(){
