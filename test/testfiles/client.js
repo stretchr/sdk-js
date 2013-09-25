@@ -52,3 +52,58 @@ buster.testCase("Client", {
   }
 
 });
+
+buster.testCase("Client - auth", {
+
+  "isLoggedIn": function(){
+
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client();
+    assert.equals(client.isLoggedIn(), false);
+
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes, 1);
+    assert.equals(client.isLoggedIn(), true);
+
+  },
+
+  "doLogin": function(){
+
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client();
+    assert.equals(client.isLoggedIn(), false);
+    assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+    assert.equals(client.isLoggedIn(), true);
+
+    assert.equals(client.authCode(), "AUTH");
+    assert.equals(client.userData()["name"], "Ryon");
+
+  },
+
+  "logout": function(){
+
+    var client = new Stretchr.Client();
+    assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+
+    assert.equals(client.logout(), true);
+    assert.equals(client.isLoggedIn(), false);
+    assert.equals(client.authCode(), "");
+    assert.equals(client.userData(), null);
+
+  },
+
+  "request when logged in should add auth": function(){
+
+    var client = new Stretchr.Client();
+    client.doLogin("AUTHCODE123", {name: "Ryon"});
+
+    var request = client.at("something");
+
+    assert.equals(request.params("auth")[0], "AUTHCODE123");
+
+  }
+
+});

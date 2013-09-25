@@ -68,6 +68,7 @@ var Stretchr = {
   ParamOrder: "order",
   ParamSkip: "skip",
   ParamLimit: "limit",
+  ParamAuth: "auth",
 
   PrefixFilterFields: ":",
 
@@ -91,7 +92,13 @@ var Stretchr = {
   ResponseKeyChangeInfoCreated: "~created",
   ResponseKeyChangeInfoUpdated: "~updated",
   ResponseKeyChangeInfoDeleted: "~deleted",
-  ResponseKeyChangeInfoDeltas: "~deltas"
+  ResponseKeyChangeInfoDeltas: "~deltas",
+
+  SessionKeyLoggedIn: "loggedIn",
+  SessionKeyLoggedInYes: "YES",
+  SessionKeyLoggedInNo: "NO",
+  SessionKeyAuthCode: "auth",
+  SessionKeyUserData: "userdata"
 
 };
 
@@ -213,8 +220,18 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
   */
   at: function(path) {
     var r = new Stretchr.Request(this, path);
+
+    // setup default parameters
     var params = {};
+
+    // API key
     params[Stretchr.ParamKey] = this.apiKey();
+
+    // auth
+    if (this.isLoggedIn()) {
+      params[Stretchr.ParamAuth] = this.authCode();
+    }
+
     return r.params(params);
   },
 
@@ -234,6 +251,11 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
   },
 
+  /*
+    Auth
+    --------------------------------------------------------------------------------
+  */
+
   /**
    * Loads a list of supported auth providers from Stretchr.
    *
@@ -249,6 +271,51 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     };
 
     this.at("~info/authproviders").read(options);
+  },
+
+  /**
+   * Gets whether there is a user logged in or not.
+   * @memberOf Stretchr.Client.prototype
+   */
+  isLoggedIn: function(options) {
+    return this.sessionStore().get(Stretchr.SessionKeyLoggedIn) == Stretchr.SessionKeyLoggedInYes;
+  },
+
+  doLogin: function(authCode, userData) {
+
+    // set some stuff in the store
+    this.sessionStore()
+      .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes)
+      .set(Stretchr.SessionKeyAuthCode, authCode)
+      .set(Stretchr.SessionKeyUserData, JSON.stringify(userData))
+    ;
+
+    return true;
+
+  },
+
+  logout: function(){
+
+    // clear stuff out
+    this.sessionStore()
+      .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo)
+      .set(Stretchr.SessionKeyAuthCode, "")
+      .set(Stretchr.SessionKeyUserData, "")
+    ;
+
+    return true;
+  },
+
+  authCode: function(){
+    return this.sessionStore().get(Stretchr.SessionKeyAuthCode);
+  },
+
+  userData: function(){
+    var v = null;
+    try {
+      eval("v = " + this.sessionStore().get(Stretchr.SessionKeyUserData));
+    } catch(e){}
+    return v;
   }
 
 });
@@ -1155,7 +1222,7 @@ Stretchr.Bag.ParamBagOptions = {
  */
 Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, oo.Properties, {
 
-  events: ["success", "error"],
+  events: ["change"],
   properties: ["expiryDays"],
 
   init: function(expiryDays){
@@ -1172,7 +1239,7 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
     Stretchr.setCookie(key, value, this.expiryDays());
 
     // raise the success event
-    this.fireWith("success", options, key, value);
+    this.fireWith("change", options, key, value);
 
     // chain
     return this;
@@ -1180,18 +1247,11 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
   },
 
   /**
-   * Gets a value from the store.  The value will not be returned by this method,
-   * instead, the `success` event will be raised containing the value.  This pattern
-   * exists so that stores can be asynchronous.
-   *
-   * Returns this for chaining.
+   * Gets a value from the store.
    * @memberOf Stretchr.CookieSessionStore.prototype
    */
   get: function(key, options) {
-    var value = Stretchr.cookie(key);
-    this.fireWith("success", options, key, value);
-    // chain
-    return this;
+    return Stretchr.cookie(key);
   }
 
 });
