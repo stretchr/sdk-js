@@ -207,6 +207,10 @@ buster.testCase("Request", {
       r.url(),
       "http://proj.stretchr.com/api/v1.1/path/to/something"
     );
+    assert.equals(
+      r.rooturl(),
+      "http://proj.stretchr.com/api/v1.1/path/to/something"
+    );
 
     r.where({
       "name": "Ryan",
@@ -221,6 +225,10 @@ buster.testCase("Request", {
     assert.equals(
       r.url(),
       "http://proj.stretchr.com/api/v1.1/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
+    );
+    assert.equals(
+      r.rooturl(),
+      "http://proj.stretchr.com/api/v1.1/path/to/something"
     );
 
   },

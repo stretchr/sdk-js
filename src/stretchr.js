@@ -68,6 +68,7 @@ var Stretchr = {
   ParamOrder: "order",
   ParamSkip: "skip",
   ParamLimit: "limit",
+  ParamAuth: "auth",
 
   PrefixFilterFields: ":",
 
@@ -91,7 +92,13 @@ var Stretchr = {
   ResponseKeyChangeInfoCreated: "~created",
   ResponseKeyChangeInfoUpdated: "~updated",
   ResponseKeyChangeInfoDeleted: "~deleted",
-  ResponseKeyChangeInfoDeltas: "~deltas"
+  ResponseKeyChangeInfoDeltas: "~deltas",
+
+  SessionKeyLoggedIn: "loggedIn",
+  SessionKeyLoggedInYes: "YES",
+  SessionKeyLoggedInNo: "NO",
+  SessionKeyAuthCode: "auth",
+  SessionKeyUserData: "userdata"
 
 };
 
@@ -190,7 +197,7 @@ Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refe
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport"],
+  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore"],
 
   init: function(projectName, apiKey){
 
@@ -201,6 +208,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setHost(projectName + ".stretchr.com")
       .setProtocol("http")
       .setApiVersion(Stretchr.apiVersion)
+      .setSessionStore(new Stretchr.CookieSessionStore())
     ;
 
   },
@@ -212,8 +220,18 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
   */
   at: function(path) {
     var r = new Stretchr.Request(this, path);
+
+    // setup default parameters
     var params = {};
+
+    // API key
     params[Stretchr.ParamKey] = this.apiKey();
+
+    // auth
+    if (this.isLoggedIn()) {
+      params[Stretchr.ParamAuth] = this.authCode();
+    }
+
     return r.params(params);
   },
 
@@ -232,6 +250,105 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return [this.protocol(), "://", this.host(), "/api/v", this.apiVersion(), path].join("");
 
   },
+
+  /*
+    Auth
+    --------------------------------------------------------------------------------
+  */
+
+  /**
+   * Loads a list of supported auth providers from Stretchr.
+   *
+   * On success, will raise the `success` event with a Stretchr.ResourceCollection
+   * containing the providers.
+   * @memberOf Stretchr.Client.prototype
+   */
+  loadAuthProviders: function(options) {
+
+    var $success = options.success;
+    options.success = function(response){
+      if ($success) $success.apply(options, arguments);
+    };
+
+    this.at("~info/authproviders").read(options);
+  },
+
+  /**
+   * Gets whether there is a user logged in or not.
+   * @memberOf Stretchr.Client.prototype
+   */
+  isLoggedIn: function(options) {
+    return this.sessionStore().get(Stretchr.SessionKeyLoggedIn) == Stretchr.SessionKeyLoggedInYes;
+  },
+
+  /**
+   * Gets the URL that the user should be redirected to in order to log in.
+   * @memberOf Stretchr.Client.prototype
+   */
+  loginUrl: function(provider) {
+    return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + location.href;
+  },
+
+  /**
+   * Redirects the browser to the loginUrl() which lets the user log in.
+   * @memberOf Stretchr.Client.prototype
+   */
+  login: function(provider) {
+    location.href = this.loginUrl(provider);
+  },
+
+  /**
+   * Sets the appropriate keys in the sessionStore to log the user in.
+   * @memberOf Stretchr.Client.prototype
+   */
+  doLogin: function(authCode, userData) {
+
+    // set some stuff in the store
+    this.sessionStore()
+      .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes)
+      .set(Stretchr.SessionKeyAuthCode, authCode)
+      .set(Stretchr.SessionKeyUserData, JSON.stringify(userData))
+    ;
+
+    return true;
+
+  },
+
+  /**
+   * Logs the user out by removing the necessary keys from the sessionStore.
+   * @memberOf Stretchr.Client.prototype
+   */
+  logout: function(){
+
+    // clear stuff out
+    this.sessionStore()
+      .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo)
+      .set(Stretchr.SessionKeyAuthCode, "")
+      .set(Stretchr.SessionKeyUserData, "")
+    ;
+
+    return true;
+  },
+
+  /**
+   * Gets the auth code of the currently logged in user.
+   * @memberOf Stretchr.Client.prototype
+   */
+  authCode: function(){
+    return this.sessionStore().get(Stretchr.SessionKeyAuthCode);
+  },
+
+  /**
+   * Gets the data for the currently logged in user.
+   * @memberOf Stretchr.Client.prototype
+   */
+  userData: function(){
+    var v = null;
+    try {
+      eval("v = " + this.sessionStore().get(Stretchr.SessionKeyUserData));
+    } catch(e){}
+    return v;
+  }
 
 });
 
@@ -317,7 +434,11 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   url: function(){
     var qs = this.querystring();
-    return this.client().url(this.path() + (qs != "" ? "?"+qs : ""))
+    return this.rooturl() + (qs != "" ? "?"+qs : "");
+  },
+
+  rooturl: function(){
+    return this.client().url(this.path());
   },
 
   toString: function(){
@@ -1128,4 +1249,84 @@ Stretchr.Bag.querystring = function(){
  */
 Stretchr.Bag.ParamBagOptions = {
   valueArrays: true
+};
+
+/**
+ * @class
+ * CookieSessionStore represents a storage backed by the browsers cookies and is the default
+ * implementation used by cookies.
+ */
+Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, oo.Properties, {
+
+  events: ["change"],
+  properties: ["expiryDays"],
+
+  init: function(expiryDays){
+    this._expiryDays = typeof(expiryDays) !== "undefined" ? expiryDays : 28;
+  },
+
+  /**
+   * Sets a value in the store.  Returns this for chaining.
+   * @memberOf Stretchr.CookieSessionStore.prototype
+   */
+  set: function(key, value, options) {
+
+    // set the cookie value
+    Stretchr.setCookie(key, value, this.expiryDays());
+
+    // raise the success event
+    this.fireWith("change", options, key, value);
+
+    // chain
+    return this;
+
+  },
+
+  /**
+   * Gets a value from the store.
+   * @memberOf Stretchr.CookieSessionStore.prototype
+   */
+  get: function(key, options) {
+    return Stretchr.cookie(key);
+  }
+
+});
+
+/**
+ * Gets the value of a cookie.
+ */
+Stretchr.cookie = function(c_name)
+{
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1)
+    {
+    c_start = c_value.indexOf(c_name + "=");
+    }
+  if (c_start == -1)
+    {
+    c_value = null;
+    }
+  else
+    {
+    c_start = c_value.indexOf("=", c_start) + 1;
+    var c_end = c_value.indexOf(";", c_start);
+    if (c_end == -1)
+    {
+  c_end = c_value.length;
+  }
+  c_value = unescape(c_value.substring(c_start,c_end));
+  }
+  return c_value;
+};
+
+/**
+ * Sets the value of a cookie.
+ */
+Stretchr.setCookie = function(c_name,value,exdays)
+{
+  var exdate=new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+  document.cookie=c_name + "=" + c_value;
 };

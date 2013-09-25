@@ -9,6 +9,8 @@ buster.testCase("Client", {
     assert.equals(s.protocol(), "http");
     assert.equals(s.apiVersion(), "1.1");
 
+    assert.equals(s.sessionStore().$class, Stretchr.CookieSessionStore);
+
   },
 
   "at": function(){
@@ -46,6 +48,69 @@ buster.testCase("Client", {
 
     var u = client.url("people/1?name=Ryan");
     assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
+
+  }
+
+});
+
+buster.testCase("Client - auth", {
+
+  "isLoggedIn": function(){
+
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client();
+    assert.equals(client.isLoggedIn(), false);
+
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes, 1);
+    assert.equals(client.isLoggedIn(), true);
+
+  },
+
+  "loginUrl": function(){
+
+    var client = new Stretchr.Client("proj", "api-key");
+
+    assert.equals(client.loginUrl("google").split("=")[0], "http://proj.stretchr.com/api/v1.1/~auth/google/login?after")
+
+  },
+
+  "doLogin": function(){
+
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client();
+    assert.equals(client.isLoggedIn(), false);
+    assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+    assert.equals(client.isLoggedIn(), true);
+
+    assert.equals(client.authCode(), "AUTH");
+    assert.equals(client.userData()["name"], "Ryon");
+
+  },
+
+  "logout": function(){
+
+    var client = new Stretchr.Client();
+    assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+
+    assert.equals(client.logout(), true);
+    assert.equals(client.isLoggedIn(), false);
+    assert.equals(client.authCode(), "");
+    assert.equals(client.userData(), null);
+
+  },
+
+  "request when logged in should add auth": function(){
+
+    var client = new Stretchr.Client();
+    client.doLogin("AUTHCODE123", {name: "Ryon"});
+
+    var request = client.at("something");
+
+    assert.equals(request.params("auth")[0], "AUTHCODE123");
 
   }
 
