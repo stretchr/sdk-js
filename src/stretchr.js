@@ -1146,3 +1146,90 @@ Stretchr.Bag.querystring = function(){
 Stretchr.Bag.ParamBagOptions = {
   valueArrays: true
 };
+
+/**
+ * @class
+ * CookieSessionStore represents a storage backed by the browsers cookies and is the default
+ * implementation used by cookies.
+ */
+Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, oo.Properties, {
+
+  events: ["success", "error"],
+  properties: ["expiryDays"],
+
+  init: function(expiryDays){
+    this._expiryDays = typeof(expiryDays) !== "undefined" ? expiryDays : 28;
+  },
+
+  /**
+   * Sets a value in the store.  Returns this for chaining.
+   * @memberOf Stretchr.CookieSessionStore.prototype
+   */
+  set: function(key, value, options) {
+
+    // set the cookie value
+    Stretchr.setCookie(key, value, this.expiryDays());
+
+    // raise the success event
+    this.fireWith("success", options, key, value);
+
+    // chain
+    return this;
+
+  },
+
+  /**
+   * Gets a value from the store.  The value will not be returned by this method,
+   * instead, the `success` event will be raised containing the value.  This pattern
+   * exists so that stores can be asynchronous.
+   *
+   * Returns this for chaining.
+   * @memberOf Stretchr.CookieSessionStore.prototype
+   */
+  get: function(key, options) {
+    var value = Stretchr.cookie(key);
+    this.fireWith("success", options, key, value);
+    // chain
+    return this;
+  }
+
+});
+
+/**
+ * Gets the value of a cookie.
+ */
+Stretchr.cookie = function(c_name)
+{
+  var c_value = document.cookie;
+  var c_start = c_value.indexOf(" " + c_name + "=");
+  if (c_start == -1)
+    {
+    c_start = c_value.indexOf(c_name + "=");
+    }
+  if (c_start == -1)
+    {
+    c_value = null;
+    }
+  else
+    {
+    c_start = c_value.indexOf("=", c_start) + 1;
+    var c_end = c_value.indexOf(";", c_start);
+    if (c_end == -1)
+    {
+  c_end = c_value.length;
+  }
+  c_value = unescape(c_value.substring(c_start,c_end));
+  }
+  return c_value;
+};
+
+/**
+ * Sets the value of a cookie.
+ */
+Stretchr.setCookie = function(c_name,value,exdays)
+{
+  var exdate=new Date();
+  exdate.setDate(exdate.getDate() + exdays);
+  var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+  document.cookie=c_name + "=" + c_value;
+};
