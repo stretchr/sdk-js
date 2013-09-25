@@ -29,10 +29,10 @@ buster.testCase("AuthService", {
     });
 
     assert.equals(calls["success"].length, 1);
-    assert.equals(calls["success"][0][0].items()[0].data("name"), "github")
-    assert.equals(calls["success"][0][0].items()[0].data("loginpath"), "~auth/github/login")
-    assert.equals(calls["success"][0][0].items()[1].data("name"), "google")
-    assert.equals(calls["success"][0][0].items()[1].data("loginpath"), "~auth/google/login")
+    assert.equals(calls["success"][0][0].resources().items()[0].data("name"), "github")
+    assert.equals(calls["success"][0][0].resources().items()[0].data("loginpath"), "~auth/github/login")
+    assert.equals(calls["success"][0][0].resources().items()[1].data("name"), "google")
+    assert.equals(calls["success"][0][0].resources().items()[1].data("loginpath"), "~auth/google/login")
 
   }
 

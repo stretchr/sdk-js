@@ -244,10 +244,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
     var $success = options.success;
     options.success = function(response){
-
-      var items = response.resources();
-      if ($success) $success(items, response);
-
+      if ($success) $success.apply(options, arguments);
     };
 
     this.at("~info/authproviders").read(options);
