@@ -281,6 +281,14 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return this.sessionStore().get(Stretchr.SessionKeyLoggedIn) == Stretchr.SessionKeyLoggedInYes;
   },
 
+  loginUrl: function(provider) {
+    return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + location.href;
+  },
+
+  login: function(provider) {
+    location.href = this.loginUrl(provider);
+  },
+
   doLogin: function(authCode, userData) {
 
     // set some stuff in the store
@@ -402,7 +410,11 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
    */
   url: function(){
     var qs = this.querystring();
-    return this.client().url(this.path() + (qs != "" ? "?"+qs : ""))
+    return this.rooturl() + (qs != "" ? "?"+qs : "");
+  },
+
+  rooturl: function(){
+    return this.client().url(this.path());
   },
 
   toString: function(){

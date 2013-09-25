@@ -68,6 +68,14 @@ buster.testCase("Client - auth", {
 
   },
 
+  "loginUrl": function(){
+
+    var client = new Stretchr.Client("proj", "api-key");
+
+    assert.equals(client.loginUrl("google").split("=")[0], "http://proj.stretchr.com/api/v1.1/~auth/google/login?after")
+
+  },
+
   "doLogin": function(){
 
     // log them out
