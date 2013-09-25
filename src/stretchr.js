@@ -233,6 +233,26 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
   },
 
+  /**
+   * Loads a list of supported auth providers from Stretchr.
+   *
+   * On success, will raise the `success` event with a Stretchr.ResourceCollection
+   * containing the providers.
+   * @memberOf Stretchr.Client.prototype
+   */
+  loadAuthProviders: function(options) {
+
+    var $success = options.success;
+    options.success = function(response){
+
+      var items = response.resources();
+      if ($success) $success(items, response);
+
+    };
+
+    this.at("~info/authproviders").read(options);
+  }
+
 });
 
 /** @class
