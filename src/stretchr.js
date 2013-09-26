@@ -123,10 +123,10 @@ Stretchr.merge = function(){
   return o;
 };
 
-/**
+/*
  * Builds an options map from the specified parameters.  If you pass an object,
- * it will be returned untouched.  If you pass one or two functions, they will be
- * interpreted as success and error functions respectively.
+ * it will be returned untouched.  If you pass a function it will be set to the
+ * 'after' field on a new object.
  */
 Stretchr.fixoptions = function(){
   if (typeof arguments[0] === "object") {
@@ -491,6 +491,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Sets the order parameter for the request.
+   * @param {string} value The field(s) to order by.
    * @memberOf Stretchr.Request.prototype
    */
   order: function(value) {
@@ -501,6 +502,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   /**
    * Sets the skip parameter for the request which indicates the number of
    * resources to skip.  It is recommended that you use the page() method instead.
+   * @param {number} value The number of resources to skip.
    * @memberOf Stretchr.Request.prototype
    */
   skip: function(value) {
@@ -511,6 +513,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   /**
    * Sets the limit parameter for the request which indicates the number of
    * resources to return.  It is recommended that you use the page() method instead.
+   * @param {number} value The number of resources to return.
    * @memberOf Stretchr.Request.prototype
    */
   limit: function(value) {
@@ -536,6 +539,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Performs a read request.
+   * @param {object} options The options to use when making the request.
    * @memberOf Stretchr.Request.prototype
    */
   read: function(options){
@@ -545,6 +549,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Creates the specified resource.
+   * @param {object} options The options to use when making the request.
    * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
    * @memberOf Stretchr.Request.prototype
    */
@@ -565,6 +570,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Replaces an entire resource.
+   * @param {object} options The options to use when making the request.
    * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
    * @memberOf Stretchr.Request.prototype
    */
@@ -578,6 +584,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Updates only some fields of a resource.
+   * @param {object} options The options to use when making the request.
    * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
    * @memberOf Stretchr.Request.prototype
    */
@@ -591,6 +598,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
   /**
    * Removes a resource or many resources.
+   * @param {object} options The options to use when making the request.
    * @param {object|Stretchr.Resource} data Either a POJO of the data to create, or an existing Stretchr.Resource.
    * @memberOf Stretchr.Request.prototype
    */
@@ -723,6 +731,7 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
 
   /**
    * Saves the changes to this resource.
+   * @param {object} options The options to use when saving this resource.
    * @memberOf Stretchr.Resource.prototype
    */
   save: function(options){
@@ -911,6 +920,8 @@ Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
  * Stretchr.TestTransport is a handy Transport alternative that allows you to easily
  * write unit tests for your Stretchr service code.  Simply make a TestTransport object,
  * assign it to the Stretchr.Client that you're using, then override the fakeResponse
+ * method.  See the test/testfiles/request.js test files for examples on how to do this.
+ * (find "transport.fakeResponse" in the code)
  */
 Stretchr.TestTransport = oo.Class("Stretchr.TestTransport", Stretchr.Transport, oo.Properties, {
 
@@ -1254,7 +1265,7 @@ Stretchr.Bag.ParamBagOptions = {
 /**
  * @class
  * CookieSessionStore represents a storage backed by the browsers cookies and is the default
- * implementation used by cookies.
+ * implementation used by clients.
  */
 Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, oo.Properties, {
 
@@ -1267,6 +1278,9 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
 
   /**
    * Sets a value in the store.  Returns this for chaining.
+   * @param {string} key The key to set.
+   * @param {string} value The value to set.
+   * @param {object} options The options to use when saving.
    * @memberOf Stretchr.CookieSessionStore.prototype
    */
   set: function(key, value, options) {
@@ -1284,6 +1298,8 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
 
   /**
    * Gets a value from the store.
+   * @param {string} key The key to get.
+   * @param {object} options The options to use when saving.
    * @memberOf Stretchr.CookieSessionStore.prototype
    */
   get: function(key, options) {
