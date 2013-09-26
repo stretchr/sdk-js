@@ -64,7 +64,9 @@ To read a resource, use the `read` method and then in the callback handler, use 
         var resource = response.resource();
 
       } else {
+
         // boo
+
       }
 
     });
