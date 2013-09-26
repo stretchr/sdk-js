@@ -73,6 +73,12 @@ To read a resource, use the `read` method and then in the callback handler, use 
 
 If your request results in many resources, you can use the `resources()` method to get a `Stretchr.ResourceCollection` object.
 
+#### Filtering, ordering and paging
+
+The `Stretchr.Request` object gives you handy methods to control detials about the collection of resources you get back.
+
+    stretchr.at("people").order("name").where("age", ">30").page(1, 10)
+
 ## Developers
 
 #### Generate documentation
