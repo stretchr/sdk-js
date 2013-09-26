@@ -51,15 +51,27 @@ All actions (and some other methods) take an `options` object that allows you to
       }
     }
 
+Usually, passing a single function argument in place of an `options` object will cause the function to be considered a callback for the `after` event.
+
 ### Reading resources
 
-To read a resource, use the `read` method:
+To read a resource, use the `read` method and then in the callback handler, use the `resource()` method on the `Stretchr.Response` to get the resource.
 
-    stretchr.at("people/1/books").read({
-      success: function(response){
-        /*... handle the successful response here ...*/
+    stretchr.at("people/1/books/1").read(function(response){
+
+      if (response.success()) {
+
+        var resource = response.resource();
+
+      } else {
+        // boo
       }
+
     });
+
+#### Reading many resources
+
+If your request results in many resources, you can use the `resources()` method to get a `Stretchr.ResourceCollection` object.
 
 ## Developers
 
