@@ -310,6 +310,8 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .set(Stretchr.SessionKeyUserRef, userRef)
     ;
 
+    this.fire("login:success");
+
     return true;
 
   },
