@@ -112,6 +112,17 @@ buster.testCase("Client - auth", {
 
     assert.equals(request.params("auth")[0], "AUTHCODE123");
 
+  },
+
+  "check params for auth/user values": function() {
+    //change the url without reloading page...will break in older browsers and IE below v10
+    //only for testing
+    window.history.pushState(null, null, window.location.pathname + "?auth=ryon");
+    var client = new Stretchr.Client(),
+      spy = this.spy(client, "doLogin");
+    assert.equals("?auth=ryon", location.search);
+    assert.called(spy);
+    //TODO : why aren't we passing in a user's url to doLogin and letting it load the users data for us?
   }
 
 });
