@@ -200,7 +200,7 @@ Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refe
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore"],
+  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore", "location"],
 
   init: function(projectName, apiKey){
 
@@ -212,24 +212,10 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setProtocol("http")
       .setApiVersion(Stretchr.apiVersion)
       .setSessionStore(new Stretchr.CookieSessionStore())
+      .setLocation(new Stretchr.Location())
     ;
 
-    //urlParams are captures so that we can determine if a user has logged in or not
-    this._urlParams = new Stretchr.Bag();
-    //TODO : replace this with param.js when done
-    if(window.location.search) {
-      var search = window.location.search.replace("?", "").split("&"),
-        params = {};
-      for (element in search) {
-        var temp = search[element].split("=");
-        params[temp[0]] = temp[1];
-      }
-      this._urlParams.data(params);
-    }
-
-    if(this._urlParams.get(Stretchr.UrlParamAuthKey)) {
-      this.doLogin(this._urlParams.get(Stretchr.UrlParamAuthKey), this._urlParams.get(Stretchr.UrlParamAuthUser), {noEvents: true});
-    }
+    this.checkParams();
   },
 
   /**
@@ -367,6 +353,17 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    */
   userRef: function() {
     return this.sessionStore().get(Stretchr.SessionKeyUserRef);
+  },
+
+  /**
+   * Lets you check the current url for the required params for auth
+   */
+  checkParams: function() {
+    if(this.location().param(Stretchr.UrlParamAuthKey)) {
+      this.doLogin(this.location().param(Stretchr.UrlParamAuthKey), this.location().param(Stretchr.UrlParamAuthUser), {noEvents: true});
+      this.location().redirect(window.location.pathname);
+      console.log(this.location());
+    }
   }
 
 });
@@ -1365,3 +1362,88 @@ Stretchr.setCookie = function(c_name,value,exdays)
   var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
   document.cookie=c_name + "=" + c_value;
 };
+
+/*
+  arg.js
+  JavaScript URL argument processing once and for all.
+
+  by Mat Ryer and Ryan Quinn
+  Copyright (c) 2013 Stretchr, Inc.
+
+  Please consider promoting this project if you find it useful.
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy of this
+  software and associated documentation files (the "Software"), to deal in the Software
+  without restriction, including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons
+  to whom the Software is furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all copies
+  or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+  INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+  PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+  FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+  OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+  DEALINGS IN THE SOFTWARE.
+*/
+var ArgReset=function(){Arg={};Arg.parse=function(e){if(!e)return{};var t={};var n=e.split("&");for(var r in n){var i=n[r].split("=");var s=decodeURIComponent(i[0]),o=decodeURIComponent(i[1]);Arg._access(t,s,true,true,o)}return t};Arg._access=function(e,t,n,r,i){var s=t.indexOf(".");if(s>-1){thisSel=t.substr(0,s);var o=t.substr(s+1)}else{if(r)e[t]=i;return e[t]}if(thisSel.indexOf("[")>-1){var u=thisSel.substr(0,thisSel.indexOf("["));var a=thisSel.split("[")[1];var f=parseInt(a.substr(0,a.length-1));e=e[u]=e[u]||[];e=e[f]=e[f]||{}}else{if(!e[thisSel]){e[thisSel]={}}e=e[thisSel]||{}}return Arg._access(e,o,n,r,i)};Arg.stringify=function(e){var t=[];for(var n in e){var r=e[n];t.push(encodeURIComponent(n)+"="+encodeURIComponent(r))}return this._s=t.join("&")};Arg.all=function(){return Arg._all?Arg._all:Arg._all=Arg.merge(Arg.query(),Arg.hash())};Arg.query=function(){return Arg._query?Arg._query:Arg._query=Arg.parse(Arg.querystring())};Arg.hash=function(){return Arg._hash?Arg._hash:Arg._hash=Arg.parse(Arg.hashstring())};Arg.querystring=function(){return Arg._cleanParamStr(location.search)};Arg.hashstring=function(){return Arg._cleanParamStr(location.hash)};Arg._cleanParamStr=function(e){while(e.indexOf("#")==0||e.indexOf("?")==0){e=e.substr(1)}return e};Arg._ensureDeep=function(e,t){var n=t.split(".");var r=e;for(var i in n){var s=n[i];r=r[s]=r[s]||{}}};Arg.merge=function(){var e={};for(var t in arguments)for(var n in arguments[t])e[n]=arguments[t][n];return e};return Arg};var Arg=ArgReset()
+
+/**
+ * Lets you manage the location of the window
+*/
+Stretchr.Location = oo.Class("Stretchr.Location", oo.Properties, {
+  /**
+   * Lets you grab any param from the url
+   */
+  param: function(name) {
+    return Arg.parse(window.location.search.replace("?", ""))[name];
+  },
+
+  /**
+   * Redirects the window
+   * Abstracted out to make testing possible
+   */
+  redirect: function(url) {
+    window.location.href = url;
+  }
+});
+
+/**
+ * Test Location
+ * Allows you to perform tests with params and redirects
+ */
+Stretchr.TestLocation = oo.Class("Stretchr.TestLocation", {
+  init: function() {
+    this._params = {};
+    this._history = [];
+  },
+
+  /**
+   * Lets you set params
+   */
+  setParam: function(name, value) {
+    this._params[name] = value;
+  },
+
+  /**
+   * Lets you grab any param from the url
+   */
+  param: function(name) {
+    return this._params[name];
+  },
+
+  /**
+   * Redirects the window
+   * Abstracted out to make testing possible
+   */
+  redirect: function(url) {
+    this._history.push(url);
+  },
+
+  history: function() {
+    return this._history;
+  }
+});
+
