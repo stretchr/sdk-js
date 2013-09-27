@@ -97,7 +97,7 @@ buster.testCase("Client - auth", {
     assert.equals(client.logout(), true);
     assert.equals(client.isLoggedIn(), false);
     assert.equals(client.authCode(), "");
-    assert.equals(client.userData(), null);
+    assert.equals(client.userRef(), "");
 
   },
 

@@ -324,7 +324,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     this.sessionStore()
       .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo)
       .set(Stretchr.SessionKeyAuthCode, "")
-      .set(Stretchr.SessionKeyUserData, "")
+      .set(Stretchr.SessionKeyUserRef, "")
     ;
 
     return true;
@@ -344,18 +344,6 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    */
   userRef: function() {
     return this.sessionStore().get(Stretchr.SessionKeyUserRef);
-  },
-
-  /**
-   * Gets the data for the currently logged in user.
-   * @memberOf Stretchr.Client.prototype
-   */
-  userData: function(){
-    var v = null;
-    try {
-      eval("v = " + this.sessionStore().get(Stretchr.SessionKeyUserData));
-    } catch(e){}
-    return v;
   }
 
 });
