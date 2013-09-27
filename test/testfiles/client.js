@@ -76,6 +76,14 @@ buster.testCase("Client - auth", {
 
   },
 
+  "login" : function() {
+    var client = new Stretchr.Client();
+    client.setLocation(new Stretchr.TestLocation());
+    client.login("method");
+
+    assert.defined(client.location().history()[0]);
+  },
+
   "doLogin": function() {
     // log them out
     Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);

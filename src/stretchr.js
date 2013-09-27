@@ -299,7 +299,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Client.prototype
    */
   login: function(provider) {
-    location.href = this.loginUrl(provider);
+    this.location().redirect(this.loginUrl(provider));
   },
 
   /**
