@@ -76,19 +76,17 @@ buster.testCase("Client - auth", {
 
   },
 
-  "doLogin": function(){
-
+  "doLogin revised": function() {
     // log them out
     Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
     var client = new Stretchr.Client();
     assert.equals(client.isLoggedIn(), false);
-    assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+    assert.equals(client.doLogin("AUTH", "/users/ryon"), true);
     assert.equals(client.isLoggedIn(), true);
 
     assert.equals(client.authCode(), "AUTH");
-    assert.equals(client.userData()["name"], "Ryon");
-
+    assert.equals(client.userRef(), "/users/ryon");
   },
 
   "logout": function(){
