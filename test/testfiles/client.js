@@ -1,3 +1,13 @@
+function setupParams(paramString) {
+  //change the url without reloading page...will break in older browsers and IE below v10
+  //only for testing
+  window.history.pushState(null, null, window.location.pathname + paramString);
+}
+
+function clearParams() {
+  setupParams("");
+}
+
 buster.testCase("Client", {
 
   "init": function(){
@@ -143,17 +153,22 @@ buster.testCase("Client - auth", {
   "check params for auth/user values": function() {
     var client = new Stretchr.Client(),
       //spy on the doLogin method
-      spy = this.spy(client, "doLogin");
+      spy = this.spy(client, "doLogin"),
+      triggeredEvent = false;
 
-    //change the url without reloading page...will break in older browsers and IE below v10
-    //only for testing
-    window.history.pushState(null, null, window.location.pathname + "?auth=ryon");
-    assert.equals("?auth=ryon", location.search);
+    client.on("login:success", function() {
+      triggeredEvent = true;
+    });
+
+    setupParams("?" + Stretchr.UrlParamAuthKey + "=ryon");
+    assert.equals("?" + Stretchr.UrlParamAuthKey + "=ryon", location.search);
 
     //rerun init
     client.init();
 
     assert.called(spy);
+    assert.equals(false, triggeredEvent); //we don't want a triggered event in this case, cause it'll just reload!
+    clearParams();
     //TODO : why aren't we passing in a user's url to doLogin and letting it load the users data for us?
     // we expect doLogin(auth, userRef) to be called, which will store the cookies and then 
     // redirect the user to the same page without the auth/user params

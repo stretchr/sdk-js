@@ -98,7 +98,10 @@ var Stretchr = {
   SessionKeyLoggedInYes: "YES",
   SessionKeyLoggedInNo: "NO",
   SessionKeyAuthCode: "auth",
-  SessionKeyUserRef: "userref"
+  SessionKeyUserRef: "userref",
+
+  UrlParamAuthKey: "auth",
+  UrlParamAuthUser: "user"
 
 };
 
@@ -210,6 +213,23 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setApiVersion(Stretchr.apiVersion)
       .setSessionStore(new Stretchr.CookieSessionStore())
     ;
+
+    //urlParams are captures so that we can determine if a user has logged in or not
+    this._urlParams = new Stretchr.Bag();
+    //TODO : replace this with param.js when done
+    if(window.location.search) {
+      var search = window.location.search.replace("?", "").split("&"),
+        params = {};
+      for (element in search) {
+        var temp = search[element].split("=");
+        params[temp[0]] = temp[1];
+      }
+      this._urlParams.data(params);
+    }
+
+    if(this._urlParams.get(Stretchr.UrlParamAuthKey)) {
+      this.doLogin(this._urlParams.get(Stretchr.UrlParamAuthKey), this._urlParams.get(Stretchr.UrlParamAuthUser), {noEvents: true});
+    }
   },
 
   /**
