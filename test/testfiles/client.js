@@ -98,9 +98,23 @@ buster.testCase("Client - auth", {
     
     client.on("login:success", function() {
       done = true;
-    })
+    });
     client.doLogin("AUTH", "/users/ryon");
     assert.equals(done, true);
+  },
+
+  "doLogin should let you supress events": function() {
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client(),
+      done = false;
+    
+    client.on("login:success", function() {
+      done = true;
+    });
+    client.doLogin("AUTH", "/users/ryon", {noEvents: true});
+    assert.equals(done, false);
   },
 
   "logout": function(){

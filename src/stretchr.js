@@ -210,7 +210,6 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setApiVersion(Stretchr.apiVersion)
       .setSessionStore(new Stretchr.CookieSessionStore())
     ;
-
   },
 
   /**
@@ -301,8 +300,8 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * Sets the appropriate keys in the sessionStore to log the user in.
    * @memberOf Stretchr.Client.prototype
    */
-  doLogin: function(authCode, userRef) {
-
+  doLogin: function(authCode, userRef, options) {
+    var options = options || {};
     // set some stuff in the store
     this.sessionStore()
       .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes)
@@ -310,7 +309,9 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .set(Stretchr.SessionKeyUserRef, userRef)
     ;
 
-    this.fire("login:success");
+    if (!options.noEvents) {
+      this.fire("login:success");
+    }
 
     return true;
 
