@@ -76,7 +76,7 @@ buster.testCase("Client - auth", {
 
   },
 
-  "doLogin revised": function() {
+  "doLogin": function() {
     // log them out
     Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
@@ -87,6 +87,20 @@ buster.testCase("Client - auth", {
 
     assert.equals(client.authCode(), "AUTH");
     assert.equals(client.userRef(), "/users/ryon");
+  },
+
+  "doLogin triggers login:success": function() {
+    // log them out
+    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+
+    var client = new Stretchr.Client(),
+      done = false;
+    
+    client.on("login:success", function() {
+      done = true;
+    })
+    client.doLogin("AUTH", "/users/ryon");
+    assert.equals(done, true);
   },
 
   "logout": function(){
