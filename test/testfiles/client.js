@@ -61,10 +61,10 @@ buster.testCase("Client - auth", {
     Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
     var client = new Stretchr.Client();
-    assert.equals(client.isLoggedIn(), false);
+    assert.equals(client.isLoggedIn(), false, "client.isLoggedIn()");
 
     Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes, 1);
-    assert.equals(client.isLoggedIn(), true);
+    assert.equals(client.isLoggedIn(), true, "client.isLoggedIn()");
 
   },
 
@@ -103,7 +103,7 @@ buster.testCase("Client - auth", {
 
     var client = new Stretchr.Client(),
       done = false;
-    
+
     client.on("login:success", function() {
       done = true;
     });
@@ -117,7 +117,7 @@ buster.testCase("Client - auth", {
 
     var client = new Stretchr.Client(),
       done = false;
-    
+
     client.on("login:success", function() {
       done = true;
     });
@@ -168,7 +168,7 @@ buster.testCase("Client - auth", {
 
     assert.called(spy);
     assert.equals(false, triggeredEvent); //we don't want a triggered event in this case, cause it'll just reload!
-    
+
     assert.defined(client.location().history()[0])
   }
 
