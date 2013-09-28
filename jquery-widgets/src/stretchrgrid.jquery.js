@@ -63,9 +63,7 @@
             item.removeClass("active");
           }
 
-          var link = item.find("a")[0] || $("<a>").attr("href","javascript:void(0);").appendTo(item);
-          link = $(link);
-          link.text(i).data("page",i).click(function(){
+          var link = item.find("a")[0] || $("<a>").attr("href","javascript:void(0);").appendTo(item).click(function(){
 
             var $item = $(this);
             $this
@@ -74,6 +72,9 @@
             ;
 
           })
+          ;
+          link = $(link);
+          link.text(i).data("page",i);
 
           counter++;
         };
