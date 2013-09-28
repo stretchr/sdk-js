@@ -1,5 +1,11 @@
 # Stretchr JavaScript SDK
 
+## Rewrite
+
+The JavaScript SDK has been rewritten from the ground up in the [rewrite branch](https://github.com/stretchr/sdk-js/tree/rewrite) and it now at version 1.2.  We're about to release it and recommend you use that instead of the version in master.
+
+# Old documentation
+
 The Stretchr JavaScript SDK allows you to interact with the Stretchr services from any web enabled device.  This SDK makes use of Stretchr's [JSONP](http://json-p.org) capabilities behind the scenes, providing an easy to use interface to developers.
 
 ## Getting started
