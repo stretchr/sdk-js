@@ -7,6 +7,7 @@
     options = options || {};
     options.pagesize = options.pagesize || 10;
     options.paginationMaxItems = options.paginationMaxItems || 10;
+    options.noItemsMessage = options.noItemsMessage || "No items to show.";
     var currentPage = $this.attr("data-stretchrgrid-page") || 1;
     currentPage = parseInt(currentPage);
 
@@ -15,6 +16,11 @@
       $this.empty();
       var resources = response.resources();
       var items = resources.items();
+
+      if (resources.count() == 0) {
+        $this.append($("<tr>").append($("<td>").text(options.noItemsMessage)))
+        return;
+      }
 
       // collect columns
       var columns = {};
@@ -48,7 +54,7 @@
         var $pager = $(options.pagination);
         var pageCount = resources.pagecount(options.pagesize);
         var minPage = Math.max(1, currentPage - (options.paginationMaxItems/2));
-        var maxPage = Math.max(options.paginationMaxItems+1, currentPage + (options.paginationMaxItems/2));
+        var maxPage = Math.min(pageCount, Math.max(options.paginationMaxItems+1, currentPage + (options.paginationMaxItems/2)));
 
         var existingItems = $pager.find("li");
         var counter = 0;
