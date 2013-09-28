@@ -25,6 +25,7 @@
   DEALINGS IN THE SOFTWARE.
 
 */
+alert("JavaScript SDK version is out of date.")
 
 /**
  * @fileOverview A comprehensive client-side JavaScript SDK for HTML5 applications
