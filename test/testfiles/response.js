@@ -145,7 +145,7 @@ var responseFixtures = {
   ],
 
   "Change info": [
-    {"~data":{"~changes":{"~created":5,"~updated":4,"~deleted":6,"~deltas":[{"~id":"ABC123"}]}},"~status":201},
+    {"~changes":{"~created":5,"~updated":4,"~deleted":6,"~deltas":[{"~id":"ABC123"}]},"~status":201},
     function(r, n){
 
       changes = r.changes();

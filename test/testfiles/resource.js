@@ -116,10 +116,9 @@ buster.testCase("Resource", {
 
       var response = {};
       response[Stretchr.ResponseKeyStatus] = 201;
-      response[Stretchr.ResponseKeyData] = {};
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges] = {};
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoCreated] = 1;
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoDeltas] = [{
+      response[Stretchr.ResponseKeyDataChanges] = {};
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoCreated] = 1;
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoDeltas] = [{
         "~id": "returned-id",
         "~created": 123456,
         "~updated": 234567,
@@ -195,10 +194,9 @@ buster.testCase("Resource", {
 
       var response = {};
       response[Stretchr.ResponseKeyStatus] = 201;
-      response[Stretchr.ResponseKeyData] = {};
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges] = {};
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoCreated] = 1;
-      response[Stretchr.ResponseKeyData][Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoDeltas] = [{
+      response[Stretchr.ResponseKeyDataChanges] = {};
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoCreated] = 1;
+      response[Stretchr.ResponseKeyDataChanges][Stretchr.ResponseKeyChangeInfoDeltas] = [{
         "~id": "returned-id",
         "~updated": 234567,
         "~updatedby": "2"

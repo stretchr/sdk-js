@@ -362,7 +362,6 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     if(this.location().param(Stretchr.UrlParamAuthKey)) {
       this.doLogin(this.location().param(Stretchr.UrlParamAuthKey), this.location().param(Stretchr.UrlParamAuthUser), {noEvents: true});
       this.location().redirect(window.location.pathname);
-      console.log(this.location());
     }
   }
 
@@ -645,6 +644,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     this._status = response[Stretchr.ResponseKeyStatus];
     this._data = response[Stretchr.ResponseKeyData];
     this._success = this._status >= 200 && this._status <= 299;
+    this._changes = response[Stretchr.ResponseKeyDataChanges];
     this._context = response[Stretchr.ResponseKeyContext];
     this._request = request;
     if (request) this._path = request.path();
@@ -682,7 +682,7 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
   * @memberOf Stretchr.Response.prototype
   */
   changes: function(){
-    return new Stretchr.ChangeInfo(this.data()[Stretchr.ResponseKeyDataChanges]);
+    return new Stretchr.ChangeInfo(this._changes);
   }
 
 });
