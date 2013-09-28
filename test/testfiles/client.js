@@ -26,6 +26,19 @@ buster.testCase("Client", {
 
   },
 
+  "new method": function(){
+
+    var client = new Stretchr.Client("proj", "ABC123");
+    var resource = client.new("people", {
+      name: "Mat"
+    });
+
+    assert.equals(resource.$class, Stretchr.Resource);
+    assert.equals(resource.client(), client);
+    assert.equals(resource.data("name"), "Mat");
+
+  },
+
   "getTransport": function(){
 
     var client = new Stretchr.Client("proj", "key");

@@ -241,6 +241,10 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return r.params(params);
   },
 
+  new: function(path, data) {
+    return new Stretchr.Resource(this, path, data);
+  },
+
   /**
    * url generates a URL that makes up the request of the specified path.
    * @param {string} path The relative path of the request.
