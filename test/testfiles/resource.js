@@ -281,6 +281,32 @@ buster.testCase("ResourceCollection", {
     assert.equals(r.items()[1].data("name"), "Tyler");
     assert.equals(r.items()[1].path(), "people");
 
+  },
+
+  "pagecount": function(){
+
+    var data = {
+      "~count":2,
+      "~total":1564,
+      "~items":[{
+        "~id": "ABC123",
+        "name": "Ryon",
+        "number": 26,
+        "something": true
+      },{
+        "~id": "DEF456",
+        "name": "Tyler",
+        "number": 29,
+        "something": false
+      }]
+    };
+
+    var client = new Stretchr.Client();
+    var r = new Stretchr.ResourceCollection(client, "people", data);
+
+    assert.equals(r.pagecount(10), 157);
+    assert.equals(r.pagecount(100), 16);
+
   }
 
 });

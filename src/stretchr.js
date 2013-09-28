@@ -87,6 +87,7 @@ var Stretchr = {
   ResponseKeyContext: "~context",
 
   ResponseKeyCollectionItems: "~items",
+  ResponseKeyCollectionTotal: "~total",
 
   ResponseKeyDataChanges: "~changes",
   ResponseKeyChangeInfoCreated: "~created",
@@ -809,13 +810,15 @@ Stretchr.Resource = oo.Class("Stretchr.Resource", oo.Events, oo.Properties, {
  */
 Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Properties, {
 
-  getters: ["client", "rawData", "items", "path"],
+  getters: ["client", "rawData", "items", "path", "total", "hasTotal"],
 
   init: function(client, path, data) {
 
     this._client = client;
     this._rawData = data;
     this._path = path;
+    this._hasTotal = typeof(data[Stretchr.ResponseKeyCollectionTotal]) !== "undefined";
+    this._total = data[Stretchr.ResponseKeyCollectionTotal];
     this._items = [];
 
     // make a Resource for each item
@@ -832,6 +835,17 @@ Stretchr.ResourceCollection = oo.Class("Stretchr.ResourceCollection", oo.Propert
   */
   count: function(){
     return this._items.length;
+  },
+
+  /**
+   * Gets the total number of pages given the specified page size.
+   * @memberOf Stretchr.ResourceCollection.prototype
+   */
+  pagecount: function(pageSize){
+    if (!this._hasTotal) {
+      throw "Cannot use pagecount without a total, add .params(\"total\",1) to your request."
+    }
+    return Math.ceil(this.total() / pageSize);
   }
 
 });
