@@ -295,8 +295,9 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * Gets the URL that the user should be redirected to in order to log in.
    * @memberOf Stretchr.Client.prototype
    */
-  loginUrl: function(provider) {
-    return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + location.href;
+  loginUrl: function(provider, after) {
+    var after = after || location.href;
+    return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + after;
   },
 
   /**
