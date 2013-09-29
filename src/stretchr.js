@@ -242,7 +242,9 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
   },
 
   new: function(path, data) {
-    return new Stretchr.Resource(this, path, data);
+    var r = new Stretchr.Resource(this, path, data);
+    r._data.setDirty(true);
+    return r;
   },
 
   /**
@@ -701,7 +703,8 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
  * `s of this kind are still considered successful.
  */
 Stretchr.ResponseNothingToDo = new Stretchr.Response(null, null, {
-  "~status": 200
+  "~status": 200,
+  "~info": "There was nothing to do"
 });
 
 /** @class

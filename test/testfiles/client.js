@@ -36,6 +36,7 @@ buster.testCase("Client", {
     assert.equals(resource.$class, Stretchr.Resource);
     assert.equals(resource.client(), client);
     assert.equals(resource.data("name"), "Mat");
+    assert.equals(resource._data.dirty(), true, "New object should start with dirty data")
 
   },
 
