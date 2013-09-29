@@ -184,13 +184,17 @@ buster.testCase("Response", {
 
     var client = new Stretchr.Client();
     var request = new Stretchr.Request();
+    var responseData = {
+      "~status":200
+    };
     request.path("people/123");
 
-    var r = new Stretchr.Response(client, request, {});
+    var r = new Stretchr.Response(client, request, responseData);
 
     assert.equals(r.client(), client, "client");
     assert.equals(r.request(), request, "request");
     assert.equals(r.path(), r.request().path(), "path");
+    assert.equals(r.raw(), responseData, "r.raw()")
 
     assert.equals(r.resource().path(), r.request().path());
 
