@@ -544,7 +544,7 @@ buster.testCase("Request", {
     assert.equals(r.replace(testData, options), r, "chain?");
 
     assert.equals(r.body(), testData);
-    assert.equals(r.method(), Stretchr.MethodPost);
+    assert.equals(r.method(), Stretchr.MethodPut);
     assert.equals(transport.requests()[0][0], r);
 
     // success(response)

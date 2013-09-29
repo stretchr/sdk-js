@@ -599,7 +599,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
 
     if (this.isCollective()) throw Stretchr.ErrorActionCollectiveResource;
 
-    this.body(data).setMethod(Stretchr.MethodPost).client().transport().makeRequest(this, options);
+    this.body(data).setMethod(Stretchr.MethodPut).client().transport().makeRequest(this, options);
     return this;
   },
 
