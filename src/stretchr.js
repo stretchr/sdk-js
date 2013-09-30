@@ -241,6 +241,11 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     return r.params(params);
   },
 
+  /**
+   * Creates a new resource at the given path, optionally with the specified data.
+   * @param {string} path The path of the new resource.
+   * @param {object} data The initial data of the resource.
+   */
   new: function(path, data) {
     var r = new Stretchr.Resource(this, path, data);
     r._data.setDirty(true);
