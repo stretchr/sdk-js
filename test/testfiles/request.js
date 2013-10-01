@@ -196,6 +196,14 @@ buster.testCase("Request", {
     assert.equals(r.params(Stretchr.ParamSkip)[0], 40)
     assert.equals(r.params(Stretchr.ParamLimit)[0], 20)
 
+    assert.equals(r.page(1, 1), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 0)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 1)
+
+    assert.equals(r.page(2, 1), r)
+    assert.equals(r.params(Stretchr.ParamSkip)[0], 1)
+    assert.equals(r.params(Stretchr.ParamLimit)[0], 1)
+
   },
 
   "url": function(){
