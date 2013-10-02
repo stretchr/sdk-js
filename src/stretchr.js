@@ -346,7 +346,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * @memberOf Stretchr.Client.prototype
    */
   loginUrl: function(provider, after) {
-    var after = after || location.href;
+    var after = encodeURIComponent(after || location.href);
     return this.at("~auth/" + provider + "/login").rooturl() + "?after=" + after;
   },
 

@@ -85,8 +85,10 @@ buster.testCase("Client - auth", {
   "loginUrl": function(){
 
     var client = new Stretchr.Client("proj", "api-key");
-
     assert.equals(client.loginUrl("google").split("=")[0], "http://proj.stretchr.com/api/v1.1/~auth/google/login?after")
+
+    // where after url is a full thing
+    assert.equals(client.loginUrl("google", "http://www.stretchr.com/page?param=true"), "http://proj.stretchr.com/api/v1.1/~auth/google/login?after=" + encodeURIComponent("http://www.stretchr.com/page?param=true"))
 
   },
 
