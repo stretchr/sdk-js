@@ -21,10 +21,11 @@ buster.testCase("stretchr.location", {
   },
 
   "know how to pull params out of the url": function(){
+    Arg = MakeArg();
     setupParams("?name=ryon");
-    assert.equals(window.location.search, "?name=ryon");
     var l = new Stretchr.Location();
     assert.equals(l.param("name"), "ryon");
+    assert.equals(l.params()["name"], "ryon");
   },
 
   "know how to redirect" : function() {

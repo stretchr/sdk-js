@@ -92,11 +92,6 @@ buster.testCase("Client - auth", {
 
   },
 
-  "loginUrl with after": function() {
-    var client = new Stretchr.Client("proj", "api-key");
-    assert.equals(client.loginUrl("google", "asdf"), "http://proj.stretchr.com/api/v1.1/~auth/google/login?after=asdf")
-  },
-
   "login" : function() {
     var client = new Stretchr.Client();
     client.setLocation(new Stretchr.TestLocation());
@@ -170,6 +165,7 @@ buster.testCase("Client - auth", {
   },
 
   "check params for auth/user values": function() {
+
     var client = new Stretchr.Client(),
       //spy on the doLogin method
       spy = this.spy(client, "doLogin"),
@@ -178,7 +174,8 @@ buster.testCase("Client - auth", {
     //load the test location
     var test = new Stretchr.TestLocation();
     test.setParam(Stretchr.UrlParamAuthKey, "asdf");
-    test.setParam(Stretchr.UrlParamUserRef, "/users/ryon");
+    test.setParam(Stretchr.UrlParamAuthUser, "/users/ryon");
+    test.setParam("test", "true");
     client.setLocation(test);
 
     client.on("login:success", function() {
@@ -191,6 +188,7 @@ buster.testCase("Client - auth", {
     assert.equals(false, triggeredEvent); //we don't want a triggered event in this case, cause it'll just reload!
 
     assert.defined(client.location().history()[0])
+    assert.equals(client.location().history()[0], location.pathname + "?test=true")
   }
 
 });
