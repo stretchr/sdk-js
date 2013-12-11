@@ -142,7 +142,7 @@ var Stretchr = {
   SessionKeyLoggedInYes: "YES",
   SessionKeyLoggedInNo: "NO",
   SessionKeyAuthCode: "auth",
-  SessionKeyUserRef: "userref",
+  SessionKeyuserpath: "userpath",
 
   UrlParamAuthKey: "auth",
   UrlParamAuthUser: "user"
@@ -362,13 +362,13 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * Sets the appropriate keys in the sessionStore to log the user in.
    * @memberOf Stretchr.Client.prototype
    */
-  doLogin: function(authCode, userRef, options) {
+  doLogin: function(authCode, userpath, options) {
     var options = options || {};
     // set some stuff in the store
     this.sessionStore()
       .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes)
       .set(Stretchr.SessionKeyAuthCode, authCode)
-      .set(Stretchr.SessionKeyUserRef, userRef)
+      .set(Stretchr.SessionKeyuserpath, userpath)
     ;
 
     if (!options.noEvents) {
@@ -389,7 +389,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     this.sessionStore()
       .set(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo)
       .set(Stretchr.SessionKeyAuthCode, "")
-      .set(Stretchr.SessionKeyUserRef, "")
+      .set(Stretchr.SessionKeyuserpath, "")
     ;
 
     return true;
@@ -407,8 +407,8 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
    * Gets the user reference of the currently logged in user.
    * @memberOf Stretchr.Client.prototype
    */
-  userRef: function() {
-    return this.sessionStore().get(Stretchr.SessionKeyUserRef);
+  userpath: function() {
+    return this.sessionStore().get(Stretchr.SessionKeyuserpath);
   },
 
   /**

@@ -110,7 +110,7 @@ buster.testCase("Client - auth", {
     assert.equals(client.isLoggedIn(), true);
 
     assert.equals(client.authCode(), "AUTH");
-    assert.equals(client.userRef(), "/users/ryon");
+    assert.equals(client.userpath(), "/users/ryon");
   },
 
   "doLogin triggers login:success": function() {
@@ -149,7 +149,7 @@ buster.testCase("Client - auth", {
     assert.equals(client.logout(), true);
     assert.equals(client.isLoggedIn(), false);
     assert.equals(client.authCode(), "");
-    assert.equals(client.userRef(), "");
+    assert.equals(client.userpath(), "");
 
   },
 
