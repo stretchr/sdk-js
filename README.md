@@ -147,6 +147,36 @@ The `where` method adds an additional filter parameter to the query.  It takes t
   * `[]` - Item present in array (e.g. .where("tags", "[javascript]"))
   * `/.../` - Regex (e.g. .where("number", "/[0-9]+/"))
 
+### Making resources
+
+To create a new resource, use the `new` method:
+
+    var newBook = stretchr.new("people/1/books");
+
+then set some values using the `data` method:
+
+    newBook.data({
+      name: "Mat",
+      age: 30,
+      something: true
+    });
+
+then save it using the `save` method:
+
+    newBook.save({
+      success: function(response){
+        // the book was saved
+      }
+    });
+
+### Changing resources
+
+Once you had read a resource (see above), you can make changes to it via the `.data()` method and then call `save()` to have the changes updated on the server.
+
+### Deleting resources
+
+Once you had read a resource (see above), you delete it by calling the `remove()` method.
+
 ## Developers
 
 #### Generate documentation
