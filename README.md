@@ -12,6 +12,14 @@ In order to interact with Stretchr, you must first create a `Stretchr.Client` in
 
 Assigning your client to a variable named `stretchr` makes your code very clear.
 
+#### Using a different host
+
+By default, the Stretchr SDK for JavaScript and HTML5 assumes your data is hosted at `stretchr.com`, but you can change this if it's not the case using the `setHost` setter method.
+
+    var stretchr = new Stretchr.Client("project-name", "API-KEY").setHost("mydomain.com");
+
+Then all requests will be made to `mydomain.com` insstead of `project-name.stretchr.com`.
+
 ### Making requests using the `at` method
 
 To make requests, you must first decide specify the path using the `at` method on your client:
@@ -110,6 +118,17 @@ Setting the order parameter is as simple as calling the `order` method on a `Str
 
     // order by age, oldest first
     stretchr.at("people").order("-age");
+
+##### Paging
+
+Stretchr delivers resources in pages up to a maximum of 1,000 at a time.  If you need more, then you'll have to use paging.
+
+The `page` method sets the appropriate `limit` and `skip` values on the request and has the following signature:
+
+    page(pageNumber, pageSize)
+
+  * `pageNumber` the 1-bound number of the page to get (i.e. `1` is the first page)
+  * `pageSize` the number of resources to get per page
 
 ##### Where
 
