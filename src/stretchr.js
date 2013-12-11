@@ -1409,6 +1409,7 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
  */
 Stretchr.cookie = function(c_name)
 {
+  c_name = Stretchr.cookiePrefix+c_name;
   var c_value = document.cookie;
   var c_start = c_value.indexOf(" " + c_name + "=");
   if (c_start == -1)
@@ -1433,6 +1434,11 @@ Stretchr.cookie = function(c_name)
 };
 
 /**
+ * The prefix to namespace all cookies.
+ */
+Stretchr.cookiePrefix = "stretchr_";
+
+/**
  * Sets the value of a cookie.
  */
 Stretchr.setCookie = function(c_name,value,exdays)
@@ -1440,7 +1446,7 @@ Stretchr.setCookie = function(c_name,value,exdays)
   var exdate=new Date();
   exdate.setDate(exdate.getDate() + exdays);
   var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-  document.cookie=c_name + "=" + c_value;
+  document.cookie=Stretchr.cookiePrefix + c_name + "=" + c_value;
 };
 
 /**
