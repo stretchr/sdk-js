@@ -6,7 +6,7 @@ Stretchr SDK for JavaScript and HTML5.
 
 In order to interact with Stretchr, you must first create a `Stretchr.Client` in your code.  You will need to pass your project name, and API key.
 
-    var stretchr = new Stretchr.Client("project-name", "API-KEY");
+    var stretchr = new Stretchr.Client("account-name", "project-name", "API-KEY");
 
 Assigning your client to a variable named `stretchr` makes your code very clear.
 
@@ -14,9 +14,9 @@ Assigning your client to a variable named `stretchr` makes your code very clear.
 
 By default, the Stretchr SDK for JavaScript and HTML5 assumes your data is hosted at `stretchr.com`, but you can change this if it's not the case using the `setHost` setter method.
 
-    var stretchr = new Stretchr.Client("project-name", "API-KEY").setHost("mydomain.com");
+    var stretchr = new Stretchr.Client("account-name", "project-name", "API-KEY").setHost("mydomain.com");
 
-Then all requests will be made to `mydomain.com` insstead of `project-name.stretchr.com`.
+Then all requests will be made to `account-name.mydomain.com` insstead of `account-name.stretchr.com`.
 
 ## Making requests using the `at` method
 
