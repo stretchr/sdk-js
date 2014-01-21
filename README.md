@@ -2,9 +2,7 @@
 
 Stretchr SDK for JavaScript and HTML5.
 
-## User guide
-
-### Creating a client
+## Creating a client
 
 In order to interact with Stretchr, you must first create a `Stretchr.Client` in your code.  You will need to pass your project name, and API key.
 
@@ -12,7 +10,7 @@ In order to interact with Stretchr, you must first create a `Stretchr.Client` in
 
 Assigning your client to a variable named `stretchr` makes your code very clear.
 
-#### Using a different host
+### Using a different host
 
 By default, the Stretchr SDK for JavaScript and HTML5 assumes your data is hosted at `stretchr.com`, but you can change this if it's not the case using the `setHost` setter method.
 
@@ -20,7 +18,7 @@ By default, the Stretchr SDK for JavaScript and HTML5 assumes your data is hoste
 
 Then all requests will be made to `mydomain.com` insstead of `project-name.stretchr.com`.
 
-### Making requests using the `at` method
+## Making requests using the `at` method
 
 To make requests, you must first decide specify the path using the `at` method on your client:
 
@@ -61,7 +59,7 @@ All actions (and some other methods) take an `options` object that allows you to
 
 Usually, passing a single function argument in place of an `options` object will cause the function to be considered a callback for the `after` event.
 
-### Reading resources
+## Reading resources
 
 To read a resource, use the `read` method and then in the callback handler, use the `resource()` method on the `Stretchr.Response` to get the resource.
 
@@ -80,7 +78,7 @@ To read a resource, use the `read` method and then in the callback handler, use 
 
     });
 
-#### Reading many resources
+### Reading many resources
 
 If your request results in many resources, you can use the `resources()` method to get a `Stretchr.ResourceCollection` object.  Then you can use the `items()` method to get the underlying `Stretchr.Resource` object array:
 
@@ -103,13 +101,13 @@ If your request results in many resources, you can use the `resources()` method 
 
     });
 
-#### Filtering, ordering and paging
+### Filtering, ordering and paging
 
 The `Stretchr.Request` object gives you handy methods to control detials about the collection of resources you get back.
 
     stretchr.at("people").order("name").where("age", ">30").page(1, 10);
 
-##### Order
+#### Order
 
 Setting the order parameter is as simple as calling the `order` method on a `Stretchr.Request`.  The value should be the field on which to order ascendingly.  To order decending, prefix the field name with a `-` minus character.
 
@@ -119,7 +117,7 @@ Setting the order parameter is as simple as calling the `order` method on a `Str
     // order by age, oldest first
     stretchr.at("people").order("-age");
 
-##### Paging
+#### Paging
 
 Stretchr delivers resources in pages up to a maximum of 1,000 at a time.  If you need more, then you'll have to use paging.
 
@@ -130,7 +128,7 @@ The `page` method sets the appropriate `limit` and `skip` values on the request 
   * `pageNumber` the 1-bound number of the page to get (i.e. `1` is the first page)
   * `pageSize` the number of resources to get per page
 
-##### Where
+#### Where
 
 The `where` method adds an additional filter parameter to the query.  It takes two arguments, the field and the filter value.  The field can be any field in a document and the value should be one of the supported filter types:
 
@@ -199,6 +197,6 @@ Once you had read a resource (see above), you delete it by calling the `remove()
 
 ## Developers
 
-#### Generate documentation
+### Generate documentation
 
     jsdoc -d docs ./src -c ./conf/docs.json
