@@ -254,7 +254,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
       .setApiKey(apiKey)
       .setTransport(new Stretchr.JSONPTransport(this))
       .setHost("stretchr.com")
-      .setProtocol("http")
+      .setProtocol("https")
       .setApiVersion(Stretchr.apiVersion)
       .setSessionStore(new Stretchr.CookieSessionStore())
       .setLocation(new Stretchr.Location())
