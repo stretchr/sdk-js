@@ -8,7 +8,7 @@ buster.testCase("Client", {
     assert.equals(s.apiKey(), "pub");
     assert.equals(s.host(), "stretchr.com");
     assert.equals(s.protocol(), "https");
-    assert.equals(s.apiVersion(), "1.1");
+    assert.equals(s.apiVersion(), Stretchr.apiVersion);
 
     assert.equals(s.sessionStore().$class, Stretchr.CookieSessionStore);
 
@@ -58,13 +58,13 @@ buster.testCase("Client", {
     client.setProject("proj")
     client.setHost("something.com");
     client.setProtocol("http");
-    client.setApiVersion(1.1);
+    client.setApiVersion(1.12);
 
     var u = client.url("/people/1?name=Ryan");
-    assert.equals(u, "http://acc.something.com/api/v1.1/proj/people/1?name=Ryan")
+    assert.equals(u, "http://acc.something.com/api/v1.12/proj/people/1?name=Ryan")
 
     var u = client.url("people/1?name=Ryan");
-    assert.equals(u, "http://acc.something.com/api/v1.1/proj/people/1?name=Ryan")
+    assert.equals(u, "http://acc.something.com/api/v1.12/proj/people/1?name=Ryan")
 
   }
 
@@ -88,10 +88,10 @@ buster.testCase("Client - auth", {
   "loginUrl": function(){
 
     var client = new Stretchr.Client("acc", "proj", "api-key");
-    assert.equals(client.loginUrl("google").split("=")[0], "https://acc.stretchr.com/api/v1.1/proj/~auth/google/login?after")
+    assert.equals(client.loginUrl("google").split("=")[0], "https://acc.stretchr.com/api/v1/proj/~auth/google/login?after")
 
     // where after url is a full thing
-    assert.equals(client.loginUrl("google", "http://www.stretchr.com/page?param=true"), "https://acc.stretchr.com/api/v1.1/proj/~auth/google/login?after=" + encodeURIComponent("http://www.stretchr.com/page?param=true"))
+    assert.equals(client.loginUrl("google", "http://www.stretchr.com/page?param=true"), "https://acc.stretchr.com/api/v1/proj/~auth/google/login?after=" + encodeURIComponent("http://www.stretchr.com/page?param=true"))
 
   },
 

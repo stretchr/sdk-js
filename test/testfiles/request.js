@@ -91,7 +91,7 @@ buster.testCase("Request", {
       "lives": "Airport"
     });
 
-    assert.equals(r.toString(), "GET https://acc.stretchr.com/api/v1.1/proj/path/to/something?key2=value2&key3=value3&%3Aname=Ryan&%3Alives=Airport")
+    assert.equals(r.toString(), "GET https://acc.stretchr.com/api/v1/proj/path/to/something?key2=value2&key3=value3&%3Aname=Ryan&%3Alives=Airport")
 
   },
 
@@ -213,11 +213,11 @@ buster.testCase("Request", {
 
     assert.equals(
       r.url(),
-      "https://acc.stretchr.com/api/v1.1/proj/path/to/something"
+      "https://acc.stretchr.com/api/v1/proj/path/to/something"
     );
     assert.equals(
       r.rooturl(),
-      "https://acc.stretchr.com/api/v1.1/proj/path/to/something"
+      "https://acc.stretchr.com/api/v1/proj/path/to/something"
     );
 
     r.where({
@@ -232,11 +232,11 @@ buster.testCase("Request", {
 
     assert.equals(
       r.url(),
-      "https://acc.stretchr.com/api/v1.1/proj/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
+      "https://acc.stretchr.com/api/v1/proj/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
     );
     assert.equals(
       r.rooturl(),
-      "https://acc.stretchr.com/api/v1.1/proj/path/to/something"
+      "https://acc.stretchr.com/api/v1/proj/path/to/something"
     );
 
   },
