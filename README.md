@@ -147,6 +147,26 @@ The `where` method adds an additional filter parameter to the query.  It takes t
   * `[]` - Item present in array (e.g. .where("tags", "[javascript]"))
   * `/.../` - Regex (e.g. .where("number", "/[0-9]+/"))
 
+## Users and Authentication
+to authenticate your users, just specify the method of authentication you want to use:
+```
+stretchr.login("github")
+```
+This will redirect users through the oauth workflow and return them with a valid user key.  The SDK will automatically snag that key for you, and all future requests will be authenticated.
+
+To check if a user is already logged in, you can call
+```
+stretchr.isLoggedIn() // return true if the user is logged in, false if they aren't
+```
+
+To logout a user, you can run
+```
+stretchr.logout()
+```
+
+## Resources
+In addition to standard URL based interactions with Stretchr, you can also interact via Resources, which enable a more OO design.
+
 ### Making resources
 
 To create a new resource, use the `new` method:
