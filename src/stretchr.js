@@ -244,15 +244,16 @@ Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refe
  */
 Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
-  properties: ["projectName", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore", "location"],
+  properties: ["account", "project", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore", "location"],
 
-  init: function(projectName, apiKey){
+  init: function(accountName, projectName, apiKey){
 
     this
-      .setProjectName(projectName)
+      .setAccount(accountName)
+      .setProject(projectName)
       .setApiKey(apiKey)
       .setTransport(new Stretchr.JSONPTransport(this))
-      .setHost(projectName + ".stretchr.com")
+      .setHost("stretchr.com")
       .setProtocol("http")
       .setApiVersion(Stretchr.apiVersion)
       .setSessionStore(new Stretchr.CookieSessionStore())
@@ -306,8 +307,7 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
     if (path.substr(0,1) != "/") {
       path = "/"+path;
     }
-
-    return [this.protocol(), "://", this.host(), "/api/v", this.apiVersion(), path].join("");
+    return [this.protocol(), "://", this.account(), ".", this.host(), "/api/v", this.apiVersion(), "/", this.project(), path].join("");
 
   },
 
