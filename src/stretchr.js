@@ -1,7 +1,7 @@
 /*
 
   Stretchr JavaScript SDK v1.2
-  /api/v1.1
+  /api/v1
 
   by Mat Ryer and Ryan Quinn
   Copyright (c) 2013 Stretchr, Inc.
@@ -95,7 +95,7 @@ var Stretchr = {
   /** The default API version this SDK will
     * attempt to interact with.  You can modify this on a per Client
     * basis. */
-  apiVersion: "1.1",
+  apiVersion: "1",
 
   defaultPageSize: 10,
 
@@ -987,7 +987,7 @@ Stretchr.ChangeInfo = oo.Class("Stretchr.ChangeInfo", oo.Properties, {
  * with Stretchr services.
  * @property {string} host The host where requests will be made to.
  * @property {string} protocol The protocol to use when making requests (default: 'http')
- * @property {float} APIVersion The API version to target (default: 1.1)
+ * @property {float} APIVersion The API version to target (default: 1)
  */
 Stretchr.Transport = oo.Class("Stretchr.Transport", oo.Events, oo.Properties, {
 
