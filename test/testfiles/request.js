@@ -2,7 +2,7 @@ buster.testCase("Request", {
 
   "init": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     refute.equals(undefined, r);
@@ -14,7 +14,7 @@ buster.testCase("Request", {
 
   "isCollective": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
 
     var r = new Stretchr.Request(client, "/people");
     assert.equals(r.isCollective(), true);
@@ -30,7 +30,7 @@ buster.testCase("Request", {
 
   "body and hasBody": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     assert.equals(r.hasBody(), false);
@@ -47,7 +47,7 @@ buster.testCase("Request", {
 
   "bodystr": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     assert.equals(r.body({
@@ -78,7 +78,7 @@ buster.testCase("Request", {
 
   "toString function": function(){
 
-    var client = new Stretchr.Client("proj", "abc");
+    var client = new Stretchr.Client("acc", "proj", "abc");
     var r = new Stretchr.Request(client, "/path/to/something");
 
     r.params({
@@ -91,13 +91,13 @@ buster.testCase("Request", {
       "lives": "Airport"
     });
 
-    assert.equals(r.toString(), "GET http://proj.stretchr.com/api/v1.1/path/to/something?key2=value2&key3=value3&%3Aname=Ryan&%3Alives=Airport")
+    assert.equals(r.toString(), "GET http://acc.stretchr.com/api/v1.1/proj/path/to/something?key2=value2&key3=value3&%3Aname=Ryan&%3Alives=Airport")
 
   },
 
   "params": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one
@@ -135,7 +135,7 @@ buster.testCase("Request", {
 
   "where" : function() {
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     // set one
@@ -168,7 +168,7 @@ buster.testCase("Request", {
 
   "where helpers: order, skip, limit, page etc.": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     assert.equals(r.order("~created"), r)
@@ -208,16 +208,16 @@ buster.testCase("Request", {
 
   "url": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     assert.equals(
       r.url(),
-      "http://proj.stretchr.com/api/v1.1/path/to/something"
+      "http://acc.stretchr.com/api/v1.1/proj/path/to/something"
     );
     assert.equals(
       r.rooturl(),
-      "http://proj.stretchr.com/api/v1.1/path/to/something"
+      "http://acc.stretchr.com/api/v1.1/proj/path/to/something"
     );
 
     r.where({
@@ -232,18 +232,18 @@ buster.testCase("Request", {
 
     assert.equals(
       r.url(),
-      "http://proj.stretchr.com/api/v1.1/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
+      "http://acc.stretchr.com/api/v1.1/proj/path/to/something?total=true&exclude=~timestamps&%3Aname=Ryan&%3Alives=Airport"
     );
     assert.equals(
       r.rooturl(),
-      "http://proj.stretchr.com/api/v1.1/path/to/something"
+      "http://acc.stretchr.com/api/v1.1/proj/path/to/something"
     );
 
   },
 
   "querystring": function(){
 
-    var s = new Stretchr.Client("proj", "key");
+    var s = new Stretchr.Client("acc", "proj", "key");
     var r = new Stretchr.Request(s, "/path/to/something");
 
     r.where({
@@ -265,7 +265,7 @@ buster.testCase("Request", {
 
   "read": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
@@ -321,7 +321,7 @@ buster.testCase("Request", {
 
   "create": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
@@ -382,7 +382,7 @@ buster.testCase("Request", {
 
   "create with ID in path": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
@@ -443,7 +443,7 @@ buster.testCase("Request", {
 
   "update": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
@@ -503,7 +503,7 @@ buster.testCase("Request", {
 
   "replace": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 
@@ -563,7 +563,7 @@ buster.testCase("Request", {
 
   "remove": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 

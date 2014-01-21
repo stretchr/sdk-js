@@ -2,7 +2,7 @@ buster.testCase("AuthService", {
 
   "loadProviders": function(){
 
-    var client = new Stretchr.Client("proj", "ABC123");
+    var client = new Stretchr.Client("acc", "proj", "ABC123");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
 

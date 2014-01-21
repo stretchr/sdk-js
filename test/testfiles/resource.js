@@ -104,7 +104,7 @@ buster.testCase("Resource", {
       "number": 26,
       "something": true
     };
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
     var r = new Stretchr.Resource(client, "people", data);
@@ -182,7 +182,7 @@ buster.testCase("Resource", {
       "~createdby": "john",
       "~updatedby": "monkey-allen"
     };
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var transport = new Stretchr.TestTransport();
     client.setTransport(transport);
     var r = new Stretchr.Resource(client, "people", data);

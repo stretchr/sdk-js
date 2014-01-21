@@ -2,10 +2,11 @@ buster.testCase("Client", {
 
   "init": function(){
 
-    var s = new Stretchr.Client("proj", "pub");
-    assert.equals(s.projectName(), "proj");
+    var s = new Stretchr.Client("acc", "proj", "pub");
+    assert.equals(s.account(), "acc");
+    assert.equals(s.project(), "proj");
     assert.equals(s.apiKey(), "pub");
-    assert.equals(s.host(), "proj.stretchr.com");
+    assert.equals(s.host(), "stretchr.com");
     assert.equals(s.protocol(), "http");
     assert.equals(s.apiVersion(), "1.1");
 
@@ -15,7 +16,7 @@ buster.testCase("Client", {
 
   "at": function(){
 
-    var client = new Stretchr.Client("proj", "ABC123");
+    var client = new Stretchr.Client("acc", "proj", "ABC123");
     var request = client.at("/path/to/something");
 
     refute.equals(undefined, request, "at() should return a request.")
@@ -28,7 +29,7 @@ buster.testCase("Client", {
 
   "new method": function(){
 
-    var client = new Stretchr.Client("proj", "ABC123");
+    var client = new Stretchr.Client("acc", "proj", "ABC123");
     var resource = client.new("people", {
       name: "Mat"
     });
@@ -42,7 +43,7 @@ buster.testCase("Client", {
 
   "getTransport": function(){
 
-    var client = new Stretchr.Client("proj", "key");
+    var client = new Stretchr.Client("acc", "proj", "key");
     var t = client.transport();
 
     assert.equals(t.client(), client);
@@ -53,15 +54,17 @@ buster.testCase("Client", {
   "url": function(){
 
     var client = new Stretchr.Client();
-    client.setHost("monkey.something.com");
+    client.setAccount("acc");
+    client.setProject("proj")
+    client.setHost("something.com");
     client.setProtocol("http");
     client.setApiVersion(1.1);
 
     var u = client.url("/people/1?name=Ryan");
-    assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
+    assert.equals(u, "http://acc.something.com/api/v1.1/proj/people/1?name=Ryan")
 
     var u = client.url("people/1?name=Ryan");
-    assert.equals(u, "http://monkey.something.com/api/v1.1/people/1?name=Ryan")
+    assert.equals(u, "http://acc.something.com/api/v1.1/proj/people/1?name=Ryan")
 
   }
 
@@ -84,11 +87,11 @@ buster.testCase("Client - auth", {
 
   "loginUrl": function(){
 
-    var client = new Stretchr.Client("proj", "api-key");
-    assert.equals(client.loginUrl("google").split("=")[0], "http://proj.stretchr.com/api/v1.1/~auth/google/login?after")
+    var client = new Stretchr.Client("acc", "proj", "api-key");
+    assert.equals(client.loginUrl("google").split("=")[0], "http://acc.stretchr.com/api/v1.1/proj/~auth/google/login?after")
 
     // where after url is a full thing
-    assert.equals(client.loginUrl("google", "http://www.stretchr.com/page?param=true"), "http://proj.stretchr.com/api/v1.1/~auth/google/login?after=" + encodeURIComponent("http://www.stretchr.com/page?param=true"))
+    assert.equals(client.loginUrl("google", "http://www.stretchr.com/page?param=true"), "http://acc.stretchr.com/api/v1.1/proj/~auth/google/login?after=" + encodeURIComponent("http://www.stretchr.com/page?param=true"))
 
   },
 
