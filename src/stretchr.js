@@ -1,6 +1,6 @@
 /*
 
-  Stretchr JavaScript SDK v1.2.2
+  Stretchr JavaScript SDK v1.3
   /api/v1.1
 
   by Mat Ryer and Ryan Quinn
