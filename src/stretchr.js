@@ -1,6 +1,6 @@
 /*
 
-  Stretchr JavaScript SDK v1.2
+  Stretchr JavaScript SDK v1.2.2
   /api/v1.1
 
   by Mat Ryer and Ryan Quinn
@@ -90,7 +90,7 @@ var Stretchr = {
   debug: false,
 
   /** The SDK version. */
-  version: "1.2",
+  version: "1.2.2",
 
   /** The default API version this SDK will
     * attempt to interact with.  You can modify this on a per Client
