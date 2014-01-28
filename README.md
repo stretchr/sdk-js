@@ -59,51 +59,9 @@ All actions (and some other methods) take an `options` object that allows you to
 
 Usually, passing a single function argument in place of an `options` object will cause the function to be considered a callback for the `after` event.
 
-## Reading resources
-
-To read a resource, use the `read` method and then in the callback handler, use the `resource()` method on the `Stretchr.Response` to get the resource.
-
-    stretchr.at("people/1/books/1").read(function(response){
-
-      if (response.success()) {
-
-        var resource = response.resource();
-        // do something with resource
-
-      } else {
-
-        // boo
-
-      }
-
-    });
-
-### Reading many resources
-
-If your request results in many resources, you can use the `resources()` method to get a `Stretchr.ResourceCollection` object.  Then you can use the `items()` method to get the underlying `Stretchr.Resource` object array:
-
-    stretchr.at("people/1/books").read(function(response){
-
-      if (response.success()) {
-
-        var resources = response.resources();
-        var items = resources.items();
-        for (var index in resources.items()) {
-
-          var resource = items[index];
-          // do something with resource
-
-        }
-
-      } else {
-        // boo
-      }
-
-    });
-
 ### Filtering, ordering and paging
 
-The `Stretchr.Request` object gives you handy methods to control detials about the collection of resources you get back.
+The `Stretchr.Request` object gives you handy methods to control details about the collection of resources you get back.
 
     stretchr.at("people").order("name").where("age", ">30").page(1, 10);
 
@@ -156,16 +114,118 @@ To check if a user is already logged in, you can call
 ```
 stretchr.isLoggedIn() // return true if the user is logged in, false if they aren't
 ```
+If a user isn't logged in yet, you can register a callback to run as soon as they are.
+
+```
+stretchr.on("login:success", function() {
+  console.log("Looks like the user just logged in!");
+});
+```
 
 To logout a user, you can run
 ```
 stretchr.logout()
 ```
 
-## Resources
+## Responses: Working with Data vs Resources
+There are two ways to utilize the Stretchr JS SDK.  One is to operate on raw data, and the other is to operate using Resources, which give you some convenience methods like `.save()`.  We'll go over data first, or you can jump to the [resouces section](#working-with-resources).
+
+## Working with data
+Once you've made a request, you'll be given a response object in the `success` or `error` callback.  The response object gives you access to the data returned from Stretchr.
+
+There are several values you can look at:
+
+| Attribute | Definition |
+| --- | --- |
+| `.data()` | For a single resource, this will be the raw data.  For a collection, it will be a standard response including total and an array of items |
+| `.items()` | Returns an array of data objects, regardless of if your query was for a resource or collection |
+| `.changes()` | Returns info that changed about your resources DURING the request.  Includes a count of how many objects were created/updated/deleted as well as an array of deltas.  More info below |
+| `.success()` | Returns `true`/`false` depending on if the request was a success |
+| `.errors()` | Returns an array of errors if the request wasn't successful |
+| `.errorMessage()` | Returns the last error message as a string |
+
+
+### Data example
+An example of working with raw data to read a collection could be:
+
+```javascript
+  stretchr.at("companies/stretchr/people").read({
+    success: function(response) {
+      var items = response.items();
+      for (var i in items) {
+        console.log(items[i]["name"]);
+      }
+    }
+  });
+```
+
+Reading a resource could look like:
+
+```javascript
+  stretchr.at("companies/stretchr").read({
+    success: function(response) {
+      var items = response.items();
+      for (var i in items) {
+        console.log(items[i]["website"]);
+      }
+    }
+  });
+
+  //or
+
+  stretchr.at("companies/stretchr").read({
+    success: function(response) {
+      console.log(response.data()["website"]);
+    }
+  });
+```
+
+### Change Info
+The response may include a `.changes()` object that includes information on how many objects were created/updated/delete in your request.  Here's what we give you access to:
+
+| Attribute | Definition | Example |
+|---|---|---|
+| `.deleted()` | How many objects were deleted in the request | `.changes().deleted()` |
+| `.updated()` | How many objects were updated in the request | `.changes().updated()` |
+| `.created()` | How many objects were created in the request | `.changes().created()` |
+| `.deltas()` | An array of all the changes that took place, usually includes timestamps for created/updated | `.changes().deltas()` |
+
+## Working with Resources
 In addition to standard URL based interactions with Stretchr, you can also interact via Resources, which enable a more OO design.
 
-### Making resources
+## Reading resources
+
+To read a resource, use the `read` method and then in the callback handler, use the `resource()` method on the `Stretchr.Response` to get the resource.
+
+    stretchr.at("people/1/books/1").read({
+
+      success: function(response) {
+
+        var resource = response.resource();
+        // do something with resource
+
+      }
+
+    });
+
+### Reading many resources
+
+If your request results in many resources, you can use the `resources()` method to get a `Stretchr.ResourceCollection` object.  Then you can use the `items()` method to get the underlying `Stretchr.Resource` object array:
+
+    stretchr.at("people/1/books").read({
+      success: function(response) {
+        var resources = response.resources();
+        var items = resources.items();
+        for (var index in resources.items()) {
+
+          var resource = items[index];
+          // do something with resource
+
+        }
+      }
+    });
+
+### Making new resources
 
 To create a new resource, use the `new` method:
 
