@@ -701,7 +701,7 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
  */
 Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
 
-  getters: ["status", "data", "success", "errors", "errorMessage", "context", "client", "request", "path", "raw"],
+  getters: ["status", "data", "items", "success", "errors", "errorMessage", "context", "client", "request", "path", "raw"],
 
   init: function(client, request, response) {
 
@@ -709,6 +709,14 @@ Stretchr.Response = oo.Class("Stretchr.Response", oo.Properties, {
     this._client = client;
     this._status = response[Stretchr.ResponseKeyStatus];
     this._data = response[Stretchr.ResponseKeyData];
+    this._items = [];
+    if (this._data) {
+      if (this._data[Stretchr.ResponseKeyCollectionItems]) {
+        this._items = this._data[Stretchr.ResponseKeyCollectionItems];
+      } else {
+        this._items = [this._data];
+      }
+    }
     this._success = this._status >= 200 && this._status <= 299;
     this._changes = response[Stretchr.ResponseKeyDataChanges];
     this._context = response[Stretchr.ResponseKeyContext];

@@ -21,6 +21,58 @@ var responseFixtures = {
     }
   ],
 
+  "Multiple items in response": [
+    {
+      "~data":{
+        "~count":2,
+        "~items":[
+          {
+            "name":"Laurie",
+            "~id":"abc1"
+          },
+          {
+            "name":"Simon",
+            "~id":"abc2"
+          }
+        ]
+      },
+      "~status":200
+    },
+    function(r, n){
+
+      assert.equals(r.items().length, 2);
+      assert.equals(r.items()[0]["name"], "Laurie");
+
+    }
+  ],
+
+  "One item in response - item call": [
+    {
+      "~data":{
+        "name":"Laurie",
+        "~id":"abc1"
+      },
+      "~status":200
+    },
+    function(r, n){
+
+      assert.equals(r.items().length, 1);
+      assert.equals(r.items()[0]["name"], "Laurie");
+
+    }
+  ],
+
+  "No items in response - item call": [
+    {
+      "~status":404
+    },
+    function(r, n){
+
+      assert.equals(r.items().length, 0);
+
+    }
+  ],
+
   "Success with context": [
     {
       "~status": 200,
