@@ -11,7 +11,7 @@ buster.testCase("Stretchr", {
 
   "version": function(){
 
-    assert.equals(Stretchr.version, "1.2.2", "Stretchr version " + Stretchr.version)
+    assert.equals(Stretchr.version, "1.3.1", "Stretchr version " + Stretchr.version)
 
   },
 
