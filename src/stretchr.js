@@ -4,7 +4,7 @@
   /api/v1.1
 
   by Mat Ryer and Ryan Quinn
-  Copyright (c) 2013 Stretchr, Inc.
+  Copyright (c) 2014 Stretchr, Inc.
 
   Please consider promoting this project if you find it useful.
 
