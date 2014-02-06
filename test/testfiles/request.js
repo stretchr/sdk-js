@@ -618,6 +618,23 @@ buster.testCase("Request", {
     assert.equals(calls["success"].length, 1, "success should get raised");
     var response = calls["success"][0][0];
 
+  },
+
+  "clone": function(){
+
+    var client = new Stretchr.Client("acc", "proj", "key");
+    var request = client.at("path/to/things");
+
+    request.where("name", "Mat").where("age", ">30");
+    request.params("order", "-age").params("something", "true");
+
+    var clone = request.clone();
+    refute.equals(request, clone);
+
+    assert.equals(clone._params._data["order"], request._params._data["order"])
+    assert.equals(clone._params._data["something"], request._params._data["something"])
+    assert.equals(clone._where._data["name"], request._where._data["name"])
+
   }
 
 });
