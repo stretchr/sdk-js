@@ -39,7 +39,7 @@ buster.testCase("Concurrently reading multiple resources", {
 
       response[Stretchr.ResponseKeyStatus] = 200;
       response[Stretchr.ResponseKeyData] = {
-        "~total": 10,
+        "~total": 20,
         "~items": testData,
         "~count": 2
       };
@@ -59,11 +59,13 @@ buster.testCase("Concurrently reading multiple resources", {
       }
     });
 
-    assert.equals(afterresult["~items"].length, 10);
-    assert.equals(afterresult["~total"], 10);
-    assert.equals(afterresult["~count"], 10);
+		assert.equals(responses.length, 10, "Should have been ten calls to each event.");
 
-    assert.equals(responses.length, 10, "Should have been ten calls to each event.");
+    assert.equals(afterresult["~items"].length, 20);
+    assert.equals(afterresult["~total"], 20);
+    assert.equals(afterresult["~count"], 20);
+
+    console.info(afterresult["~items"])
 
     assert.equals(afterresult["~items"][0].index, 0);
     assert.equals(afterresult["~items"][1].index, 1);

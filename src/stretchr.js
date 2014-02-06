@@ -582,6 +582,17 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     return this.skip(pageSize*(page-1)).limit(pageSize);
   },
 
+  /**
+   * Sets the total parameter for the request which instructs Stretchr to
+   * include the total resources in the collection being queried.
+   * @param {bool} value Whether to include the total or not.
+   * @memberOf Stretchr.Request.prototype
+   */
+  total: function(value) {
+    this._params.set("total", value, true);
+    return this;
+  },
+
   /*
     Actions
     ----------------------------------------------------------------
@@ -661,9 +672,10 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
     Special features
     ----------------------------------------------------------------
   */
-  readEverything: function(){
+  readEverything: function(options){
 
-    console.warn("Not ready yet.")
+    var reader = new Stretchr.multiReader(this);
+    reader.read(options);
 
   }
 
@@ -675,7 +687,84 @@ Stretchr.multiReader = oo.Class("Stretchr.multiReader", oo.Properties, oo.Events
 
   init: function(baseRequest) {
     this.setBaseRequest(baseRequest);
-  }
+  },
+
+  read: function(options) {
+
+  	//var responseObject = new Stretchr.Response(this.client(), request, response);
+
+  	var aggregateResponse = {
+			"~total": 0,
+  		"~items": [],
+  		"~count": 0
+  	};
+
+
+  	var limit = this.baseRequest().params("limit")
+  	if (limit === undefined) {
+  		console.info("total not set")
+  		this.baseRequest().limit(1000)
+  		limit = 1000
+  	}
+  	var path = this.baseRequest().path;
+  	var outerThis = this
+
+
+  	// make the initial request, making sure to ask for the total number of
+  	// items to be fetched from the collection
+  	this.baseRequest().total(true).read(function(response){
+	    if (response.success()) {
+	    	// The response was a success. Populate our temporary response object with
+	    	// the initial data
+
+
+
+	    	var resources = response.resources();
+console.info(resources.items())
+
+	      aggregateResponse["~total"] = resources.total();
+	      aggregateResponse["~items"].push.apply(aggregateResponse["~items"],resources.items());
+	      aggregateResponse["~count"] += resources.count();
+
+	      if (aggregateResponse["~total"] < limit) {
+	      	// Nothing more to load. We are done.
+	      	this.fireWith("after", options, aggregateResponse);
+	      } else {
+	      	// We have more to load. Fire the first each call.
+	      	this.fireWith("each", options, response);
+
+	      	// Now fire the readPage call enough times to get all the data
+	      	for (var i = 1; i != aggregateResponse["~total"]/limit; i++) {
+	      		outerThis.readPage(path,i,limit,{
+	      			each: function(response) {
+	      				var resources = response.resources();
+					      aggregateResponse["~total"] = resources.total();
+					      aggregateResponse["~items"].push.apply(aggregateResponse["~items"],resources.items());
+					      aggregateResponse["~count"] += resources.count();
+					      if (aggregateResponse["~count"] >= aggregateResponse["~total"]) {
+					      	// Nothing more to load. We are done.
+					      	this.fireWith("after", options, aggregateResponse);
+					      }
+				      	// We have more to load. Fire the first each call.
+				      	this.fireWith("each", options, response);
+	      			}
+	      		})
+	      	}
+	      }
+
+			} else {
+
+			}
+		});
+	},
+
+	readPage: function(path, page, pageSize, options) {
+		this.baseRequest().client().at(path).page(page,pageSize).read(function(response){
+	    if (response.success()) {
+	    	this.fireWith("each",options,response)
+	    }
+	  })
+	}
 
 });
 
