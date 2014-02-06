@@ -1,6 +1,6 @@
 /*
 
-  Stretchr JavaScript SDK v1.3.1
+  Stretchr JavaScript SDK v1.4
   /api/v1.1
 
   by Mat Ryer and Ryan Quinn
@@ -66,7 +66,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
 /**
  * @namespace
- * @version 1.3.1
+ * @version 1.4
  */
 var Stretchr = {
 
@@ -74,7 +74,7 @@ var Stretchr = {
   debug: false,
 
   /** The SDK version. */
-  version: "1.3.1",
+  version: "1.4",
 
   /** The default API version this SDK will
     * attempt to interact with.  You can modify this on a per Client
@@ -655,6 +655,26 @@ Stretchr.Request = oo.Class("Stretchr.Request", oo.Events, oo.Properties, {
   remove: function(options) {
     this.setMethod(Stretchr.MethodDelete).client().transport().makeRequest(this, options);
     return this;
+  },
+
+  /*
+    Special features
+    ----------------------------------------------------------------
+  */
+  readEverything: function(){
+
+    console.warn("Not ready yet.")
+
+  }
+
+});
+
+Stretchr.multiReader = oo.Class("Stretchr.multiReader", oo.Properties, oo.Events, {
+
+  properties: ["baseRequest"],
+
+  init: function(baseRequest) {
+    this.setBaseRequest(baseRequest);
   }
 
 });
