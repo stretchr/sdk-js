@@ -18,6 +18,15 @@ buster.testCase("CookieSessionStore", {
 
     assert.equals(i.get("name"), "Mat");
 
+  },
+
+  "set expire days" : function() {
+    var i = new Stretchr.CookieSessionStore({expireDays: 28}),
+      date = new Date();
+    date.setDate(date.getDate() + 28);
+    i.set("name", "Ryan");
+    assert.equals(i.get("name"), "Ryan");
+    assert.equals(i.params("expire", date.toUTCString()));
   }
 
 });
