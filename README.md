@@ -180,6 +180,16 @@ Reading a resource could look like:
   });
 ```
 
+Creating resources
+
+```javascript
+  stretchr.at("companies").create({name: "Stretchr"}, {
+    success: function(response) {
+      console.log("Created Stretchr!");
+    }
+  })
+```
+
 ### Change Info
 The response may include a `.changes()` object that includes information on how many objects were created/updated/delete in your request.  Here's what we give you access to:
 
