@@ -75,13 +75,13 @@ buster.testCase("Client - auth", {
   "isLoggedIn": function(){
 
     // log them out
-    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
+    var s = new Stretchr.Client("acc", "proj", "key");
+    s.logout();
 
-    var client = new Stretchr.Client();
-    assert.equals(client.isLoggedIn(), false, "client.isLoggedIn()");
+    assert.equals(s.isLoggedIn(), false, "client.isLoggedIn()");
 
-    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInYes, 1);
-    assert.equals(client.isLoggedIn(), true, "client.isLoggedIn()");
+    s.doLogin("auth", "userpath");
+    assert.equals(s.isLoggedIn(), true, "client.isLoggedIn()");
 
   },
 
@@ -105,9 +105,9 @@ buster.testCase("Client - auth", {
 
   "doLogin": function() {
     // log them out
-    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
     var client = new Stretchr.Client();
+    client.logout();
     assert.equals(client.isLoggedIn(), false);
     assert.equals(client.doLogin("AUTH", "/users/ryon"), true);
     assert.equals(client.isLoggedIn(), true);
@@ -117,11 +117,11 @@ buster.testCase("Client - auth", {
   },
 
   "doLogin triggers login:success": function() {
-    // log them out
-    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
     var client = new Stretchr.Client(),
       done = false;
+
+    client.logout();
 
     client.on("login:success", function() {
       done = true;
@@ -132,10 +132,10 @@ buster.testCase("Client - auth", {
 
   "doLogin should let you supress events": function() {
     // log them out
-    Stretchr.setCookie(Stretchr.SessionKeyLoggedIn, Stretchr.SessionKeyLoggedInNo, 1);
 
     var client = new Stretchr.Client(),
       done = false;
+    client.logout();
 
     client.on("login:success", function() {
       done = true;
@@ -148,11 +148,12 @@ buster.testCase("Client - auth", {
 
     var client = new Stretchr.Client();
     assert.equals(client.doLogin("AUTH", {name: "Ryon"}), true);
+    assert.equals(client.authCode(), "AUTH");
 
     assert.equals(client.logout(), true);
     assert.equals(client.isLoggedIn(), false);
-    assert.equals(client.authCode(), "");
-    assert.equals(client.userpath(), "");
+    assert.equals(client.authCode(), "" || null);
+    assert.equals(client.userpath(), "" || null);
 
   },
 

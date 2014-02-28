@@ -1,6 +1,6 @@
 /*
 
-  Stretchr JavaScript SDK v1.3.1
+  Stretchr JavaScript SDK v1.3.2
   /api/v1.1
 
   by Mat Ryer and Ryan Quinn
@@ -66,7 +66,7 @@ eval(function(p,a,c,k,e,r){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a
 
 /**
  * @namespace
- * @version 1.3.1
+ * @version 1.3.2
  */
 var Stretchr = {
 
@@ -74,7 +74,7 @@ var Stretchr = {
   debug: false,
 
   /** The SDK version. */
-  version: "1.3.1",
+  version: "1.3.2",
 
   /** The default API version this SDK will
     * attempt to interact with.  You can modify this on a per Client
@@ -127,6 +127,7 @@ var Stretchr = {
   SessionKeyLoggedInNo: "NO",
   SessionKeyAuthCode: "auth",
   SessionKeyuserpath: "userpath",
+  SessioncookiePrefix: "stretchr_", //for cookie store only
 
   UrlParamAuthKey: "auth",
   UrlParamAuthUser: "user"
@@ -1341,26 +1342,49 @@ Stretchr.Bag.ParamBagOptions = {
  * CookieSessionStore represents a storage backed by the browsers cookies and is the default
  * implementation used by clients.
  */
-Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, oo.Properties, {
+Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events, {
 
   events: ["change"],
-  properties: ["expiryDays"],
 
-  init: function(expiryDays){
-    this._expiryDays = typeof(expiryDays) !== "undefined" ? expiryDays : 28;
+  /**
+   * Initialize the session store, we do this for you
+   * with some default options, but if you want to set things
+   * within the cookie, just initialize your own with your own
+   * settings
+   * Options:
+   *  - expires
+   *  - expireDays (convenience method, just include the number of days)
+   *  - secure
+   *  - domain (default to current, use ".domain.com" for all subdomains)
+   *  - path
+   * @param  {Object} options cookie options
+   */
+  init: function(options){
+    this._options = options || {};
+    this._options.expireDays = this._options.expireDays || 28;
+    if (this._options.expireDays) {
+      //calculate the date they meant
+      var date = new Date();
+      date.setDate(date.getDate() + this._options.expireDays);
+      //save it in the cookie format
+      this._options.expires = date.toUTCString();
+      //now remove the convenience setting from the options object
+      delete this._options.expireDays;
+    }
   },
 
   /**
    * Sets a value in the store.  Returns this for chaining.
    * @param {string} key The key to set.
    * @param {string} value The value to set.
-   * @param {object} options The options to use when saving.
+   * @param {object} options Event options
    * @memberOf Stretchr.CookieSessionStore.prototype
    */
   set: function(key, value, options) {
 
     // set the cookie value
-    Stretchr.setCookie(key, value, this.expiryDays());
+    var key = Stretchr.SessioncookiePrefix + key;
+    Stretchr.cookie.set(key, value, this._options.expires, this._options.path, this._options.domain, this._options.secure);
 
     // raise the success event
     this.fireWith("change", options, key, value);
@@ -1373,58 +1397,50 @@ Stretchr.CookieSessionStore = oo.Class("Stretchr.CookieSessionStore", oo.Events,
   /**
    * Gets a value from the store.
    * @param {string} key The key to get.
-   * @param {object} options The options to use when saving.
    * @memberOf Stretchr.CookieSessionStore.prototype
    */
-  get: function(key, options) {
-    return Stretchr.cookie(key);
+  get: function(key) {
+    var key = Stretchr.SessioncookiePrefix+key;
+    return Stretchr.cookie.get(key)
   }
 
 });
 
 /**
- * Gets the value of a cookie.
+ * Used to handle cookies on the page
+ * https://developer.mozilla.org/en-US/docs/Web/API/document.cookie
  */
-Stretchr.cookie = function(c_name)
-{
-  c_name = Stretchr.cookiePrefix+c_name;
-  var c_value = document.cookie;
-  var c_start = c_value.indexOf(" " + c_name + "=");
-  if (c_start == -1)
-    {
-    c_start = c_value.indexOf(c_name + "=");
+Stretchr.cookie = {
+  get: function (sKey) {
+    return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+  },
+  set: function (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+    if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+    var sExpires = "";
+    if (vEnd) {
+      switch (vEnd.constructor) {
+        case Number:
+          sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+          break;
+        case String:
+          sExpires = "; expires=" + vEnd;
+          break;
+        case Date:
+          sExpires = "; expires=" + vEnd.toUTCString();
+          break;
+      }
     }
-  if (c_start == -1)
-    {
-    c_value = null;
-    }
-  else
-    {
-    c_start = c_value.indexOf("=", c_start) + 1;
-    var c_end = c_value.indexOf(";", c_start);
-    if (c_end == -1)
-    {
-  c_end = c_value.length;
+    document.cookie = encodeURIComponent(sKey) + "=" + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+    return true;
+  },
+  remove: function (sKey, sPath, sDomain) {
+    if (!sKey || !this.hasItem(sKey)) { return false; }
+    document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" + ( sDomain ? "; domain=" + sDomain : "") + ( sPath ? "; path=" + sPath : "");
+    return true;
+  },
+  has: function (sKey) {
+    return (new RegExp("(?:^|;\\s*)" + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=")).test(document.cookie);
   }
-  c_value = unescape(c_value.substring(c_start,c_end));
-  }
-  return c_value;
-};
-
-/**
- * The prefix to namespace all cookies.
- */
-Stretchr.cookiePrefix = "stretchr_";
-
-/**
- * Sets the value of a cookie.
- */
-Stretchr.setCookie = function(c_name,value,exdays)
-{
-  var exdate=new Date();
-  exdate.setDate(exdate.getDate() + exdays);
-  var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-  document.cookie=Stretchr.cookiePrefix + c_name + "=" + c_value;
 };
 
 /**

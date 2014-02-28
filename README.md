@@ -127,6 +127,18 @@ To logout a user, you can run
 stretchr.logout()
 ```
 
+### Secure & Multidomain Cookies
+If you need to change the settings on the way cookies are stored for users/authentication, you can do so by initializing your own session store.  Here's an example:
+
+```js
+// Using ".your-domain.com" for your cookies will make them accessible across all subdomains
+// default is the current page address
+
+var store = new Stretchr.CookieSessionStore({secure: true, domain: ".your-domain.com"});
+
+var stretchr = new Stretchr.Client("acc", "proj", "key").setSessionStore(store);
+```
+
 ## Responses: Working with Data vs Resources
 There are two ways to utilize the Stretchr JS SDK.  One is to operate on raw data, and the other is to operate using Resources, which give you some convenience methods like `.save()`.  We'll go over data first, or you can jump to the [resouces section](#working-with-resources).
 
