@@ -193,6 +193,22 @@ buster.testCase("Client - auth", {
 
     assert.defined(client.location().history()[0])
     assert.equals(client.location().history()[0], location.pathname + "?test=true")
+  },
+
+  "Set params in init" : function() {
+    var client = new Stretchr.Client("acc", "proj", "key", {
+      host: "hostname",
+      protocol: "protocol",
+      apiVersion: "api",
+      transport: "transport",
+      sessionStore: "store"
+    });
+
+    assert.equals(client.host(), "hostname");
+    assert.equals(client.protocol(), "protocol");
+    assert.equals(client.sessionStore(), "store");
+    assert.equals(client.transport(), "transport");
+    assert.equals(client.apiVersion(), "api");
   }
 
 });

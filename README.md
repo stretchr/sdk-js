@@ -136,7 +136,7 @@ If you need to change the settings on the way cookies are stored for users/authe
 
 var store = new Stretchr.CookieSessionStore({secure: true, domain: ".your-domain.com"});
 
-var stretchr = new Stretchr.Client("acc", "proj", "key").setSessionStore(store);
+var stretchr = new Stretchr.Client("acc", "proj", "key", {sessionStore: store});
 ```
 
 ## Responses: Working with Data vs Resources

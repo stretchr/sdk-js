@@ -217,17 +217,27 @@ Stretchr.Client = oo.Class("Stretchr.Client", oo.Events, oo.Properties, {
 
   properties: ["account", "project", "apiKey", "host", "protocol", "apiVersion", "transport", "sessionStore", "location"],
 
-  init: function(accountName, projectName, apiKey){
-
+  /**
+   * Initialize your client
+   * var stretchr = new Stretchr.Client("acc", "proj", "key");
+   *  
+   * @param  {String} accountName Stretchr Account
+   * @param  {String} projectName Stretchr Project
+   * @param  {String} apiKey      Stretchr API Key
+   * @param  {Object} options     Options
+   * @return {Stretchr.Client}    Your Client
+   */
+  init: function(accountName, projectName, apiKey, options){
+    var options = options || {};
     this
       .setAccount(accountName)
       .setProject(projectName)
       .setApiKey(apiKey)
-      .setTransport(new Stretchr.JSONPTransport(this))
-      .setHost("stretchr.com")
-      .setProtocol("https")
-      .setApiVersion(Stretchr.apiVersion)
-      .setSessionStore(new Stretchr.CookieSessionStore())
+      .setTransport(options.transport || new Stretchr.JSONPTransport(this))
+      .setHost(options.host || "stretchr.com")
+      .setProtocol(options.protocol || "https")
+      .setApiVersion(options.apiVersion || Stretchr.apiVersion)
+      .setSessionStore(options.sessionStore || new Stretchr.CookieSessionStore())
       .setLocation(new Stretchr.Location())
     ;
 
