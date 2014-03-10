@@ -104,10 +104,12 @@ The `where` method adds an additional filter parameter to the query.  It takes t
   * `/.../` - Regex (e.g. .where("number", "/[0-9]+/"))
 
 ## Users and Authentication
-to authenticate your users, just specify the method of authentication you want to use:
+To authenticate your users, just specify the method of authentication you want to use:
 ```
 stretchr.login("github")
 ```
+You can view a list of supported authorization types [on our docs](http://docs.stretchr.com/users-and-permissions/users.md).
+
 This will redirect users through the oauth workflow and return them with a valid user key.  The SDK will automatically snag that key for you, and all future requests will be authenticated.
 
 To check if a user is already logged in, you can call
@@ -122,7 +124,7 @@ stretchr.on("login:success", function() {
 });
 ```
 
-To logout a user, you can run
+To logout a user, simply call:
 ```
 stretchr.logout()
 ```
