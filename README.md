@@ -16,7 +16,7 @@ By default, the Stretchr SDK for JavaScript and HTML5 assumes your data is hoste
 
     var stretchr = new Stretchr.Client("account-name", "project-name", "API-KEY").setHost("mydomain.com");
 
-Then all requests will be made to `account-name.mydomain.com` insstead of `account-name.stretchr.com`.
+Then all requests will be made to `account-name.mydomain.com` instead of `account-name.stretchr.com`.
 
 ## Making requests using the `at` method
 
