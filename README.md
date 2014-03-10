@@ -20,7 +20,7 @@ Then all requests will be made to `account-name.mydomain.com` instead of `accoun
 
 ## Making requests using the `at` method
 
-To make requests, you must first decide specify the path using the `at` method on your client:
+To make requests, you must first specify the path using the `at` method on your client:
 
     stretchr.at("people/1/books")
 
