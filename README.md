@@ -88,7 +88,7 @@ The `page` method sets the appropriate `limit` and `skip` values on the request 
 
 #### Where
 
-The `where` method adds an additional filter parameter to the query.  It takes two arguments, the field and the filter value.  The field can be any field in a document and the value should be one of the supported filter types:
+The `where` method adds an additional filter parameter to the query.  It takes two arguments, the field and the filter value.  The field can be any field in a resource and the value should be one of the supported filter types:
 
   * No character - Equal to (e.g. `.where("age", "18")`)
   * `!` - Not equal to (e.g. `.where("age", "!18"`)
@@ -96,12 +96,14 @@ The `where` method adds an additional filter parameter to the query.  It takes t
   * `<` - Less than (e.g. `.where("age", "<18")`)
   * `>=` - Greater than or equal to (e.g. `.where("age", ">=18")`)
   * `<=` - Less than or equal to (e.g. `.where("age", "<=18")`)
-  * `*` - Exists i.e. has a value (e.g. `.where("pincode", "*")`)
-  * `!*` - Not Exists i.e. has no value (e.g. `.where("pincode", "!*")`)
-  * `..` - Between i.e. number is between a and b (e.g. .where("age", "18..30"))
-  * `,` - OR value i.e. value is one of (e.g. .where("name", "Mat,Tyler"))
+  * `*` - Exists/has a value (e.g. `.where("pincode", "*")`)
+  * `!*` - Doesn't exist/has no value (e.g. `.where("pincode", "!*")`)
+  * `..` - Between (e.g. .where("age", "18..30"))
+  * `,` - OR value (e.g. .where("name", "Mat,Tyler"))
   * `[]` - Item present in array (e.g. .where("tags", "[javascript]"))
   * `/.../` - Regex (e.g. .where("number", "/[0-9]+/"))
+
+A full list of possible filters can be found [in our docs](http://docs.stretchr.com/querying/filters.md#parameter-filtering).
 
 ## Users and Authentication
 To authenticate your users, just specify the method of authentication you want to use:
