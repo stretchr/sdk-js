@@ -200,7 +200,7 @@ Stretchr.ErrorAction = oo.Class("Stretchr.ErrorAction", Stretchr.Error, {
   }
 });
 
-Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refer to a single resource a collection of resources.");
+Stretchr.ErrorActionCollectiveResource = new Stretchr.ErrorAction("URL must refer to a single resource, not a collection of resources.");
 
 /** @class
  * Stretchr.Client represents a client that can be used to interact
