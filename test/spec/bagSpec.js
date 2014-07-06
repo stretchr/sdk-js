@@ -36,4 +36,10 @@ describe("Stretchr Bag", function() {
     bag.data("key", "value2");
     expect(bag.data("key")).toEqual(["value", "value2"]);
   });
+
+  it("Should support query string conversion", function() {
+    var bag = new Stretchr.Bag();
+    bag.data({key: "value", key2: ["value2", "value3"]});
+    expect(bag.queryString()).toEqual("key=value&key2=value2&key2=value3");
+  });
 });

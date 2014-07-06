@@ -10,4 +10,10 @@ describe("Stretchr Request", function() {
     var request = new Stretchr.Request("path", {protocol: "https", hostName: "stretchr.com", account: "account", project: "project", apiVersion: "1.1"});
     expect(request.url()).toEqual("https://account.stretchr.com/api/v1.1/project/path");
   });
+
+  it("Should let me specify params", function() {
+    var request = new Stretchr.Request("path", {protocol: "https", hostName: "stretchr.com", account: "account", project: "project", apiVersion: "1.1"});
+    request.params("key", "value");
+    expect(request.url()).toEqual("https://account.stretchr.com/api/v1.1/project/path?key=value")
+  });
 });

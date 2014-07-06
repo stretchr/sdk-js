@@ -64,11 +64,24 @@ Stretchr.Request = function(path, client) {
 }
 
 /**
+ * Adds a param to the request object
+ */
+Stretchr.Request.prototype.params = function(key, value) {
+  this._params.data.apply(this._params, arguments);
+  return this;
+}
+
+/**
  * Generate a url for the request object
  * Relies heavily on information from the client object
  */
 Stretchr.Request.prototype.url = function() {
-  return [this.client.protocol, "://", this.client.account, ".", this.client.hostName, "/api/v", this.client.apiVersion, "/", this.client.project, "/", this.path].join("");
+  var baseUrl = [this.client.protocol, "://", this.client.account, ".", this.client.hostName, "/api/v", this.client.apiVersion, "/", this.client.project, "/", this.path].join(""),
+    paramString = this._params.queryString();
+   if (paramString) {
+     baseUrl += "?" + paramString;
+   }
+  return baseUrl;
 }
 
 /**
@@ -132,6 +145,16 @@ Stretchr.Bag = function(options) {
         }
 
       }
+    },
+
+    queryString: function() {
+      var items = [];
+      for (var key in _data)
+        for (var i = 0; i < _data[key].length; i++) {
+          val = _data[key][i]
+          items.push(encodeURIComponent(key) + "=" + encodeURIComponent(val));
+        }
+      return items.join("&");
     }
   }
 }
