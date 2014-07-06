@@ -35,9 +35,9 @@ Stretchr.TestTransporter = function() {
   this.requests = [];
   this.responses = [];
 
-  this.makeRequest = function(client, request, options) {
+  this.makeRequest = function(request, options) {
     this.requests.push(arguments);
-    response = new Stretchr.Response(client, this.responses.shift(), options);
+    response = new Stretchr.Response(request.client, this.responses.shift(), options);
   }
 }
 

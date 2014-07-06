@@ -36,6 +36,12 @@ Stretchr.Defaults = {
   hostName: "stretchr.com",
   apiVersion: "1.1",
   protocol: "https",
+  //request info
+  readMethod: "GET",
+  createMethod: "POST",
+  updateMethod: "PATCH",
+  replaceMethod: "PUT",
+  deleteMethod: "DELETE",
   //api version info
   apiVersions: {
     "1.1" : "V1_1"
@@ -102,6 +108,49 @@ Stretchr.Request.prototype.url = function() {
      baseUrl += "?" + paramString;
    }
   return baseUrl;
+}
+
+/**
+ * Perform a read request
+ */
+Stretchr.Request.prototype.read = function(options) {
+  this.method = Stretchr.Defaults.readMethod;
+  this.client.transporter.makeRequest(this, options);
+}
+
+/**
+ * Perform a create request
+ */
+Stretchr.Request.prototype.create = function(body, options) {
+  this.body = body;
+  this.method = Stretchr.Defaults.createMethod;
+  this.client.transporter.makeRequest(this, options);
+}
+
+/**
+ * Perform an update request
+ */
+Stretchr.Request.prototype.update = function(body, options) {
+  this.body = body;
+  this.method = Stretchr.Defaults.updateMethod;
+  this.client.transporter.makeRequest(this, options);
+}
+
+/**
+ * Perform a replace request
+ */
+Stretchr.Request.prototype.replace = function(body, options) {
+  this.body = body;
+  this.method = Stretchr.Defaults.replaceMethod;
+  this.client.transporter.makeRequest(this, options);
+}
+
+/**
+ * Perform a delete request
+ */
+Stretchr.Request.prototype.remove = function(options) {
+  this.method = Stretchr.Defaults.deleteMethod;
+  this.client.transporter.makeRequest(this, options);
 }
 
 /**
