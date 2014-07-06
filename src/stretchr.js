@@ -100,6 +100,52 @@ Stretchr.Request.prototype.url = function() {
 }
 
 /**
+ * Stretchr.{{VERSION}}.Response
+ * Create Stretchr response objects that correspond to a specific API version.
+ * The response object version is determined by the apiVersion value passed to the client
+ * @param {Object} data The data returned by Stretchr, already converted into a JS object
+ * ---------
+ * response returns:
+ * ---------
+ * response.data == response.items == [{object}, {object}]
+ * //as of 1.2, all data in responses are an array
+ * response.errors == [{}, {}]
+ * response.errorMessages == ["", ""]
+ * response.success == true/false
+ * response.status == 200/404/500
+ * response.changes == {created: 2, deltas: []}
+ * response.total == 150
+ * response.count == 100
+ */
+
+Stretchr.V1_1 = Stretchr.V1_1 || {};
+Stretchr.V1_1.Response = function(data) {
+  this.raw = data;
+  if (data["~data"] && data["~data"]["~items"]) {
+    this.data = data["~data"]["~items"];
+    this.total = data["~data"]["~total"];
+    this.count = data["~data"]["~count"];
+  } else {
+    if (typeof data["~data"] === "object" && typeof data["~data"].length !== "undefined") {
+      //we already have an array, just store it
+      this.data = data["~data"];
+    } else {
+      //not an array, convert it into one to conform with upcoming API changes
+      this.data = [data["~data"]];
+    }
+  }
+  this.status = data["~status"];
+  this.success = this.status >= 200 && this.status <= 299;
+  this.errors = data["~errors"];
+  if (this.errors) {
+    this.errorMessages = [];
+    for (var i = 0; i < this.errors.length; i++) {
+      this.errorMessages.push(this.errors[i]["~message"]);
+    }
+  }
+}
+
+/**
  * Creates a new Stretchr bag object, which is used for handling query params and aggregations
  * @param {Object} options Set the options for the bag
  */
