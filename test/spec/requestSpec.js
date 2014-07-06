@@ -16,4 +16,11 @@ describe("Stretchr Request", function() {
     request.params("key", "value");
     expect(request.url()).toEqual("https://account.stretchr.com/api/v1.1/project/path?key=value")
   });
+
+  xit("Should let me perform a read request", function() {
+    var transporter = new Stretchr.TestTransporter(),
+      request = new Stretchr.Request("path", {transporter: transporter, protocol: "https", hostName: "stretchr.com", account: "account", project: "project", apiVersion: "1.1"});
+    transporter.responses.push(Stretchr.V1_1.Stubs.get_single);
+
+  });
 });

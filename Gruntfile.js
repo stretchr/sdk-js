@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: ["src/stretchr.js", "test/**/*"],
+                files: ["src/stretchr.js", "src/test-transporter.js", "test/**/*"],
                 tasks: ["production"]
             }
         }

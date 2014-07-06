@@ -41,4 +41,13 @@ describe("Stretchr Client", function() {
     var stretchr = new Stretchr.Client("acc", "proj", "key");
     expect(stretchr.apiVersion).toEqual("1.1");
   });
+
+  it("Should let me specify a transporter but also default one", function() {
+    var stretchr = new Stretchr.Client("acc", "proj", "key");
+    expect(stretchr.transporter).toBeDefined();
+
+    var transporter = new Stretchr.TestTransporter(),
+      stretchr = new Stretchr.Client("acc", "proj", "key", {transporter: transporter});
+    expect(stretchr.transporter).toEqual(transporter);
+  });
 });

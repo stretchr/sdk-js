@@ -35,7 +35,11 @@ Stretchr.Defaults = {
   //client
   hostName: "stretchr.com",
   apiVersion: "1.1",
-  protocol: "https"
+  protocol: "https",
+  //api version info
+  apiVersions: {
+    "1.1" : "V1_1"
+  }
 }
 
 /**
@@ -55,6 +59,8 @@ Stretchr.Client = function(acc, proj, key, options) {
   this.hostName = options.hostName || Stretchr.Defaults.hostName;
   this.protocol = options.protocol || Stretchr.Defaults.protocol;
   this.apiVersion = options.apiVersion || Stretchr.Defaults.apiVersion;
+  //TODO : Make this a real transporter by default;
+  this.transporter = options.transporter || {};
 }
 
 /**
@@ -64,7 +70,6 @@ Stretchr.Client = function(acc, proj, key, options) {
 Stretchr.Client.prototype.at = function(path) {
  return new Stretchr.Request(path, this);
 }
-
 
 
 /**
@@ -98,6 +103,30 @@ Stretchr.Request.prototype.url = function() {
    }
   return baseUrl;
 }
+
+/**
+ * Stretchr.Response
+ *
+ * A generic Stretchr reponse responsible for firing events and parsing the response object with the
+ * appropriate API version
+ */
+Stretchr.Response = function(client, data, options) {
+  var response = new Stretchr[Stretchr.Defaults.apiVersions[client.apiVersion]].Response(data);
+  if (response.success) {
+    if (options["success"] && typeof options["success"] === "function") {
+      options["success"](response);
+    }
+  } else {
+    if (options["error"] && typeof options["error"] === "function") {
+      options["error"](response);
+    }
+  }
+
+  if (options["done"] && typeof options["done"] === "function") {
+    options["done"](response);
+  }
+}
+
 
 /**
  * Stretchr.{{VERSION}}.Response
