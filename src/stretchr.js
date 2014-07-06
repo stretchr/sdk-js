@@ -60,6 +60,15 @@ Stretchr.Client.prototype.at = function(path) {
 Stretchr.Request = function(path, client) {
   this.path = path;
   this.client = client;
+  this._params = new Stretchr.Bag();
+}
+
+/**
+ * Generate a url for the request object
+ * Relies heavily on information from the client object
+ */
+Stretchr.Request.prototype.url = function() {
+  return [this.client.protocol, "://", this.client.account, ".", this.client.hostName, "/api/v", this.client.apiVersion, "/", this.client.project, "/", this.path].join("");
 }
 
 /**
@@ -84,7 +93,7 @@ Stretchr.Bag = function(options) {
 
     if (typeof _data[key] === "object" && typeof _data[key].length !== "undefined") {
       // already an array
-      _data[key].concat(value)
+      _data[key] = _data[key].concat(value)
     } else if (typeof _data[key] === "undefined") {
       // no key
       _data[key] = value;
@@ -93,7 +102,12 @@ Stretchr.Bag = function(options) {
 
   return {
     /**
-     * Let's you set or get data based on the params sent.  Takes an object, key/value, or undefined.
+     * Let's you set or get data based on the params sent.  Takes a variety of inputs:
+     * ---------
+     * bag.data("key", "value") - adds "value" to the data["key"] array
+     * bag.data({key: "value", key2: ["value1", "value2"]}) - stores the entire object
+     * bag.data("key") - returns the data["key"] value
+     * bag.data() - returns the entire data object
      */
     data: function(key, value) {
       if (arguments.length == 0) {

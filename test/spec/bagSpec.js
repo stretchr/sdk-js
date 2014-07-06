@@ -22,4 +22,18 @@ describe("Stretchr Bag", function() {
     bag.data("key", ["value1", "value2"]);
     expect(bag.data("key")).toEqual(["value1", "value2"]);
   });
+
+  it("Should let me request the entire data bag", function() {
+    var bag = new Stretchr.Bag();
+    bag.data("key", "value");
+    bag.data("key2", "value");
+    expect(bag.data()).toEqual({key: ["value"], key2: ["value"]});
+  });
+
+  it("Should append values if a key is set twice", function() {
+    var bag = new Stretchr.Bag();
+    bag.data("key", "value");
+    bag.data("key", "value2");
+    expect(bag.data("key")).toEqual(["value", "value2"]);
+  });
 });
