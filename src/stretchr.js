@@ -74,7 +74,9 @@ Stretchr.Client = function(acc, proj, key, options) {
  * @param {String} path The path of the resource within Stretchr
  */
 Stretchr.Client.prototype.at = function(path) {
- return new Stretchr.Request(path, this);
+ var request = new Stretchr.Request(path, this);
+ request.params("key", this.key);
+ return request;
 }
 
 

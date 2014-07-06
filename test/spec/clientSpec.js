@@ -50,4 +50,9 @@ describe("Stretchr Client", function() {
       stretchr = new Stretchr.Client("acc", "proj", "key", {transporter: transporter});
     expect(stretchr.transporter).toEqual(transporter);
   });
+
+  it("Should pass the key to the request", function() {
+    stretchr = new Stretchr.Client("acc", "proj", "key", {apiVersion: "1.1"});
+    expect(stretchr.at("path").url()).toEqual("https://acc.stretchr.com/api/v1.1/proj/path?key=key");
+  });
 });
