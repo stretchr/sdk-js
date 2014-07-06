@@ -17,4 +17,28 @@ describe("Stretchr Client", function() {
     var stretchr = new Stretchr.Client("acc", "proj", "key");
     expect(stretchr.at("path").client).toEqual(stretchr);
   });
+
+  it("Should let me specify the hostName but default to stretchr.com", function() {
+    var stretchr = new Stretchr.Client("acc", "proj", "key", {hostName: "asdf.com"});
+    expect(stretchr.hostName).toEqual("asdf.com");
+
+    var stretchr = new Stretchr.Client("acc", "proj", "key");
+    expect(stretchr.hostName).toEqual("stretchr.com");
+  });
+
+  it("Should let me specify the protocol but default to https", function() {
+    var stretchr = new Stretchr.Client("acc", "proj", "key", {protocol: "http"});
+    expect(stretchr.protocol).toEqual("http");
+
+    var stretchr = new Stretchr.Client("acc", "proj", "key");
+    expect(stretchr.protocol).toEqual("https");
+  });
+
+  it("Should let me specify the apiVersion but default to 1.1", function() {
+    var stretchr = new Stretchr.Client("acc", "proj", "key", {apiVersion: "1.0"});
+    expect(stretchr.apiVersion).toEqual("1.0");
+
+    var stretchr = new Stretchr.Client("acc", "proj", "key");
+    expect(stretchr.apiVersion).toEqual("1.1");
+  });
 });

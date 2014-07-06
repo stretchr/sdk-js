@@ -29,6 +29,16 @@
 var Stretchr = Stretchr || {};
 
 /**
+ * Set the default values for Stretchr
+ */
+Stretchr.Defaults = {
+  //client
+  hostName: "stretchr.com",
+  apiVersion: "1.1",
+  protocol: "https"
+}
+
+/**
  * Creates a new Stretchr client that can be used for making requests against Stretchr
  * @param {String} acc The Stretchr account to use
  * @param {String} proj The Stretchr project to use
@@ -37,9 +47,14 @@ var Stretchr = Stretchr || {};
  */
 Stretchr.Client = function(acc, proj, key, options) {
   var options = options || {};
+  //set required attributes
   this.account = acc;
   this.project = proj;
   this.key = key;
+  //set optional attributes
+  this.hostName = options.hostName || Stretchr.Defaults.hostName;
+  this.protocol = options.protocol || Stretchr.Defaults.protocol;
+  this.apiVersion = options.apiVersion || Stretchr.Defaults.apiVersion;
 }
 
 /**
