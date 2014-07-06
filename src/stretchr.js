@@ -143,6 +143,7 @@ Stretchr.V1_1.Response = function(data) {
       this.errorMessages.push(this.errors[i]["~message"]);
     }
   }
+  this.changes = data["~changes"];
 }
 
 /**
